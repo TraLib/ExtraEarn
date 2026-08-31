@@ -12,7 +12,7 @@ class ApiService extends ChangeNotifier {
     if (_customUrl.isNotEmpty) {
       return _customUrl;
     }
-    return 'http://10.0.2.2:3000/api';
+    return 'https://extraearn.onrender.com/api';
   }
 
   AppSettings _settings = AppSettings(
