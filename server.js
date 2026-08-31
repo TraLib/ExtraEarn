@@ -401,38 +401,37 @@ const server = http.createServer((req, res) => {
     }
 
     // Serve static files (HTML, CSS, JS)
-    const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
-    let pathname = urlObj.pathname;
-    let filePath = pathname === '/' ? '/index.html' : pathname;
-    filePath = path.join(__dirname, filePath);
-    
-    if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
-        filePath = path.join(filePath, 'index.html');
-    }
-    
-    if (!filePath.startsWith(__dirname)) {
-        res.writeHead(403, { 'Content-Type': 'text/plain' });
-        res.end('Forbidden');
-        return;
-    }
-    
-    const ext = path.extname(filePath);
-    const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-    
-    fs.readFile(filePath, (err, content) => {
-        if (err) {
-            if (err.code === 'ENOENT') {
-                res.writeHead(404, { 'Content-Type': 'text/plain' });
-                res.end('File Not Found');
-            } else {
-                res.writeHead(500, { 'Content-Type': 'text/plain' });
-                res.end(`Server Error: ${err.code}`);
-            }
-        } else {
-            res.writeHead(200, { 'Content-Type': contentType });
-            res.end(content, 'utf-8');
+    try {
+        const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+        let pathname = decodeURIComponent(urlObj.pathname);
+        let safePath = path.normalize(pathname).replace(/^(\.\.[\/\\])+/, '');
+        let filePath = path.join(__dirname, safePath);
+
+        if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+            filePath = path.join(filePath, 'index.html');
         }
-    });
+
+        if (!filePath.startsWith(__dirname)) {
+            res.writeHead(403, { 'Content-Type': 'text/plain' });
+            res.end('Forbidden');
+            return;
+        }
+
+        fs.readFile(filePath, (err, content) => {
+            if (err) {
+                res.writeHead(err.code === 'ENOENT' ? 404 : 500, { 'Content-Type': 'text/plain' });
+                res.end(err.code === 'ENOENT' ? 'File Not Found' : `Server Error: ${err.code}`);
+            } else {
+                const ext = path.extname(filePath).toLowerCase();
+                const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+                res.writeHead(200, { 'Content-Type': contentType });
+                res.end(content, 'utf-8');
+            }
+        });
+    } catch (e) {
+        res.writeHead(500, { 'Content-Type': 'text/plain' });
+        res.end(`Server Exception: ${e.message}`);
+    }
 });
 
 server.listen(PORT, '0.0.0.0', () => {
