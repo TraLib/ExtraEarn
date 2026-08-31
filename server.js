@@ -404,8 +404,8 @@ const server = http.createServer((req, res) => {
     try {
         const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
         let pathname = decodeURIComponent(urlObj.pathname);
-        let safePath = path.normalize(pathname).replace(/^(\.\.[\/\\])+/, '');
-        let filePath = path.join(__dirname, safePath);
+        if (pathname === '/') pathname = '/index.html';
+        let filePath = path.join(__dirname, '.' + pathname);
 
         if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
             filePath = path.join(filePath, 'index.html');
