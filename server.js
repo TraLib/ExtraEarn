@@ -408,7 +408,11 @@ const server = http.createServer((req, res) => {
             reqPath += 'index.html';
         }
         const safePath = path.normalize(reqPath).replace(/^(\.\.[\/\\])+/, '');
-        const filePath = path.join(__dirname, safePath);
+        let filePath = path.join(__dirname, safePath);
+
+        if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+            filePath = path.join(filePath, 'index.html');
+        }
 
         if (!filePath.startsWith(__dirname)) {
             res.writeHead(403, { 'Content-Type': 'text/plain' });
