@@ -1,0 +1,1504 @@
+{
+    "users": [
+        {
+            "id": "usr_1",
+            "name": "Hiten Patel",
+            "phone": "9876543210",
+            "coins": 2935,
+            "level": 1,
+            "status": "Active",
+            "devices": [
+                "android_a1b2"
+            ]
+        },
+        {
+            "id": "usr_2",
+            "name": "Amit Shah",
+            "phone": "9988776655",
+            "coins": 120,
+            "level": 1,
+            "status": "Active",
+            "devices": [
+                "android_c3d4"
+            ]
+        },
+        {
+            "id": "usr_3",
+            "name": "Kajal Mehta",
+            "phone": "9123456789",
+            "coins": 3450,
+            "level": 1,
+            "status": "Active",
+            "devices": [
+                "android_e5f6"
+            ]
+        },
+        {
+            "id": "usr_4",
+            "name": "Dev Emulator",
+            "phone": "9000000000",
+            "coins": 2500,
+            "level": 1,
+            "status": "Active",
+            "devices": [
+                "emulator_x1y2"
+            ]
+        },
+        {
+            "id": "usr_5",
+            "name": "Priya Sharma",
+            "phone": "9869474296",
+            "coins": 100,
+            "level": 1,
+            "status": "Active",
+            "devices": [
+                "android_z9w8"
+            ]
+        },
+        {
+            "id": "usr_6",
+            "name": "fgd",
+            "phone": "3333333333",
+            "coins": 50485,
+            "level": 1,
+            "status": "Active",
+            "devices": [
+                "android_t6kuxv"
+            ],
+            "lastCheckInDate": "2026-07-16"
+        },
+        {
+            "id": "usr_7",
+            "name": "dsdfs",
+            "phone": "2222222222",
+            "coins": 50000,
+            "level": 1,
+            "status": "Active",
+            "devices": [
+                "android_g94u5e"
+            ]
+        },
+        {
+            "id": "usr_8",
+            "name": "Rajesh Patel",
+            "phone": "9773237202",
+            "coins": 100,
+            "level": 1,
+            "status": "Active",
+            "devices": [
+                "android_si1ae"
+            ]
+        },
+        {
+            "id": "usr_9",
+            "name": "Sita Rami",
+            "phone": "9201640221",
+            "coins": 100,
+            "level": 1,
+            "status": "Active",
+            "devices": [
+                "android_xage7s"
+            ]
+        },
+        {
+            "id": "usr_10",
+            "name": "Sita Rami",
+            "phone": "9522007703",
+            "coins": 100,
+            "level": 1,
+            "status": "Active",
+            "devices": [
+                "android_u7zi0r"
+            ]
+        },
+        {
+            "id": "NG3YY0",
+            "name": "king",
+            "phone": "4444444444",
+            "coins": 920729,
+            "level": 1,
+            "status": "Active",
+            "devices": [
+                "android_sarsd4"
+            ],
+            "lastCheckInDate": "2026-07-10"
+        },
+        {
+            "id": "Q57Z5I",
+            "name": "hhidjjd",
+            "phone": "6363636396",
+            "coins": 50109,
+            "level": 1,
+            "status": "Active",
+            "devices": [
+                "android_76qtcf"
+            ],
+            "lastCheckInDate": "2026-07-10"
+        },
+        {
+            "id": "HCWHII",
+            "name": "king",
+            "phone": "9999999999",
+            "coins": 100,
+            "level": 1,
+            "status": "Active",
+            "devices": [
+                "android_gv5xd"
+            ]
+        },
+        {
+            "id": "K8MYFN",
+            "name": "ggg",
+            "phone": "6666666666",
+            "coins": 5000100,
+            "level": 1,
+            "status": "Active",
+            "devices": [
+                "android_57abbf"
+            ],
+            "lastCheckInDate": "2026-07-15"
+        },
+        {
+            "id": "V4MABD",
+            "name": "vinas Ramani ",
+            "phone": "9426061639",
+            "coins": 300,
+            "level": 1,
+            "status": "Active",
+            "devices": [
+                "android_xdgmlg"
+            ],
+            "lastCheckInDate": "2026-07-15"
+        },
+        {
+            "id": "XBEP44",
+            "name": "dfsdfsdfs",
+            "phone": "3434444444",
+            "coins": 9900793,
+            "level": 1,
+            "status": "Active",
+            "devices": [
+                "android_9pfpdi"
+            ],
+            "lastCheckInDate": "2026-07-18"
+        }
+    ],
+    "transactions": [
+        {
+            "id": "tx_1783513537726",
+            "userId": "usr_6",
+            "type": "Scratch Card Win",
+            "amount": 150,
+            "timestamp": "2026-07-08 12:25:37",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783513540635",
+            "userId": "usr_6",
+            "type": "Scratch Card Win",
+            "amount": 150,
+            "timestamp": "2026-07-08 12:25:40",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783513810763",
+            "userId": "usr_6",
+            "type": "Mini Game Reward",
+            "amount": 85,
+            "timestamp": "2026-07-08 12:30:10",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783513957565",
+            "userId": "usr_7",
+            "type": "Scratch Card Win",
+            "amount": 150,
+            "timestamp": "2026-07-08 12:32:37",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783513961608",
+            "userId": "usr_7",
+            "type": "Scratch Card Win",
+            "amount": 150,
+            "timestamp": "2026-07-08 12:32:41",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783513965861",
+            "userId": "usr_7",
+            "type": "Scratch Card Win",
+            "amount": 150,
+            "timestamp": "2026-07-08 12:32:45",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783513968097",
+            "userId": "usr_7",
+            "type": "Scratch Card Win",
+            "amount": 150,
+            "timestamp": "2026-07-08 12:32:48",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783513977569",
+            "userId": "usr_7",
+            "type": "Scratch Card Win",
+            "amount": 150,
+            "timestamp": "2026-07-08 12:32:57",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783513981352",
+            "userId": "usr_7",
+            "type": "Scratch Card Win",
+            "amount": 150,
+            "timestamp": "2026-07-08 12:33:01",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783513984162",
+            "userId": "usr_7",
+            "type": "Scratch Card Win",
+            "amount": 150,
+            "timestamp": "2026-07-08 12:33:04",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783513986246",
+            "userId": "usr_7",
+            "type": "Scratch Card Win",
+            "amount": 150,
+            "timestamp": "2026-07-08 12:33:06",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783513988867",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 12:33:08",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783513991327",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 12:33:11",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783513992028",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 12:33:12",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783514022459",
+            "userId": "usr_7",
+            "type": "Cashout Request",
+            "amount": -1450,
+            "timestamp": "2026-07-08 12:33:42",
+            "status": "Success",
+            "details": "UPI"
+        },
+        {
+            "id": "tx_1783515614849",
+            "userId": "usr_7",
+            "type": "Scratch Card Win",
+            "amount": 150,
+            "timestamp": "2026-07-08 13:00:14",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515616831",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:16",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515617016",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:17",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515617269",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:17",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515617468",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:17",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515617644",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:17",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515618061",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:18",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515618282",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:18",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515618481",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:18",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515618688",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:18",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515618866",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:18",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515619069",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:19",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515619245",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:19",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515619401",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:19",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515619612",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:19",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515619786",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:19",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515619962",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:19",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515620158",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:20",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515620314",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:20",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515620493",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:20",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515620670",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:20",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515620924",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:20",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515621027",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:21",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515621216",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:21",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515621382",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:21",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515621552",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:21",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515621756",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:21",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515621940",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:21",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515622120",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:22",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515622339",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:22",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515622540",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:22",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515622707",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:22",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515622935",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:22",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515623121",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:23",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515623398",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:23",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515623559",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:23",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515623749",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:23",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515623912",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:23",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515624079",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:24",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515624257",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:24",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515624625",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:24",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515624789",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:24",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515624984",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:24",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515625172",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:25",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515625377",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:25",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515625572",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:25",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515625750",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:25",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515625952",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:25",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515626147",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:26",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515626341",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:26",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515626550",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:26",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515626762",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:26",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515626978",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:26",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515627207",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:27",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515627370",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:27",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515627595",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:27",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515627775",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:27",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515628237",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-08 13:00:28",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783515637032",
+            "userId": "usr_7",
+            "type": "Cashout Request",
+            "amount": -3000,
+            "timestamp": "2026-07-08 13:00:37",
+            "status": "Success",
+            "details": "UPI"
+        },
+        {
+            "id": "tx_1783516244545",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 5000,
+            "timestamp": "2026-07-08 13:10:44",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783516246148",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 5000,
+            "timestamp": "2026-07-08 13:10:46",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783516248605",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 5000,
+            "timestamp": "2026-07-08 13:10:48",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783516251196",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 5000,
+            "timestamp": "2026-07-08 13:10:51",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783516253566",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 5000,
+            "timestamp": "2026-07-08 13:10:53",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783516255818",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 5000,
+            "timestamp": "2026-07-08 13:10:55",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783516268371",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 5000,
+            "timestamp": "2026-07-08 13:11:08",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783516282273",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 5000,
+            "timestamp": "2026-07-08 13:11:22",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783516289840",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 5000,
+            "timestamp": "2026-07-08 13:11:29",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783516304181",
+            "userId": "usr_7",
+            "type": "Daily Check-in",
+            "amount": 5000,
+            "timestamp": "2026-07-08 13:11:44",
+            "status": "Success",
+            "details": ""
+        },
+        {
+            "id": "tx_1783671507273",
+            "userId": "NG3YY0",
+            "type": "Admin Adjustment",
+            "amount": 1000000,
+            "timestamp": "2026-07-10 08:18:27",
+            "status": "Success",
+            "details": "Changed by admin dashboard"
+        },
+        {
+            "id": "tx_1783671547143",
+            "userId": "NG3YY0",
+            "type": "Cashout Request",
+            "amount": -100000,
+            "timestamp": "2026-07-10 08:19:07",
+            "status": "Success",
+            "details": "UPI"
+        },
+        {
+            "id": "tx_1783672305664_62",
+            "userId": "NG3YY0",
+            "type": "Daily Check-in",
+            "amount": 50000,
+            "timestamp": "2026-07-10 08:31:45",
+            "status": "Success",
+            "details": "",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1783672427665_858",
+            "userId": "NG3YY0",
+            "type": "Redeem Code Request",
+            "amount": -1000,
+            "timestamp": "2026-07-10 08:33:47",
+            "status": "Success",
+            "details": "Google Play Gift Card: ₹10",
+            "redeemCode": "123456"
+        },
+        {
+            "id": "tx_1783672480686_800",
+            "userId": "NG3YY0",
+            "type": "Redeem Code Request",
+            "amount": -10000,
+            "timestamp": "2026-07-10 08:34:40",
+            "status": "Success",
+            "details": "Google Play Gift Card: ₹500",
+            "redeemCode": "4564454"
+        },
+        {
+            "id": "tx_1783672492518_576",
+            "userId": "NG3YY0",
+            "type": "Redeem Code Request",
+            "amount": -1000,
+            "timestamp": "2026-07-10 08:34:52",
+            "status": "Success",
+            "details": "Google Play Gift Card: ₹10",
+            "redeemCode": "789785"
+        },
+        {
+            "id": "tx_1783672562459_646",
+            "userId": "NG3YY0",
+            "type": "Redeem Code Request",
+            "amount": -5000,
+            "timestamp": "2026-07-10 08:36:02",
+            "status": "Success",
+            "details": "Google Play Gift Card: ₹100",
+            "redeemCode": "GP-PLAY-FREE-100"
+        },
+        {
+            "id": "tx_1783673064983_592",
+            "userId": "NG3YY0",
+            "type": "Redeem Code Request",
+            "amount": -2500,
+            "timestamp": "2026-07-10 08:44:24",
+            "status": "Success",
+            "details": "Google Play Gift Card: ₹50",
+            "redeemCode": "werw435er"
+        },
+        {
+            "id": "tx_1783673104867_629",
+            "userId": "NG3YY0",
+            "type": "Watch Ad Reward",
+            "amount": 25,
+            "timestamp": "2026-07-10 08:45:04",
+            "status": "Success",
+            "details": "",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1783673115125_162",
+            "userId": "NG3YY0",
+            "type": "Watch Ad Reward",
+            "amount": 25,
+            "timestamp": "2026-07-10 08:45:15",
+            "status": "Success",
+            "details": "",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1783674241928_341",
+            "userId": "NG3YY0",
+            "type": "Daily Quiz Win",
+            "amount": 20,
+            "timestamp": "2026-07-10 09:04:01",
+            "status": "Success",
+            "details": "",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1783674246183_262",
+            "userId": "NG3YY0",
+            "type": "Daily Quiz Win",
+            "amount": 20,
+            "timestamp": "2026-07-10 09:04:06",
+            "status": "Success",
+            "details": "",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1783674735757_236",
+            "userId": "NG3YY0",
+            "type": "Game Reward",
+            "amount": 1,
+            "timestamp": "2026-07-10 09:12:15",
+            "status": "Success",
+            "details": "Star Catcher: caught 1 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1783674950088_587",
+            "userId": "NG3YY0",
+            "type": "Game Reward",
+            "amount": 36,
+            "timestamp": "2026-07-10 09:15:50",
+            "status": "Success",
+            "details": "Star Catcher: caught 36 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1783674980167_362",
+            "userId": "NG3YY0",
+            "type": "Game Reward",
+            "amount": 2,
+            "timestamp": "2026-07-10 09:16:20",
+            "status": "Success",
+            "details": "Star Catcher: caught 2 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1783678175055_73",
+            "userId": "NG3YY0",
+            "type": "Cashout Request",
+            "amount": -10000,
+            "timestamp": "2026-07-10 10:09:35",
+            "status": "Success",
+            "details": "UPI",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1783678552213_202",
+            "userId": "Q57Z5I",
+            "type": "Game Reward",
+            "amount": 9,
+            "timestamp": "2026-07-10 10:15:52",
+            "status": "Success",
+            "details": "Star Catcher: caught 9 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1783678565588_401",
+            "userId": "Q57Z5I",
+            "type": "Daily Check-in",
+            "amount": 50000,
+            "timestamp": "2026-07-10 10:16:05",
+            "status": "Success",
+            "details": "",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784119437237_256",
+            "userId": "K8MYFN",
+            "type": "Daily Check-in",
+            "amount": 5000000,
+            "timestamp": "2026-07-15 12:43:57",
+            "status": "Success",
+            "details": "",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784119801954_945",
+            "userId": "V4MABD",
+            "type": "Daily Check-in",
+            "amount": 50,
+            "timestamp": "2026-07-15 12:50:01",
+            "status": "Success",
+            "details": "",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784119906749_218",
+            "userId": "V4MABD",
+            "type": "Scratch Card Win",
+            "amount": 150,
+            "timestamp": "2026-07-15 12:51:46",
+            "status": "Success",
+            "details": "",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784215796483_461",
+            "userId": "usr_6",
+            "type": "Daily Check-in",
+            "amount": 50000,
+            "timestamp": "2026-07-16 15:29:56",
+            "status": "Success",
+            "details": "",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784215878343_420",
+            "userId": "XBEP44",
+            "type": "Daily Check-in",
+            "amount": 5000000,
+            "timestamp": "2026-07-16 15:31:18",
+            "status": "Success",
+            "details": "",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784215905837_931",
+            "userId": "XBEP44",
+            "type": "Redeem Code Request",
+            "amount": -1000,
+            "timestamp": "2026-07-16 15:31:45",
+            "status": "Rejected",
+            "details": "Google Play Gift Card: ₹10",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784215907972_332",
+            "userId": "XBEP44",
+            "type": "Redeem Code Request",
+            "amount": -2500,
+            "timestamp": "2026-07-16 15:31:47",
+            "status": "Rejected",
+            "details": "Google Play Gift Card: ₹50",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784215909264_518",
+            "userId": "XBEP44",
+            "type": "Redeem Code Request",
+            "amount": -10000,
+            "timestamp": "2026-07-16 15:31:49",
+            "status": "Rejected",
+            "details": "Google Play Gift Card: ₹500",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784215911122_172",
+            "userId": "XBEP44",
+            "type": "Redeem Code Request",
+            "amount": -5000,
+            "timestamp": "2026-07-16 15:31:51",
+            "status": "Rejected",
+            "details": "Google Play Gift Card: ₹100",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784215927205_67",
+            "userId": "XBEP44",
+            "type": "Cashout Request",
+            "amount": -1000000,
+            "timestamp": "2026-07-16 15:32:07",
+            "status": "Rejected",
+            "details": "Google Play Gift Card",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784216053875_964",
+            "userId": "XBEP44",
+            "type": "Scratch Card Win",
+            "amount": 150,
+            "timestamp": "2026-07-16 15:34:13",
+            "status": "Success",
+            "details": "",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784216645553_293",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 5,
+            "timestamp": "2026-07-16 15:44:05",
+            "status": "Success",
+            "details": "Star Catcher: caught 5 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784216656036_538",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 5,
+            "timestamp": "2026-07-16 15:44:16",
+            "status": "Success",
+            "details": "Star Catcher: caught 5 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784216674386_130",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 5,
+            "timestamp": "2026-07-16 15:44:34",
+            "status": "Success",
+            "details": "Star Catcher: caught 5 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784216684913_211",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 5,
+            "timestamp": "2026-07-16 15:44:44",
+            "status": "Success",
+            "details": "Star Catcher: caught 5 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784216696551_706",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 5,
+            "timestamp": "2026-07-16 15:44:56",
+            "status": "Success",
+            "details": "Star Catcher: caught 5 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784216703315_109",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 15,
+            "timestamp": "2026-07-16 15:45:03",
+            "status": "Success",
+            "details": "Star Catcher: caught 15 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784216714386_171",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 2,
+            "timestamp": "2026-07-16 15:45:14",
+            "status": "Success",
+            "details": "Star Catcher: caught 2 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784216725067_581",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 2,
+            "timestamp": "2026-07-16 15:45:25",
+            "status": "Success",
+            "details": "Star Catcher: caught 2 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784216733738_875",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 2,
+            "timestamp": "2026-07-16 15:45:33",
+            "status": "Success",
+            "details": "Star Catcher: caught 2 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784216749014_231",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 20,
+            "timestamp": "2026-07-16 15:45:49",
+            "status": "Success",
+            "details": "Star Catcher: caught 20 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784216772456_596",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 46,
+            "timestamp": "2026-07-16 15:46:12",
+            "status": "Success",
+            "details": "Star Catcher: caught 46 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784216852189_933",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 26,
+            "timestamp": "2026-07-16 15:47:32",
+            "status": "Success",
+            "details": "Star Catcher: caught 26 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784216883579_846",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 3,
+            "timestamp": "2026-07-16 15:48:03",
+            "status": "Success",
+            "details": "Star Catcher: caught 3 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784216937986_275",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 24,
+            "timestamp": "2026-07-16 15:48:57",
+            "status": "Success",
+            "details": "Star Catcher: caught 24 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784216972434_46",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 65,
+            "timestamp": "2026-07-16 15:49:32",
+            "status": "Success",
+            "details": "Star Catcher: caught 65 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784216996332_633",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 36,
+            "timestamp": "2026-07-16 15:49:56",
+            "status": "Success",
+            "details": "Star Catcher: caught 36 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784217114698_499",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 60,
+            "timestamp": "2026-07-16 15:51:54",
+            "status": "Success",
+            "details": "Star Catcher: caught 60 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784217156735_387",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 30,
+            "timestamp": "2026-07-16 15:52:36",
+            "status": "Success",
+            "details": "Star Catcher: caught 30 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784217171437_614",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 11,
+            "timestamp": "2026-07-16 15:52:51",
+            "status": "Success",
+            "details": "Star Catcher: caught 11 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784217184369_736",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 16,
+            "timestamp": "2026-07-16 15:53:04",
+            "status": "Success",
+            "details": "Star Catcher: caught 16 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784217192216_401",
+            "userId": "XBEP44",
+            "type": "Game Reward",
+            "amount": 10,
+            "timestamp": "2026-07-16 15:53:12",
+            "status": "Success",
+            "details": "Star Catcher: caught 10 stars",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784364933045_50",
+            "userId": "XBEP44",
+            "type": "Daily Check-in",
+            "amount": 5000000,
+            "timestamp": "2026-07-18 08:55:33",
+            "status": "Success",
+            "details": "",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784365329506_986",
+            "userId": "XBEP44",
+            "type": "Scratch Card Win",
+            "amount": 150,
+            "timestamp": "2026-07-18 09:02:09",
+            "status": "Success",
+            "details": "",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784365359880_986",
+            "userId": "XBEP44",
+            "type": "Redeem Code Request",
+            "amount": -1000,
+            "timestamp": "2026-07-18 09:02:39",
+            "status": "Rejected",
+            "details": "Google Play Gift Card: ₹10",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1784365401878_826",
+            "userId": "XBEP44",
+            "type": "Cashout Request",
+            "amount": -100000,
+            "timestamp": "2026-07-18 09:03:21",
+            "status": "Success",
+            "details": "UPI",
+            "redeemCode": ""
+        }
+    ],
+    "settings": {
+        "webAppEnabled": false,
+        "webAppUrl": "app_code/index.html",
+        "maintenanceMode": false,
+        "forceUpdate": false,
+        "adReward": 1000,
+        "dailyCheckin": 5000000,
+        "adClicks": 0,
+        "adRevenue": 0,
+        "antiFraudAutoBan": true,
+        "appName": "EarnMaster",
+        "appTitle": "Earn Daily Rewards",
+        "appSubtitle": "Earn coins by checking in, watching ads, and playing games!",
+        "primaryColor": "#109356",
+        "secondaryColor": "#002cbd",
+        "cardColor": "#1b1b22",
+        "borderColor": "#333344",
+        "backgroundColor": "#0a0a0e",
+        "broadcastTitle": "sdfsd",
+        "broadcastMsg": "sdfs",
+        "broadcastTime": "2026-07-18T08:57:34.007Z"
+    }
+}

@@ -1,0 +1,7 @@
+node_modules/
+.DS_Store
+*.log
+flutter_app/build/
+flutter_app/.dart_tool/
+flutter_app/.pub-cache/
+flutter_app/.pub/

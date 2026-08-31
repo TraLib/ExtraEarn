@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Arcade - Space Dodger</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: none; }
+        body { background: radial-gradient(circle at center, #020617 0%, #09090b 100%); font-family: system-ui, -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; color: #fff; }
+        #gameWrapper { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        canvas { display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        #uiOverlay { position: absolute; top: 24px; left: 24px; right: 24px; display: flex; justify-content: space-between; z-index: 10; pointer-events: none; }
+        .glass-card { background: rgba(15, 23, 42, 0.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); padding: 14px 24px; border-radius: 16px; font-weight: 700; font-size: clamp(0.9rem, 3vw, 1.2rem); letter-spacing: 0.05em; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); display: flex; align-items: center; gap: 8px; }
+        #scoreBoard { color: #38bdf8; border-bottom: 2px solid rgba(56, 189, 248, 0.4); box-shadow: 0 0 20px rgba(56, 189, 248, 0.15); }
+        #gameOverScreen, #authScreen { position: absolute; inset: 0; background: rgba(3, 7, 18, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; padding: 20px; text-align: center; }
+        #gameOverScreen { display: none; }
+        #gameOverScreen h2 { font-size: clamp(2.5rem, 10vw, 4.5rem); color: #ef4444; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 40px rgba(239, 68, 68, 0.6); }
+        #gameOverScreen p { font-size: clamp(1.1rem, 4vw, 1.4rem); color: #9ca3af; margin-bottom: 12px; }
+        #gameOverScreen span { color: #fbbf24; font-weight: 800; }
+        #syncStatus { font-size: 1rem; color: #34d399; margin-bottom: 32px; font-weight: 600; }
+        button { padding: 16px 40px; font-size: 1.1rem; font-weight: 700; background: #38bdf8; color: #030712; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.45); transition: all 0.2s ease-in-out; }
+        button:hover { background: #0ea5e9; transform: translateY(-3px); }
+        #authScreen h2 { font-size: clamp(2rem, 8vw, 3rem); color: #38bdf8; margin-bottom: 16px; }
+        #authScreen p { color: #9ca3af; font-size: 1.1rem; max-width: 400px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+    <div id="gameWrapper">
+        <div id="uiOverlay">
+            <div id="scoreBoard" class="glass-card">🛸 DODGED: <span id="score">0</span></div>
+        </div>
+
+        <div id="authScreen" style="display: none;">
+            <h2>Unauthorized Access</h2>
+            <p>Please launch the game directly from the ExtraEarn mobile application to earn coins.</p>
+        </div>
+        
+        <div id="gameOverScreen">
+            <h2>Spaceship Destroyed</h2>
+            <p>Meteors dodged: <span><span id="finalScore">0</span></span></p>
+            <div id="syncStatus">Syncing rewards...</div>
+            <button id="restartBtn" onclick="resetGame()" style="display: none;">Launch Again</button>
+        </div>
+
+        <canvas id="gameCanvas"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+        const finalScoreEl = document.getElementById('finalScore');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const authScreen = document.getElementById('authScreen');
+        const syncStatusEl = document.getElementById('syncStatus');
+        const restartBtn = document.getElementById('restartBtn');
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('userId');
+
+        if (!userId) {
+            authScreen.style.display = 'flex';
+        }
+
+        let score = 0;
+        let gameOver = false;
+        let particles = [];
+        let stars = [];
+
+        const ship = {
+            width: 40,
+            height: 40,
+            x: 0,
+            y: 0,
+            color: '#38bdf8'
+        };
+
+        let meteors = [];
+        let spawnTimer = 0;
+        let spawnInterval = 30;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            ship.y = canvas.height - 100;
+            if (ship.x === 0) ship.x = canvas.width / 2 - ship.width / 2;
+            initStars();
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        function initStars() {
+            stars = [];
+            for (let i = 0; i < 50; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2,
+                    speed: Math.random() * 0.5 + 0.2
+                });
+            }
+        }
+
+        // Drag spaceship horizontally
+        window.addEventListener('pointermove', (e) => {
+            if (!userId || gameOver) return;
+            ship.x = e.clientX - ship.width / 2;
+            if (ship.x < 0) ship.x = 0;
+            if (ship.x > canvas.width - ship.width) ship.x = canvas.width - ship.width;
+        });
+
+        function spawnMeteor() {
+            const size = Math.random() * 30 + 15;
+            meteors.push({
+                x: Math.random() * (canvas.width - size),
+                y: -size,
+                size: size,
+                speed: Math.random() * 3 + 2 + Math.min(score * 0.05, 5),
+                color: '#f87171'
+            });
+        }
+
+        function triggerGameOver() {
+            gameOver = true;
+            finalScoreEl.innerText = score;
+            gameOverScreen.style.display = 'flex';
+            syncStatusEl.innerText = "Syncing reward coins...";
+            restartBtn.style.display = "none";
+
+            // Reward 1 coin per 2 meteors dodged (maximum 50 coins)
+            const rewardCoins = Math.min(50, Math.floor(score / 2));
+
+            if (rewardCoins > 0) {
+                fetch('/api/games/submit-score', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: userId, score: rewardCoins, gameName: 'Space Dodger' })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        syncStatusEl.innerText = `Reward claimed! +${data.coinsEarned}
+if (window.parent) { window.parent.postMessage({ type: 'SCORE_SUBMITTED', score: (data || res).coinsEarned }, '*'); } Coins added to your account!`;
+                    } else {
+                        syncStatusEl.innerText = `Sync status: ${data.error || "Claim failed"}`;
+                    }
+                    restartBtn.style.display = "block";
+                })
+                .catch(err => {
+                    console.error("Score submission failed:", err);
+                    syncStatusEl.innerText = "Failed to sync coins. Check internet connection.";
+                    restartBtn.style.display = "block";
+                });
+            } else {
+                syncStatusEl.innerText = "Dodge more meteors to earn coins!";
+                restartBtn.style.display = "block";
+            }
+        }
+
+        function resetGame() {
+            score = 0;
+            gameOver = false;
+            meteors = [];
+            spawnInterval = 30;
+            scoreEl.innerText = score;
+            gameOverScreen.style.display = 'none';
+            animate();
+        }
+
+        function animate() {
+            if (!userId || gameOver) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw space stars background
+            ctx.fillStyle = '#ffffff';
+            stars.forEach(s => {
+                ctx.fillRect(s.x, s.y, s.size, s.size);
+                s.y += s.speed;
+                if (s.y > canvas.height) s.y = 0;
+            });
+
+            // Draw player ship (triangle)
+            ctx.beginPath();
+            ctx.moveTo(ship.x + ship.width / 2, ship.y);
+            ctx.lineTo(ship.x, ship.y + ship.height);
+            ctx.lineTo(ship.x + ship.width, ship.y + ship.height);
+            ctx.closePath();
+            ctx.fillStyle = ship.color;
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = ship.color;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Spawn meteors
+            spawnTimer++;
+            if (spawnTimer >= spawnInterval) {
+                spawnMeteor();
+                spawnTimer = 0;
+                spawnInterval = Math.max(12, 30 - Math.floor(score / 5));
+            }
+
+            // Move and draw meteors
+            for (let i = meteors.length - 1; i >= 0; i--) {
+                const m = meteors[i];
+                m.y += m.speed;
+
+                // Draw Meteor (circle)
+                ctx.beginPath();
+                ctx.arc(m.x + m.size / 2, m.y + m.size / 2, m.size / 2, 0, Math.PI * 2);
+                ctx.fillStyle = m.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = m.color;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                ctx.closePath();
+
+                // Circle collision with ship bounding-box
+                const shipCenterX = ship.x + ship.width / 2;
+                const shipCenterY = ship.y + ship.height / 2;
+                const meteorCenterX = m.x + m.size / 2;
+                const meteorCenterY = m.y + m.size / 2;
+
+                const distance = Math.hypot(shipCenterX - meteorCenterX, shipCenterY - meteorCenterY);
+                if (distance < (ship.width / 2.5 + m.size / 2)) {
+                    triggerGameOver();
+                    return;
+                }
+
+                // Dodged check
+                if (m.y > canvas.height) {
+                    meteors.splice(i, 1);
+                    score++;
+                    scoreEl.innerText = score;
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        resizeCanvas();
+        if (userId) {
+            animate();
+        }
+    </script>
+</body>
+</html>

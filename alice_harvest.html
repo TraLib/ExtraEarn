@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Arcade - Alice Harvest</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+        body { 
+            background: radial-gradient(circle at center, #0f1c15 0%, #050b07 100%); 
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            width: 100vw; height: 100vh; overflow: hidden; color: #fff; 
+        }
+        
+        #gameWrapper { 
+            position: relative; width: 100%; height: 100%; max-width: 480px; 
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between; 
+            padding: 16px; 
+        }
+
+        /* Glass HUD Header */
+        #uiOverlay { 
+            display: flex; justify-content: space-between; align-items: center; 
+            width: 100%; margin-top: 8px; z-index: 10; gap: 10px; 
+        }
+        .glass-card { 
+            background: rgba(16, 30, 22, 0.65); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); 
+            border: 1px solid rgba(52, 211, 153, 0.25); padding: 10px 16px; border-radius: 16px; 
+            font-weight: 800; font-size: 0.95rem; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); 
+            display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center;
+        }
+        #scoreBoard { color: #34d399; border-bottom: 2px solid rgba(52, 211, 153, 0.5); }
+        #timerBoard { color: #fbbf24; border-bottom: 2px solid rgba(251, 191, 36, 0.5); }
+        #comboBoard { color: #f472b6; border-bottom: 2px solid rgba(244, 114, 182, 0.5); }
+
+        /* Garden Header Banner */
+        .garden-banner {
+            text-align: center; margin: 10px 0 5px 0;
+        }
+        .garden-banner h2 {
+            font-family: 'Fredoka', cursive, sans-serif; font-size: 1.6rem; color: #6ee7b7;
+            text-shadow: 0 0 20px rgba(110, 231, 183, 0.4); letter-spacing: 0.5px;
+        }
+        .garden-banner p {
+            font-size: 0.8rem; color: #a7f3d0; opacity: 0.85; font-weight: 600;
+        }
+
+        /* 3x3 Garden Plots Grid */
+        #gardenGrid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+            width: 100%; max-width: 380px; flex: 1; max-height: 380px;
+            margin: 10px 0; z-index: 5; align-content: center;
+        }
+
+        .plot-tile {
+            background: linear-gradient(145deg, #1b2e21 0%, #0d1a12 100%);
+            border: 2px solid rgba(52, 211, 153, 0.2); border-radius: 20px;
+            position: relative; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s, box-shadow 0.2s;
+            overflow: hidden; aspect-ratio: 1;
+            box-shadow: inset 0 4px 12px rgba(0,0,0,0.6), 0 4px 15px rgba(0,0,0,0.3);
+        }
+        
+        .plot-tile:active { transform: scale(0.92); }
+
+        /* Crop Visual States */
+        .crop-icon {
+            font-size: 2.8rem; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s;
+        }
+
+        .stage-empty { opacity: 0; transform: scale(0.2); }
+        .stage-sprout { opacity: 0.7; transform: scale(0.6); filter: brightness(0.7); }
+        .stage-ripe { 
+            opacity: 1; transform: scale(1.1); 
+            animation: pulseCrop 0.8s infinite alternate ease-in-out;
+        }
+        .stage-golden {
+            opacity: 1; transform: scale(1.2);
+            animation: pulseGolden 0.6s infinite alternate ease-in-out;
+            filter: drop-shadow(0 0 16px rgba(251, 191, 36, 0.9));
+        }
+        .stage-withered {
+            opacity: 0.5; transform: scale(0.8); filter: grayscale(1) contrast(0.7);
+        }
+
+        @keyframes pulseCrop {
+            0% { transform: scale(1.05); }
+            100% { transform: scale(1.15); }
+        }
+
+        @keyframes pulseGolden {
+            0% { transform: scale(1.15) rotate(-3deg); }
+            100% { transform: scale(1.25) rotate(3deg); }
+        }
+
+        /* Floating Score Text Effect */
+        .float-text {
+            position: absolute; font-family: 'Fredoka', cursive, sans-serif;
+            font-size: 1.4rem; font-weight: 700; color: #fbbf24;
+            pointer-events: none; animation: floatUp 0.8s forwards ease-out;
+            z-index: 20; text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-40px) scale(1.3); }
+        }
+
+        /* Progress Bar for Crop Timer */
+        .plot-progress {
+            position: absolute; bottom: 6px; left: 10%; width: 80%; height: 4px;
+            background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;
+        }
+        .plot-progress-fill {
+            height: 100%; width: 100%; background: #34d399;
+            transition: width 0.1s linear, background-color 0.2s;
+        }
+
+        /* Modals & Overlays */
+        #gameOverScreen, #authScreen { 
+            position: absolute; inset: 0; background: rgba(5, 11, 7, 0.94); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            z-index: 30; padding: 24px; text-align: center; 
+        }
+        #gameOverScreen { display: none; }
+        #gameOverScreen h2 { 
+            font-family: 'Fredoka', cursive, sans-serif; font-size: 2.5rem; color: #34d399; 
+            margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; 
+            text-shadow: 0 0 30px rgba(52, 211, 153, 0.5); 
+        }
+        #gameOverScreen p { font-size: 1.1rem; color: #a7f3d0; margin-bottom: 12px; }
+        #gameOverScreen span.highlight { color: #fbbf24; font-weight: 800; font-size: 1.3rem; }
+        #syncStatus { font-size: 0.95rem; color: #6ee7b7; margin-bottom: 24px; font-weight: 600; }
+        
+        button.action-btn { 
+            padding: 14px 36px; font-size: 1.05rem; font-weight: 800; 
+            background: linear-gradient(135deg, #10b981, #059669); color: #fff; 
+            border: none; border-radius: 16px; cursor: pointer; 
+            text-transform: uppercase; letter-spacing: 1px; 
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4); 
+            transition: all 0.2s ease-in-out; 
+        }
+        button.action-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6); }
+
+        #authScreen h2 { font-size: 2rem; color: #f87171; margin-bottom: 16px; }
+        #authScreen p { color: #9ca3af; font-size: 1rem; max-width: 360px; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+    <div id="gameWrapper">
+        <div id="uiOverlay">
+            <div id="scoreBoard" class="glass-card"><i class="fa-solid fa-wheat-awn text-gold"></i> <span id="score">0</span></div>
+            <div id="timerBoard" class="glass-card"><i class="fa-solid fa-stopwatch"></i> <span id="timer">30</span>s</div>
+            <div id="comboBoard" class="glass-card"><i class="fa-solid fa-bolt"></i> x<span id="combo">1</span></div>
+        </div>
+
+        <div class="garden-banner">
+            <h2>Alice's Harvest Garden</h2>
+            <p>Tap ripe crops & golden sunflowers before they wither!</p>
+        </div>
+
+        <div id="authScreen" style="display: none;">
+            <h2><i class="fa-solid fa-lock"></i> Direct Access Disabled</h2>
+            <p>Please open this game directly from the ExtraEarn application to receive daily reward coins.</p>
+        </div>
+        
+        <div id="gameOverScreen">
+            <h2 id="endTitle">Harvest Complete!</h2>
+            <p>Total Harvest: <span class="highlight"><span id="finalScore">0</span> Crops</span></p>
+            <div id="syncStatus">Syncing reward coins...</div>
+            <button class="action-btn" id="restartBtn" onclick="resetGame()" style="display: none;"><i class="fa-solid fa-rotate-right"></i> Harvest Again</button>
+        </div>
+
+        <div id="gardenGrid">
+            <!-- 9 Plots will be generated dynamically -->
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('userId');
+
+        const authScreen = document.getElementById('authScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const scoreEl = document.getElementById('score');
+        const timerEl = document.getElementById('timer');
+        const comboEl = document.getElementById('combo');
+        const finalScoreEl = document.getElementById('finalScore');
+        const syncStatusEl = document.getElementById('syncStatus');
+        const restartBtn = document.getElementById('restartBtn');
+        const gardenGrid = document.getElementById('gardenGrid');
+
+        if (!userId) {
+            authScreen.style.display = 'flex';
+        }
+
+        const CROP_TYPES = [
+            { icon: '🥕', name: 'Carrot', points: 10, ripeTime: 2500, witherTime: 2000 },
+            { icon: '🍓', name: 'Strawberry', points: 15, ripeTime: 2200, witherTime: 1800 },
+            { icon: '🎃', name: 'Pumpkin', points: 20, ripeTime: 2800, witherTime: 1600 },
+            { icon: '🍅', name: 'Tomato', points: 12, ripeTime: 2400, witherTime: 2000 },
+            { icon: '🌻', name: 'Golden Sunflower', points: 50, isGolden: true, ripeTime: 1800, witherTime: 1400 }
+        ];
+
+        let score = 0;
+        let combo = 1;
+        let comboTimer = null;
+        let gameTimer = 30;
+        let gameInterval = null;
+        let spawnTimeout = null;
+        let isGameOver = false;
+
+        let plotStates = Array(9).fill(null).map(() => ({
+            stage: 'empty', // empty, sprout, ripe, golden, withered
+            crop: null,
+            timer: null,
+            progress: 100
+        }));
+
+        // Generate 9 plot tiles
+        function buildGrid() {
+            gardenGrid.innerHTML = '';
+            for (let i = 0; i < 9; i++) {
+                const tile = document.createElement('div');
+                tile.className = 'plot-tile';
+                tile.dataset.index = i;
+                tile.innerHTML = `
+                    <div class="crop-icon stage-empty" id="crop-${i}"></div>
+                    <div class="plot-progress">
+                        <div class="plot-progress-fill" id="progress-${i}"></div>
+                    </div>
+                `;
+                tile.addEventListener('click', () => harvestPlot(i, tile));
+                gardenGrid.appendChild(tile);
+            }
+        }
+
+        function startGame() {
+            score = 0;
+            combo = 1;
+            gameTimer = 30;
+            isGameOver = false;
+
+            scoreEl.innerText = score;
+            timerEl.innerText = gameTimer;
+            comboEl.innerText = combo;
+
+            gameOverScreen.style.display = 'none';
+
+            // Clear all plots
+            for (let i = 0; i < 9; i++) {
+                clearPlot(i);
+            }
+
+            // Start countdown
+            clearInterval(gameInterval);
+            gameInterval = setInterval(() => {
+                gameTimer--;
+                timerEl.innerText = gameTimer;
+                if (gameTimer <= 0) {
+                    endGame();
+                }
+            }, 1000);
+
+            // Start crop spawner loop
+            scheduleNextSpawn();
+        }
+
+        function scheduleNextSpawn() {
+            if (isGameOver) return;
+            const delay = Math.max(400, 1200 - (30 - gameTimer) * 25);
+            spawnTimeout = setTimeout(() => {
+                spawnRandomCrop();
+                scheduleNextSpawn();
+            }, delay);
+        }
+
+        function spawnRandomCrop() {
+            if (isGameOver) return;
+
+            // Pick an empty plot
+            const emptyIndices = plotStates
+                .map((p, idx) => p.stage === 'empty' ? idx : null)
+                .filter(idx => idx !== null);
+
+            if (emptyIndices.length === 0) return;
+
+            const targetIdx = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+            
+            // Pick crop type (golden sunflower 15% chance)
+            const isGolden = Math.random() < 0.15;
+            const crop = isGolden ? CROP_TYPES[4] : CROP_TYPES[Math.floor(Math.random() * 4)];
+
+            const plot = plotStates[targetIdx];
+            plot.crop = crop;
+            plot.stage = 'sprout';
+
+            const cropEl = document.getElementById(`crop-${targetIdx}`);
+            const fillEl = document.getElementById(`progress-${targetIdx}`);
+
+            cropEl.innerText = '🌱';
+            cropEl.className = 'crop-icon stage-sprout';
+            fillEl.style.width = '100%';
+            fillEl.style.backgroundColor = '#34d399';
+
+            // Transition from sprout to ripe
+            plot.timer = setTimeout(() => {
+                if (isGameOver || plot.stage !== 'sprout') return;
+                plot.stage = crop.isGolden ? 'golden' : 'ripe';
+                cropEl.innerText = crop.icon;
+                cropEl.className = `crop-icon ${crop.isGolden ? 'stage-golden' : 'stage-ripe'}`;
+                
+                // Start timer for withered stage
+                startWitherCountdown(targetIdx, crop.witherTime);
+            }, 700);
+        }
+
+        function startWitherCountdown(idx, duration) {
+            const plot = plotStates[idx];
+            const fillEl = document.getElementById(`progress-${idx}`);
+            const startTime = Date.now();
+
+            clearInterval(plot.interval);
+            plot.interval = setInterval(() => {
+                if (isGameOver || (plot.stage !== 'ripe' && plot.stage !== 'golden')) {
+                    clearInterval(plot.interval);
+                    return;
+                }
+
+                const elapsed = Date.now() - startTime;
+                const remaining = Math.max(0, 1 - (elapsed / duration));
+                fillEl.style.width = `${remaining * 100}%`;
+
+                if (remaining < 0.3) {
+                    fillEl.style.backgroundColor = '#ef4444';
+                }
+
+                if (remaining <= 0) {
+                    clearInterval(plot.interval);
+                    plot.stage = 'withered';
+                    const cropEl = document.getElementById(`crop-${idx}`);
+                    cropEl.innerText = '🥀';
+                    cropEl.className = 'crop-icon stage-withered';
+
+                    // Clear withered crop after 1 sec
+                    setTimeout(() => clearPlot(idx), 1000);
+                }
+            }, 50);
+        }
+
+        function harvestPlot(idx, tileEl) {
+            if (isGameOver || !userId) return;
+            const plot = plotStates[idx];
+
+            if (plot.stage === 'ripe' || plot.stage === 'golden') {
+                const points = plot.crop.points * combo;
+                score += points;
+                scoreEl.innerText = score;
+
+                // Increase combo multiplier
+                combo = Math.min(5, combo + 1);
+                comboEl.innerText = combo;
+
+                // Reset combo timeout
+                clearTimeout(comboTimer);
+                comboTimer = setTimeout(() => {
+                    combo = 1;
+                    comboEl.innerText = combo;
+                }, 2000);
+
+                // Show float text
+                showFloatText(tileEl, `+${points}`);
+
+                clearPlot(idx);
+            } else if (plot.stage === 'withered') {
+                clearPlot(idx);
+            }
+        }
+
+        function clearPlot(idx) {
+            const plot = plotStates[idx];
+            clearTimeout(plot.timer);
+            clearInterval(plot.interval);
+            plot.stage = 'empty';
+            plot.crop = null;
+
+            const cropEl = document.getElementById(`crop-${idx}`);
+            const fillEl = document.getElementById(`progress-${idx}`);
+            if (cropEl) {
+                cropEl.innerText = '';
+                cropEl.className = 'crop-icon stage-empty';
+            }
+            if (fillEl) fillEl.style.width = '0%';
+        }
+
+        function showFloatText(tileEl, text) {
+            const rect = tileEl.getBoundingClientRect();
+            const floatEl = document.createElement('div');
+            floatEl.className = 'float-text';
+            floatEl.innerText = text;
+            floatEl.style.left = `${rect.left + rect.width / 2 - 20}px`;
+            floatEl.style.top = `${rect.top + 10}px`;
+            document.body.appendChild(floatEl);
+
+            setTimeout(() => floatEl.remove(), 800);
+        }
+
+        function endGame() {
+            isGameOver = true;
+            clearInterval(gameInterval);
+            clearTimeout(spawnTimeout);
+
+            for (let i = 0; i < 9; i++) {
+                clearPlot(i);
+            }
+
+            finalScoreEl.innerText = score;
+            gameOverScreen.style.display = 'flex';
+            syncStatusEl.innerText = "Syncing reward coins...";
+            restartBtn.style.display = "none";
+
+            // Reward 1 coin per 10 score points (max 50 coins)
+            const rewardCoins = Math.min(50, Math.floor(score / 10));
+
+            if (rewardCoins > 0) {
+                fetch('/api/games/submit-score', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: userId, score: rewardCoins, gameName: 'Alice Harvest' })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        syncStatusEl.innerText = `Reward claimed! +${data.coinsEarned} Coins added to your balance!`;
+                        if (window.parent) {
+                            window.parent.postMessage({ type: 'SCORE_SUBMITTED', score: data.coinsEarned }, '*');
+                        }
+                    } else {
+                        syncStatusEl.innerText = `Sync status: ${data.error || "Claim failed"}`;
+                    }
+                    restartBtn.style.display = "block";
+                })
+                .catch(err => {
+                    console.error("Score submission failed:", err);
+                    syncStatusEl.innerText = "Failed to sync coins. Check connection.";
+                    restartBtn.style.display = "block";
+                });
+            } else {
+                syncStatusEl.innerText = "Harvest more ripe crops to earn reward coins!";
+                restartBtn.style.display = "block";
+            }
+        }
+
+        function resetGame() {
+            startGame();
+        }
+
+        buildGrid();
+        if (userId) {
+            startGame();
+        }
+    </script>
+</body>
+</html>

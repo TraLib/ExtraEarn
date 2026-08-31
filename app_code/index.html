@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ExtraEarn Live Web Client</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+    <!-- 1. SPLASH SCREEN -->
+    <div id="splash-screen" class="app-screen active">
+        <div class="splash-content">
+            <i class="fa-solid fa-circle-dollar-to-slot splash-logo"></i>
+            <h1 id="splash-app-name">ExtraEarn</h1>
+            <p id="splash-app-subtitle">TURN TIME INTO REAL COINS</p>
+            <div class="loader-bar">
+                <div class="loader-progress"></div>
+            </div>
+            <span class="version-label">v1.0.0 Pro Live</span>
+        </div>
+    </div>
+
+    <!-- 2. LOGIN / AUTH SCREEN -->
+    <div id="auth-screen" class="app-screen">
+        <div class="auth-container">
+            <div class="auth-header">
+                <i class="fa-solid fa-shield-halved auth-icon"></i>
+                <h2>Verify Identity</h2>
+                <p>Verify your phone number to start earning daily coins.</p>
+            </div>
+            
+            <div id="auth-form-step">
+                <div class="input-group">
+                    <label for="login-name">Your Full Name</label>
+                    <input type="text" id="login-name" placeholder="Enter full name" required>
+                </div>
+                <div class="input-group">
+                    <label for="login-phone">Mobile Phone Number</label>
+                    <div class="phone-input-wrapper">
+                        <span class="country-code">+91</span>
+                        <input type="tel" id="login-phone" placeholder="10-digit number" maxlength="10" required>
+                    </div>
+                </div>
+                <button id="btn-send-otp" class="btn btn-primary btn-block">SEND OTP VERIFICATION</button>
+            </div>
+
+            <div id="otp-form-step" style="display: none;">
+                <div class="input-group">
+                    <label for="login-otp">OTP Verification Code</label>
+                    <input type="number" id="login-otp" placeholder="Enter 6-digit OTP" required>
+                </div>
+                <button id="btn-verify-login" class="btn btn-primary btn-block">VERIFY & LOGIN</button>
+                <button id="btn-back-auth" class="btn btn-link btn-block">Change details</button>
+            </div>
+
+            <div class="auth-divider">
+                <span>OR</span>
+            </div>
+
+            <button id="btn-google-login" class="btn btn-secondary btn-block">
+                <i class="fa-brands fa-google text-gold"></i> Continue with Google
+            </button>
+        </div>
+    </div>
+
+    <!-- 3. MAIN DASHBOARD SCREEN -->
+    <div id="dashboard-screen" class="app-screen">
+        <!-- Dashboard Header -->
+        <header class="app-header">
+            <div class="user-meta">
+                <img id="user-avatar" src="" alt="Avatar" class="avatar-img">
+                <div class="user-info">
+                    <span id="user-name" class="user-name-text">Loading...</span>
+                    <span id="user-vip-level" class="user-vip-text">Level 1 VIP</span>
+                </div>
+            </div>
+            <div class="header-coins-badge">
+                <i class="fa-solid fa-coins gold-coin"></i>
+                <span id="header-coin-count">0</span>
+            </div>
+        </header>
+
+        <!-- Dynamic Content Tabs -->
+        <main class="app-content">
+            <!-- TAB 1: HOME TAB -->
+            <section id="tab-home" class="tab-pane active">
+                <!-- Promo banner/Stats Card -->
+                <div class="promo-card">
+                    <div class="promo-body">
+                        <h3>Extra Reward Booster</h3>
+                        <p>Complete daily check-ins & play games to reach new levels and earn bonuses!</p>
+                    </div>
+                    <div class="promo-accent">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                </div>
+
+                <!-- Daily Checkin / Video Ad section -->
+                <div class="grid-2">
+                    <div class="action-card" id="btn-daily-checkin">
+                        <div class="card-icon checkin-bg"><i class="fa-solid fa-calendar-check"></i></div>
+                        <div class="card-info">
+                            <h4>Daily Check-in</h4>
+                            <p id="checkin-subtitle">+50 Coins Daily</p>
+                        </div>
+                    </div>
+                    <div class="action-card" id="btn-watch-ad">
+                        <div class="card-icon ad-bg"><i class="fa-solid fa-rectangle-ad"></i></div>
+                        <div class="card-info">
+                            <h4>Watch Video Ad</h4>
+                            <p id="ad-subtitle">+15 Coins Instant</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scratch Card Card -->
+                <div class="scratch-banner margin-top-md" id="btn-scratch-card">
+                    <div class="scratch-icon"><i class="fa-solid fa-gift"></i></div>
+                    <div class="scratch-info">
+                        <h4>Scratch and Win!</h4>
+                        <p>Claim random bonus coins instantly</p>
+                    </div>
+                    <div class="scratch-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+                </div>
+
+                <!-- Arcade Lobby -->
+                <div class="lobby-title-container margin-top-md">
+                    <h3><i class="fa-solid fa-gamepad text-gold"></i> Arcade Lobby</h3>
+                    <span>12 Games Live</span>
+                </div>
+                <div class="games-grid" id="arcade-games-grid">
+                    <!-- Dynamic games list will be rendered here -->
+                </div>
+            </section>
+
+            <!-- TAB 2: WALLET & TRANSACTION HISTORY TAB -->
+            <section id="tab-wallet" class="tab-pane">
+                <div class="wallet-balance-card">
+                    <span class="label">Total Coin Balance</span>
+                    <div class="coin-display">
+                        <i class="fa-solid fa-coins text-gold"></i>
+                        <span id="wallet-coin-count">0</span>
+                    </div>
+                    <div class="cash-eq-box">
+                        <span id="wallet-cash-equivalent">₹0.00</span>
+                        <span class="rate-badge">100 Coins = ₹1</span>
+                    </div>
+                </div>
+
+                <div class="withdraw-section margin-top-md">
+                    <h3>Request Coin Cashout</h3>
+                    <p class="text-sm">Select payment method and input details to redeem cash.</p>
+                    
+                    <div class="withdraw-methods" id="withdraw-methods-container">
+                        <!-- Dynamic list of payment options -->
+                    </div>
+
+                    <div class="withdraw-form" id="withdraw-inputs" style="display: none;">
+                        <input type="text" id="withdraw-details" placeholder="Enter details (e.g. UPI ID or Phone)" required>
+                        <input type="number" id="withdraw-amount" placeholder="Amount of Coins to redeem" required>
+                        <button id="btn-submit-payout" class="btn btn-primary btn-block">SUBMIT PAYOUT REQUEST</button>
+                    </div>
+                </div>
+
+                <!-- User Transaction Log -->
+                <div class="transaction-history-section margin-top-md">
+                    <h3>Recent Transactions</h3>
+                    <div class="transaction-list" id="user-transaction-list">
+                        <!-- Dynamic list of transaction records -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: REFERRAL TAB -->
+            <section id="tab-referral" class="tab-pane">
+                <div class="referral-container">
+                    <div class="referral-card">
+                        <i class="fa-solid fa-user-group invite-logo"></i>
+                        <h2>Invite Friends & Earn</h2>
+                        <p>Share your unique referral code. When your friends register, you both receive 250 bonus coins instantly!</p>
+                        
+                        <div class="invite-code-box">
+                            <span class="invite-code-label">YOUR INVITE CODE</span>
+                            <div class="invite-code-value">
+                                <span id="user-invite-code">E-100234</span>
+                                <button id="btn-copy-invite" class="btn-icon"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                        </div>
+
+                        <button id="btn-share-invite" class="btn btn-primary btn-block">
+                            <i class="fa-solid fa-share-nodes"></i> SHARE INVITE LINK
+                        </button>
+                    </div>
+
+                    <div class="referral-stats card-surface margin-top-md">
+                        <div class="stat-item">
+                            <span class="num">0</span>
+                            <span class="desc">Invited Friends</span>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item">
+                            <span class="num">0 Coins</span>
+                            <span class="desc">Referral Earnings</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: SUPPORT TAB -->
+            <section id="tab-support" class="tab-pane">
+                <div class="support-container">
+                    <div class="support-hero">
+                        <i class="fa-solid fa-headset support-logo"></i>
+                        <h2>How can we help?</h2>
+                        <p>Have questions about coin rewards, ads, or withdrawals? Read the FAQs below or message us.</p>
+                    </div>
+
+                    <div class="faq-list margin-top-md">
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>How do I earn coins?</span>
+                                <i class="fa-solid fa-plus"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>You can earn coins by checking in daily, watching video ads, playing HTML5 arcade games, and referring friends. Higher play scores result in larger payouts!</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>What is the minimum withdrawal?</span>
+                                <i class="fa-solid fa-plus"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>The minimum withdrawal is 1,000 Coins, which converts to ₹10. Processing time takes between 1-24 hours depending on the method.</p>
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>How are game scores rewarded?</span>
+                                <i class="fa-solid fa-plus"></i>
+                            </div>
+                            <div class="faq-answer">
+                                <p>Every score you get in our games is converted directly into coins (e.g. 1 point = 1 coin). You can play and submit scores repeatedly up to 500 points per game round!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-support-box card-surface margin-top-lg">
+                        <h3>Direct Support Contact</h3>
+                        <p class="text-sm">Speak directly with an administrator regarding account issues.</p>
+                        <button id="btn-support-whatsapp" class="btn btn-secondary btn-block margin-top-sm">
+                            <i class="fa-brands fa-whatsapp text-green"></i> Support Chat (WhatsApp)
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="app-navbar">
+            <div class="nav-item active" data-tab="home">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </div>
+            <div class="nav-item" data-tab="wallet">
+                <i class="fa-solid fa-wallet"></i>
+                <span>Wallet</span>
+            </div>
+            <div class="nav-item" data-tab="referral">
+                <i class="fa-solid fa-users"></i>
+                <span>Invite</span>
+            </div>
+            <div class="nav-item" data-tab="support">
+                <i class="fa-solid fa-headset"></i>
+                <span>Support</span>
+            </div>
+        </nav>
+    </div>
+
+    <!-- 4. SCRATCH CARD DIALOG -->
+    <div id="scratch-dialog" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Daily Scratch Reward</h3>
+            <p class="text-sm">Rub the silver area to reveal your random coin payout!</p>
+            <div class="scratch-canvas-container">
+                <div class="scratch-prize-reveal" id="scratch-prize-value">55 Coins</div>
+                <canvas id="scratch-canvas" width="220" height="150"></canvas>
+            </div>
+            <button id="btn-close-scratch" class="btn btn-secondary btn-block" style="display: none;">CLAIM COINS & CLOSE</button>
+        </div>
+    </div>
+
+    <!-- 5. GAME WEBVIEW FRAME CONTAINER -->
+    <div id="game-frame-screen" class="app-screen">
+        <div class="game-frame-header">
+            <button id="btn-exit-game"><i class="fa-solid fa-circle-chevron-left"></i> EXIT GAME</button>
+            <h4 id="game-frame-title">Arcade Game</h4>
+            <div class="live-score-display"><i class="fa-solid fa-ranking-star"></i> Score: <span id="game-live-score">0</span></div>
+        </div>
+        <div class="game-frame-wrapper">
+            <iframe id="game-iframe" src="" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+</body>
+</html>

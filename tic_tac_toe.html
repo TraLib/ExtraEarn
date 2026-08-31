@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Arcade - Neon Tic Tac Toe</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+        body { background: radial-gradient(circle at center, #0b0f19 0%, #030712 100%); font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; color: #fff; }
+        #gameWrapper { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        #uiOverlay { display: flex; justify-content: center; width: 100%; max-width: 320px; margin-bottom: 24px; z-index: 10; }
+        .glass-card { background: rgba(15, 23, 42, 0.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); padding: 14px 24px; border-radius: 16px; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); display: flex; align-items: center; gap: 8px; color: #34d399; border-bottom: 2px solid rgba(52, 211, 153, 0.4); }
+        #board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; max-width: 320px; aspect-ratio: 1; z-index: 5; }
+        .cell { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 800; cursor: pointer; transition: background 0.2s, box-shadow 0.2s; aspect-ratio: 1; }
+        .cell:active { background: rgba(15, 23, 42, 0.8); }
+        .cell.x { color: #f87171; text-shadow: 0 0 20px rgba(248, 113, 113, 0.6); }
+        .cell.o { color: #38bdf8; text-shadow: 0 0 20px rgba(56, 189, 248, 0.6); }
+        #gameOverScreen, #authScreen { position: absolute; inset: 0; background: rgba(3, 7, 18, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; padding: 20px; text-align: center; }
+        #gameOverScreen { display: none; }
+        #gameOverScreen h2 { font-size: 2.5rem; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 2px; }
+        #gameOverScreen p { font-size: 1.2rem; color: #9ca3af; margin-bottom: 12px; }
+        #gameOverScreen span { color: #fbbf24; font-weight: 800; }
+        #syncStatus { font-size: 1rem; color: #34d399; margin-bottom: 32px; font-weight: 600; }
+        button { padding: 16px 40px; font-size: 1.1rem; font-weight: 700; background: #38bdf8; color: #030712; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.45); transition: all 0.2s ease-in-out; }
+        button:hover { background: #0ea5e9; transform: translateY(-3px); }
+        #authScreen h2 { font-size: 2rem; color: #38bdf8; margin-bottom: 16px; }
+        #authScreen p { color: #9ca3af; font-size: 1.1rem; max-width: 400px; line-height: 1.6; }
+        #turnIndicator { margin-top: 20px; font-size: 1.1rem; color: #9ca3af; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <div id="gameWrapper">
+        <div id="uiOverlay">
+            <div id="scoreBoard" class="glass-card">🏆 WINS: <span id="wins">0</span></div>
+        </div>
+
+        <div id="authScreen" style="display: none;">
+            <h2>Unauthorized Access</h2>
+            <p>Please launch the game directly from the ExtraEarn mobile application to earn coins.</p>
+        </div>
+        
+        <div id="gameOverScreen">
+            <h2 id="endTitle">YOU WON!</h2>
+            <p id="endDesc">Matches won this session.</p>
+            <div id="syncStatus">Syncing rewards...</div>
+            <button id="restartBtn" onclick="resetGame()" style="display: none;">Play Again</button>
+        </div>
+
+        <div id="board">
+            <div class="cell" data-idx="0"></div>
+            <div class="cell" data-idx="1"></div>
+            <div class="cell" data-idx="2"></div>
+            <div class="cell" data-idx="3"></div>
+            <div class="cell" data-idx="4"></div>
+            <div class="cell" data-idx="5"></div>
+            <div class="cell" data-idx="6"></div>
+            <div class="cell" data-idx="7"></div>
+            <div class="cell" data-idx="8"></div>
+        </div>
+
+        <div id="turnIndicator">YOUR TURN (X)</div>
+    </div>
+
+    <script>
+        const cells = document.querySelectorAll('.cell');
+        const winsEl = document.getElementById('wins');
+        const endTitleEl = document.getElementById('endTitle');
+        const endDescEl = document.getElementById('endDesc');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const authScreen = document.getElementById('authScreen');
+        const syncStatusEl = document.getElementById('syncStatus');
+        const restartBtn = document.getElementById('restartBtn');
+        const turnIndicator = document.getElementById('turnIndicator');
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('userId');
+
+        if (!userId) {
+            authScreen.style.display = 'flex';
+        }
+
+        let board = ['', '', '', '', '', '', '', '', ''];
+        let wins = 0;
+        let isPlayerTurn = true;
+        let gameActive = true;
+
+        const winConditions = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+            [0, 4, 8], [2, 4, 6]             // Diagonals
+        ];
+
+        cells.forEach(cell => {
+            cell.addEventListener('click', () => handleCellClick(cell));
+        });
+
+        function handleCellClick(cell) {
+            const idx = parseInt(cell.dataset.idx);
+            if (!userId || !isPlayerTurn || !gameActive || board[idx] !== '') return;
+
+            makeMove(idx, 'X');
+            
+            if (checkWin('X')) {
+                wins++;
+                winsEl.innerText = wins;
+                triggerGameOver('win');
+                return;
+            }
+
+            if (board.every(cell => cell !== '')) {
+                triggerGameOver('draw');
+                return;
+            }
+
+            isPlayerTurn = false;
+            turnIndicator.innerText = "AI IS THINKING...";
+            setTimeout(aiMove, 600);
+        }
+
+        function makeMove(idx, player) {
+            board[idx] = player;
+            cells[idx].innerText = player;
+            cells[idx].classList.add(player.toLowerCase());
+        }
+
+        function aiMove() {
+            if (!gameActive) return;
+
+            // Simple AI logic: try to win, block player, or take random
+            let bestMove = findWinningMove('O') || findWinningMove('X') || takeCenter() || takeCorner() || takeRandom();
+
+            if (bestMove !== null) {
+                makeMove(bestMove, 'O');
+            }
+
+            if (checkWin('O')) {
+                triggerGameOver('loss');
+                return;
+            }
+
+            if (board.every(cell => cell !== '')) {
+                triggerGameOver('draw');
+                return;
+            }
+
+            isPlayerTurn = true;
+            turnIndicator.innerText = "YOUR TURN (X)";
+        }
+
+        function findWinningMove(player) {
+            for (let cond of winConditions) {
+                const [a, b, c] = cond;
+                if (board[a] === player && board[b] === player && board[c] === '') return c;
+                if (board[a] === player && board[c] === player && board[b] === '') return b;
+                if (board[b] === player && board[c] === player && board[a] === '') return a;
+            }
+            return null;
+        }
+
+        function takeCenter() {
+            return board[4] === '' ? 4 : null;
+        }
+
+        function takeCorner() {
+            const corners = [0, 2, 6, 8].filter(idx => board[idx] === '');
+            return corners.length > 0 ? corners[Math.floor(Math.random() * corners.length)] : null;
+        }
+
+        function takeRandom() {
+            const empties = board.map((val, idx) => val === '' ? idx : null).filter(val => val !== null);
+            return empties.length > 0 ? empties[Math.floor(Math.random() * empties.length)] : null;
+        }
+
+        function checkWin(player) {
+            return winConditions.some(cond => {
+                return cond.every(idx => board[idx] === player);
+            });
+        }
+
+        function triggerGameOver(result) {
+            gameActive = false;
+            gameOverScreen.style.display = 'flex';
+            syncStatusEl.innerText = "Syncing reward coins...";
+            restartBtn.style.display = "none";
+
+            let rewardCoins = 0;
+            if (result === 'win') {
+                endTitleEl.innerText = "YOU WON!";
+                endTitleEl.style.color = "#10b981";
+                endTitleEl.style.textShadow = "0 0 30px rgba(16, 185, 129, 0.6)";
+                rewardCoins = 15;
+            } else if (result === 'draw') {
+                endTitleEl.innerText = "IT'S A DRAW";
+                endTitleEl.style.color = "#fbbf24";
+                endTitleEl.style.textShadow = "0 0 30px rgba(251, 191, 36, 0.6)";
+                rewardCoins = 5;
+            } else {
+                endTitleEl.innerText = "AI DEFEATED YOU";
+                endTitleEl.style.color = "#f87171";
+                endTitleEl.style.textShadow = "0 0 30px rgba(248, 113, 113, 0.6)";
+                rewardCoins = 0;
+            }
+
+            endDescEl.innerText = `Claimed +${rewardCoins} Coins.`;
+
+            if (rewardCoins > 0) {
+                fetch('/api/games/submit-score', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: userId, score: rewardCoins, gameName: 'Tic Tac Toe' })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        syncStatusEl.innerText = `Reward claimed! +${data.coinsEarned}
+if (window.parent) { window.parent.postMessage({ type: 'SCORE_SUBMITTED', score: (data || res).coinsEarned }, '*'); } Coins added to your account!`;
+                    } else {
+                        syncStatusEl.innerText = `Sync status: ${data.error || "Claim failed"}`;
+                    }
+                    restartBtn.style.display = "block";
+                })
+                .catch(err => {
+                    console.error("Score submission failed:", err);
+                    syncStatusEl.innerText = "Failed to sync coins. Check internet connection.";
+                    restartBtn.style.display = "block";
+                });
+            } else {
+                syncStatusEl.innerText = "Win or draw the next match to claim coins!";
+                restartBtn.style.display = "block";
+            }
+        }
+
+        function resetGame() {
+            board = ['', '', '', '', '', '', '', '', ''];
+            isPlayerTurn = true;
+            gameActive = true;
+            turnIndicator.innerText = "YOUR TURN (X)";
+            cells.forEach(cell => {
+                cell.innerText = '';
+                cell.className = 'cell';
+            });
+            gameOverScreen.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
