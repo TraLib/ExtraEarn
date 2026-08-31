@@ -146,26 +146,53 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       backgroundColor: api.backgroundColor,
       appBar: AppBar(
-        backgroundColor: api.cardColor,
+        backgroundColor: const Color(0xFF0C0D18),
         elevation: 0,
+        titleSpacing: 16,
         title: Row(
           children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://api.dicebear.com/7.x/bottts/png?seed=${user.name}'),
-              radius: 16,
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: const Color(0xFFFFB800), width: 2),
+                boxShadow: const [
+                  BoxShadow(color: Color(0x55FFB800), blurRadius: 10),
+                ],
+              ),
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(
+                    'https://api.dicebear.com/7.x/bottts/png?seed=${user.name}'),
+                radius: 18,
+              ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   user.name,
-                  style: const TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
-                Text(
-                  "Level ${user.level} VIP",
-                  style: TextStyle(fontSize: 10, color: api.secondaryColor),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: const Color(0x228B5CF6),
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: const Color(0x448B5CF6)),
+                  ),
+                  child: Text(
+                    "LEVEL ${user.level} VIP",
+                    style: const TextStyle(
+                      fontSize: 9,
+                      color: Color(0xFFFFB800),
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -173,50 +200,84 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         actions: [
           Container(
-            margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
             decoration: BoxDecoration(
-              color: api.backgroundColor,
-              border: Border.all(color: api.primaryColor, width: 1),
-              borderRadius: BorderRadius.circular(15),
+              gradient: const LinearGradient(
+                colors: [Color(0x33FFB800), Color(0x338B5CF6)],
+              ),
+              border: Border.all(color: const Color(0x66FFB800), width: 1.5),
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: const [
+                BoxShadow(color: Color(0x33000000), blurRadius: 10),
+              ],
             ),
             child: Row(
               children: [
-                Icon(Icons.monetization_on, color: api.primaryColor, size: 16),
-                const SizedBox(width: 4),
+                const Icon(Icons.monetization_on_rounded, color: Color(0xFFFFB800), size: 18),
+                const SizedBox(width: 6),
                 Text(
                   "${user.coins}",
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 14,
+                  ),
                 ),
               ],
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.settings, color: Colors.white, size: 20),
+            icon: const Icon(Icons.settings_suggest_rounded, color: Colors.white70, size: 22),
             onPressed: _showApiSettingsDialog,
           ),
+          const SizedBox(width: 4),
         ],
       ),
       body: tabs[_activeTabIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _activeTabIndex,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: api.cardColor,
-        selectedItemColor: api.primaryColor,
-        unselectedItemColor: Colors.grey,
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
-        unselectedLabelStyle: const TextStyle(fontSize: 11),
-        onTap: (index) {
-          setState(() {
-            _activeTabIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.account_balance_wallet), label: "Wallet"),
-          BottomNavigationBarItem(icon: Icon(Icons.share), label: "Referral"),
-          BottomNavigationBarItem(icon: Icon(Icons.support_agent), label: "Support"),
-        ],
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          color: Color(0xFF0C0D18),
+          border: Border(top: BorderSide(color: Color(0x1AFFFFFF), width: 1)),
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _activeTabIndex,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: const Color(0xFF0C0D18),
+          selectedItemColor: const Color(0xFFFFB800),
+          unselectedItemColor: const Color(0xFF64748B),
+          selectedFontSize: 12,
+          unselectedFontSize: 11,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w800, height: 1.5),
+          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, height: 1.5),
+          onTap: (index) {
+            setState(() {
+              _activeTabIndex = index;
+            });
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.space_dashboard_rounded),
+              activeIcon: Icon(Icons.space_dashboard_rounded, color: Color(0xFFFFB800)),
+              label: "Home",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_balance_wallet_rounded),
+              activeIcon: Icon(Icons.account_balance_wallet_rounded, color: Color(0xFFFFB800)),
+              label: "Wallet",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.group_add_rounded),
+              activeIcon: Icon(Icons.group_add_rounded, color: Color(0xFFFFB800)),
+              label: "Referral",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.headset_mic_rounded),
+              activeIcon: Icon(Icons.headset_mic_rounded, color: Color(0xFFFFB800)),
+              label: "Support",
+            ),
+          ],
+        ),
       ),
     );
   }
