@@ -403,13 +403,12 @@ const server = http.createServer((req, res) => {
     // Serve static files (HTML, CSS, JS)
     try {
         const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
-        let pathname = decodeURIComponent(urlObj.pathname);
-        if (pathname === '/') pathname = '/index.html';
-        let filePath = path.join(__dirname, '.' + pathname);
-
-        if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
-            filePath = path.join(filePath, 'index.html');
+        let reqPath = decodeURIComponent(urlObj.pathname);
+        if (reqPath.endsWith('/')) {
+            reqPath += 'index.html';
         }
+        const safePath = path.normalize(reqPath).replace(/^(\.\.[\/\\])+/, '');
+        const filePath = path.join(__dirname, safePath);
 
         if (!filePath.startsWith(__dirname)) {
             res.writeHead(403, { 'Content-Type': 'text/plain' });
