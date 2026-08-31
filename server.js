@@ -407,7 +407,7 @@ const server = http.createServer((req, res) => {
         if (reqPath.endsWith('/')) {
             reqPath += 'index.html';
         }
-        const safePath = path.normalize(reqPath).replace(/^(\.\.[\/\\])+/, '');
+        const safePath = path.normalize(reqPath).replace(/^(\.\.[\/\\])+/, '').replace(/^[\/\\]+/, '');
         let filePath = path.join(__dirname, safePath);
 
         if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
