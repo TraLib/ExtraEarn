@@ -12,6 +12,27 @@
     <link rel="stylesheet" href="app.css">
 </head>
 <body>
+    <!-- TOAST CONTAINER (No raw API URLs in alerts!) -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- CUSTOM APP MODAL (Replaces browser alert popup) -->
+    <div id="app-modal" class="app-modal-backdrop" style="display: none;">
+        <div class="app-modal-card">
+            <div class="app-modal-header">
+                <div id="modal-icon-badge" class="modal-icon-badge">
+                    <i class="fa-solid fa-gift"></i>
+                </div>
+                <h3 id="modal-title">Reward Notice</h3>
+            </div>
+            <div class="app-modal-body">
+                <p id="modal-message">Notification details here...</p>
+            </div>
+            <div class="app-modal-footer">
+                <button id="btn-modal-close" class="btn btn-primary">OKAY, GOT IT</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 1. SPLASH SCREEN -->
     <div id="splash-screen" class="app-screen active">
         <div class="splash-content">
@@ -19,11 +40,11 @@
                 <i class="fa-solid fa-bolt splash-logo"></i>
             </div>
             <h1 id="splash-app-name">ExtraEarn</h1>
-            <p id="splash-app-subtitle">TURN TIME INTO REAL COINS</p>
+            <p id="splash-app-subtitle">TURN TIME INTO REAL REWARDS</p>
             <div class="loader-bar">
                 <div class="loader-progress"></div>
             </div>
-            <span class="version-label">v2.0 Pro Edition</span>
+            <span class="version-label">v2.5 Live Edition</span>
         </div>
     </div>
 
@@ -35,7 +56,7 @@
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <h2>Welcome Back</h2>
-                <p>Enter your phone number to access your coin vault.</p>
+                <p>Enter your details to access your coin vault.</p>
             </div>
             
             <div id="auth-form-step">
@@ -47,7 +68,7 @@
                     <label for="login-phone">Mobile Phone Number</label>
                     <div class="phone-input-wrapper">
                         <span class="country-code">+91</span>
-                        <input type="tel" id="login-phone" placeholder="10-digit number" maxlength="10" required>
+                        <input type="tel" id="login-phone" placeholder="10-digit mobile number" maxlength="10" required>
                     </div>
                 </div>
                 <button id="btn-send-otp" class="btn btn-primary">
@@ -105,28 +126,70 @@
                 <!-- Hero Banner Card -->
                 <div class="hero-card">
                     <span class="hero-tag"><i class="fa-solid fa-fire"></i> Daily Booster</span>
-                    <h3>VIP Reward Vault</h3>
-                    <p>Play games and complete check-ins to boost your coin multiplier by 2x!</p>
-                    <button class="btn btn-primary" id="btn-claim-daily-hero" style="width: auto; padding: 10px 20px;">
-                        <i class="fa-solid fa-calendar-check"></i> CLAIM DAILY BONUS
+                    <h3>VIP Coin Reward Vault</h3>
+                    <p>Play games, claim daily check-ins, and complete offerwall tasks for 2x multipliers!</p>
+                    <button class="btn btn-primary" id="btn-claim-daily-hero" style="width: auto; padding: 10px 22px;">
+                        <i class="fa-solid fa-calendar-check"></i> CLAIM DAILY CHECK-IN
                     </button>
                 </div>
 
                 <!-- 7-Day Check-in Grid -->
                 <div class="checkin-section">
                     <div class="section-title">
-                        <h4><i class="fa-solid fa-calendar-days" style="color: var(--color-primary);"></i> 7-Day Check-in Streak</h4>
-                        <span style="font-size: 11px; color: var(--color-primary); font-weight: 700;">+350 Coins Total</span>
+                        <h4><i class="fa-solid fa-calendar-days" style="color: var(--color-primary);"></i> 7-Day Daily Check-in Streak</h4>
+                        <span id="checkin-status-badge" style="font-size: 11px; color: var(--color-emerald); font-weight: 800;">1 Claim Per Day</span>
                     </div>
                     <div class="checkin-grid" id="checkin-grid-container">
                         <!-- Rendered dynamically in app.js -->
                     </div>
                 </div>
 
+                <!-- WinZO / TaskBucks Style Tasks Offerwall -->
+                <div class="tasks-section">
+                    <div class="section-title">
+                        <h4><i class="fa-solid fa-bolt" style="color: #F59E0B;"></i> Instant Reward Tasks</h4>
+                        <span style="font-size: 11px; color: var(--color-muted);">High Coin Payouts</span>
+                    </div>
+                    <div class="tasks-grid">
+                        <div class="task-card" onclick="handleTaskClaim('task_video_ad_today', 500, 'Watch Video Ad Reward')">
+                            <div class="task-icon" style="background: rgba(245, 158, 11, 0.15); color: #F59E0B;">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+                            <div class="task-info">
+                                <div class="task-title">Watch Video Bonus Ad</div>
+                                <div class="task-desc">Watch a 15s sponsor video ad</div>
+                            </div>
+                            <button class="task-btn">+500 Coins</button>
+                        </div>
+
+                        <div class="task-card" onclick="handleTaskClaim('task_lucky_wheel', 300, 'Daily Lucky Wheel Bonus')">
+                            <div class="task-icon" style="background: rgba(124, 58, 237, 0.15); color: #7C3AED;">
+                                <i class="fa-solid fa-spinner"></i>
+                            </div>
+                            <div class="task-info">
+                                <div class="task-title">Lucky Spin Teaser</div>
+                                <div class="task-desc">Claim your daily spin bonus</div>
+                            </div>
+                            <button class="task-btn">+300 Coins</button>
+                        </div>
+
+                        <div class="task-card" onclick="handleTaskClaim('task_telegram_join', 250, 'Join Telegram Channel Task')">
+                            <div class="task-icon" style="background: rgba(6, 182, 212, 0.15); color: #06B6D4;">
+                                <i class="fa-brands fa-telegram"></i>
+                            </div>
+                            <div class="task-info">
+                                <div class="task-title">Join Telegram Channel</div>
+                                <div class="task-desc">Get instant payout updates</div>
+                            </div>
+                            <button class="task-btn">+250 Coins</button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Arcade Lobby Quick Section -->
                 <div class="arcade-quick-section">
                     <div class="section-title">
-                        <h4><i class="fa-solid fa-gamepad" style="color: var(--color-secondary);"></i> Popular Games</h4>
+                        <h4><i class="fa-solid fa-gamepad" style="color: var(--color-secondary);"></i> Popular Games Lobby</h4>
                         <span id="btn-see-all-games" style="font-size: 12px; color: var(--color-primary); font-weight: 700; cursor: pointer;">View All <i class="fa-solid fa-chevron-right"></i></span>
                     </div>
                     <div class="games-grid" id="home-featured-games">
@@ -170,11 +233,11 @@
                     </div>
                     <div class="input-group">
                         <label for="redeem-method">Payment Method</label>
-                        <select id="redeem-method" class="input-group input" style="background: var(--card-bg-solid); color: #fff; padding: 12px;">
-                            <option value="UPI">UPI ID (Google Pay / PhonePe)</option>
+                        <select id="redeem-method" class="input-group input" style="background: var(--card-bg-solid); color: #fff; padding: 12px; border-radius: 12px; border: 1px solid var(--card-border);">
+                            <option value="UPI">UPI ID (Google Pay / PhonePe / Paytm UPI)</option>
                             <option value="Paytm">Paytm Wallet</option>
-                            <option value="Google Play Gift Card">Google Play Gift Card</option>
-                            <option value="Bank Transfer">Direct Bank Transfer</option>
+                            <option value="Google Play Gift Card">Google Play Gift Card Code</option>
+                            <option value="Bank Transfer">Direct Bank Transfer (NEFT/IMPS)</option>
                         </select>
                     </div>
                     <div class="input-group">
@@ -202,7 +265,7 @@
                 <div class="hero-card" style="background: linear-gradient(135deg, rgba(6,182,212,0.25) 0%, rgba(20,22,36,0.85) 100%); border-color: rgba(6,182,212,0.3);">
                     <span class="hero-tag" style="background: rgba(6,182,212,0.15); color: var(--color-cyan); border-color: rgba(6,182,212,0.3);"><i class="fa-solid fa-users"></i> Earn Together</span>
                     <h3>Invite Friends & Win</h3>
-                    <p>Get 200 bonus coins instantly whenever a friend joins ExtraEarn using your code!</p>
+                    <p>Get 200 bonus coins instantly whenever a friend joins ExtraEarn using your unique code!</p>
                 </div>
 
                 <div class="cashout-section">

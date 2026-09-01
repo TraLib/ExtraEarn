@@ -165,20 +165,32 @@ const server = http.createServer((req, res) => {
                     }
 
                     // Check Daily Check-in claim limit
-                    if (type === "Daily Check-in") {
-                        const options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' };
-                        const formatter = new Intl.DateTimeFormat('en-US', options);
-                        const parts = formatter.formatToParts(new Date());
-                        const month = parts.find(p => p.type === 'month').value;
-                        const day = parts.find(p => p.type === 'day').value;
-                        const year = parts.find(p => p.type === 'year').value;
-                        const istDateString = `${year}-${month}-${day}`;
+                    const options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' };
+                    const formatter = new Intl.DateTimeFormat('en-US', options);
+                    const parts = formatter.formatToParts(new Date());
+                    const month = parts.find(p => p.type === 'month').value;
+                    const day = parts.find(p => p.type === 'day').value;
+                    const year = parts.find(p => p.type === 'year').value;
+                    const istDateString = `${year}-${month}-${day}`;
 
+                    if (type === "Daily Check-in" || details?.includes("Daily Check-in")) {
                         if (user.lastCheckInDate === istDateString) {
-                            res.end(JSON.stringify({ success: false, error: "Already Claimed Today" }));
+                            res.end(JSON.stringify({ success: false, error: "Already Claimed Today! Come back tomorrow." }));
                             return;
                         }
                         user.lastCheckInDate = istDateString;
+                        user.dailyCheckins = (user.dailyCheckins || 0) + 1;
+                    }
+
+                    // Check Daily Task Limit
+                    if (details && details.startsWith("Task:")) {
+                        user.completedTasks = user.completedTasks || [];
+                        const taskKey = `${details}_${istDateString}`;
+                        if (user.completedTasks.includes(taskKey)) {
+                            res.end(JSON.stringify({ success: false, error: "This task reward was already claimed today!" }));
+                            return;
+                        }
+                        user.completedTasks.push(taskKey);
                     }
 
                     user.coins += amount;

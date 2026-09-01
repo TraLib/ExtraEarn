@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ExtraEarn Dynamic Web Client JavaScript Controller — Pro v2.0
+   ExtraEarn Dynamic Web Client JavaScript Controller — Pro v2.5 Live
    ========================================================================== */
 
 const API_BASE = window.location.origin;
@@ -9,11 +9,63 @@ let currentUser = null;
 let currentSettings = {};
 let currentActiveTab = 'tab-home';
 
+// Custom Toast System (NO raw API host URLs displayed in popups!)
+function showToast(message, type = "success", icon = null) {
+    const container = document.getElementById("toast-container");
+    if (!container) return;
+
+    const toast = document.createElement("div");
+    toast.className = `custom-toast ${type}`;
+    
+    let iconClass = icon || (type === "success" ? "fa-solid fa-circle-check" : type === "error" ? "fa-solid fa-triangle-exclamation" : "fa-solid fa-bell");
+    let iconColor = type === "success" ? "var(--color-emerald)" : type === "error" ? "var(--color-rose)" : "var(--color-primary)";
+
+    toast.innerHTML = `
+        <i class="${iconClass}" style="font-size: 18px; color: ${iconColor};"></i>
+        <span>${message}</span>
+    `;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateY(-10px)";
+        toast.style.transition = "all 0.3s ease";
+        setTimeout(() => toast.remove(), 300);
+    }, 3200);
+}
+
+// Custom Modal Dialog (Replaces native browser alert)
+function showAppModal(title, message, iconClass = "fa-solid fa-gift") {
+    const modal = document.getElementById("app-modal");
+    if (!modal) {
+        showToast(message, "success");
+        return;
+    }
+    
+    document.getElementById("modal-title").innerText = title;
+    document.getElementById("modal-message").innerText = message;
+    
+    const iconBadge = document.getElementById("modal-icon-badge");
+    if (iconBadge) {
+        iconBadge.innerHTML = `<i class="${iconClass}"></i>`;
+    }
+    
+    modal.style.display = "flex";
+}
+
+const btnCloseModal = document.getElementById("btn-modal-close");
+if (btnCloseModal) {
+    btnCloseModal.addEventListener("click", () => {
+        const modal = document.getElementById("app-modal");
+        if (modal) modal.style.display = "none";
+    });
+}
+
 // Auto Detect Mobile Display Size & Orientation Engine
 function autoDetectDisplaySize() {
     const width = window.innerWidth;
     const height = window.innerHeight;
-    const dpr = window.devicePixelRatio || 1;
     const isLandscape = width > height;
 
     const root = document.documentElement;
@@ -25,16 +77,14 @@ function autoDetectDisplaySize() {
     root.style.setProperty('--screen-width', `${width}px`);
     root.style.setProperty('--screen-height', `${height}px`);
 
-    // Remove previous screen width classes
     body.classList.remove('display-small', 'display-medium', 'display-large', 'display-landscape');
 
-    // Automatically set responsive layout classes based on screen width
     if (width <= 360) {
-        body.classList.add('display-small'); // Compact phones (Galaxy Fold outer, iPhone SE)
+        body.classList.add('display-small');
     } else if (width <= 480) {
-        body.classList.add('display-medium'); // Standard mobile screens
+        body.classList.add('display-medium');
     } else {
-        body.classList.add('display-large'); // Tablets & Desktop screens
+        body.classList.add('display-large');
     }
 
     if (isLandscape && height < 500) {
@@ -71,17 +121,14 @@ const screens = {
 };
 
 // -------------------------------------------------------------
-// BOOTSTRAP & INITIALIZATION (0ms Instant Load + Live API UI Sync)
+// BOOTSTRAP & INITIALIZATION
 // -------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. INSTANT 0ms CACHE RENDER (No millisecond delay for user!)
     loadCachedSettingsAndTheme();
 
     try {
-        // 2. Fetch Live Dynamic UI & Settings from API in background
         await syncApiUiBundle();
         
-        // 3. Check Saved User State
         const savedUserJson = localStorage.getItem("extraearn_user");
         if (savedUserJson) {
             currentUser = JSON.parse(savedUserJson);
@@ -102,7 +149,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// Load cached settings for 0ms instantaneous boot
 function loadCachedSettingsAndTheme() {
     try {
         const cachedStr = localStorage.getItem("extraearn_cached_ui");
@@ -116,7 +162,6 @@ function loadCachedSettingsAndTheme() {
     }
 }
 
-// Background API UI sync (Stale-While-Revalidate pattern)
 async function syncApiUiBundle() {
     try {
         const res = await fetch(`${API_BASE}/api/app-ui`);
@@ -133,7 +178,6 @@ async function syncApiUiBundle() {
     }
 }
 
-// Apply dynamic colors, font styles & branding elements
 function applyDynamicThemeAndBranding(settings) {
     if (!settings) return;
     const root = document.documentElement;
@@ -160,7 +204,6 @@ function showScreen(screenKey) {
     });
 }
 
-// Fetch & sync user profile from server
 async function refreshUserProfile() {
     if (!currentUser || !currentUser.id) return false;
     try {
@@ -185,7 +228,6 @@ function updateHeaderCoins() {
     document.getElementById('header-coin-count').innerText = currentUser.coins.toLocaleString();
     document.getElementById('wallet-coin-count').innerText = currentUser.coins.toLocaleString();
     
-    // Calculate approximate cash value (100 coins = ₹1)
     const cashVal = (currentUser.coins / 100).toFixed(2);
     document.getElementById('wallet-cash-value').innerText = cashVal;
     
@@ -194,6 +236,21 @@ function updateHeaderCoins() {
     if (currentUser.name) {
         document.getElementById('user-avatar').src = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(currentUser.name)}`;
     }
+}
+
+// -------------------------------------------------------------
+// CHECK-IN LIMIT GUARD (1 claim per calendar day per user)
+// -------------------------------------------------------------
+function isAlreadyClaimedToday() {
+    if (!currentUser || !currentUser.lastCheckInDate) return false;
+    const options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' };
+    const formatter = new Intl.DateTimeFormat('en-US', options);
+    const parts = formatter.formatToParts(new Date());
+    const month = parts.find(p => p.type === 'month').value;
+    const day = parts.find(p => p.type === 'day').value;
+    const year = parts.find(p => p.type === 'year').value;
+    const todayStr = `${year}-${month}-${day}`;
+    return currentUser.lastCheckInDate === todayStr;
 }
 
 // -------------------------------------------------------------
@@ -207,10 +264,9 @@ function renderAllUI() {
     setupNavigation();
 }
 
-// Render 7-Day Check-in Grid
 function renderCheckinGrid() {
     const container = document.getElementById('checkin-grid-container');
-    if (!container) return;
+    if (!container || !currentUser) return;
     
     const days = [
         { day: 'Day 1', reward: 20 },
@@ -219,14 +275,38 @@ function renderCheckinGrid() {
         { day: 'Day 4', reward: 50 },
         { day: 'Day 5', reward: 60 },
         { day: 'Day 6', reward: 70 },
-        { day: 'Day 7', reward: 80 }
+        { day: 'Day 7', reward: 100 }
     ];
     
-    const claimedCount = (currentUser.dailyCheckins || 0) % 7;
+    const claimedToday = isAlreadyClaimedToday();
+    const checkins = currentUser.dailyCheckins || 0;
+    const currentStreakIdx = claimedToday ? Math.max(0, (checkins - 1) % 7) : checkins % 7;
+
+    const heroBtn = document.getElementById('btn-claim-daily-hero');
+    const statusBadge = document.getElementById('checkin-status-badge');
+
+    if (heroBtn) {
+        if (claimedToday) {
+            heroBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> CLAIMED TODAY ✔`;
+            heroBtn.style.background = "rgba(16, 185, 129, 0.2)";
+            heroBtn.style.color = "var(--color-emerald)";
+            heroBtn.style.border = "1px solid var(--color-emerald)";
+        } else {
+            heroBtn.innerHTML = `<i class="fa-solid fa-calendar-check"></i> CLAIM DAILY CHECK-IN (+50)`;
+            heroBtn.style.background = "var(--color-primary)";
+            heroBtn.style.color = "#000";
+            heroBtn.style.border = "none";
+        }
+    }
+
+    if (statusBadge) {
+        statusBadge.innerText = claimedToday ? "Claimed Today ✔ (Next tomorrow)" : "Available to Claim!";
+        statusBadge.style.color = claimedToday ? "var(--color-emerald)" : "var(--color-primary)";
+    }
 
     container.innerHTML = days.map((d, idx) => {
-        const isClaimed = idx < claimedCount;
-        const isToday = idx === claimedCount;
+        let isClaimed = idx < currentStreakIdx || (idx === currentStreakIdx && claimedToday);
+        let isToday = idx === currentStreakIdx && !claimedToday;
         
         let classList = 'checkin-day';
         if (isClaimed) classList += ' claimed';
@@ -236,14 +316,18 @@ function renderCheckinGrid() {
             <div class="${classList}" onclick="handleCheckinClick(${idx}, ${isToday})">
                 <span>${d.day}</span>
                 <i class="${isClaimed ? 'fa-solid fa-check-circle' : 'fa-solid fa-coins'}"></i>
-                <div class="reward-val">+${d.reward}</div>
+                <div class="reward-val">${isClaimed ? 'Claimed' : '+' + d.reward}</div>
             </div>
         `;
     }).join('');
 }
 
 async function handleCheckinClick(dayIdx, isToday) {
-    if (!isToday) return;
+    if (isAlreadyClaimedToday()) {
+        showToast("You have already claimed today's daily reward! Come back tomorrow.", "warning", "fa-solid fa-clock");
+        return;
+    }
+    
     try {
         const res = await fetch(`${API_BASE}/api/users/adjust-coins`, {
             method: 'POST',
@@ -251,23 +335,52 @@ async function handleCheckinClick(dayIdx, isToday) {
             body: JSON.stringify({
                 userId: currentUser.id,
                 amount: 50,
-                type: 'earn',
-                details: 'Daily Check-in Reward'
+                type: 'Daily Check-in',
+                details: 'Daily Check-in Streak Reward'
             })
         });
         const data = await res.json();
         if (data.success) {
             currentUser = data.user;
             localStorage.setItem("extraearn_user", JSON.stringify(currentUser));
-            alert("🎉 +50 Coins claimed successfully!");
+            showAppModal("🎉 Daily Reward Claimed!", "Awesome! +50 gold coins added to your vault. Come back tomorrow for your next streak bonus!", "fa-solid fa-gift");
             renderAllUI();
+        } else {
+            showToast(data.error || "Check-in already claimed today!", "warning", "fa-solid fa-clock");
         }
     } catch (e) {
-        alert("Failed to claim check-in reward.");
+        showToast("Failed to claim check-in reward. Check connection.", "error");
     }
 }
 
-// Render Arcade Games Grids
+// Tasks Offerwall Claims
+async function handleTaskClaim(taskId, amount, taskTitle) {
+    if (!currentUser) return;
+    try {
+        const res = await fetch(`${API_BASE}/api/users/adjust-coins`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                userId: currentUser.id,
+                amount: amount,
+                type: 'earn',
+                details: `Task: ${taskTitle}`
+            })
+        });
+        const data = await res.json();
+        if (data.success) {
+            currentUser = data.user;
+            localStorage.setItem("extraearn_user", JSON.stringify(currentUser));
+            showAppModal("🎉 Task Completed!", `Awesome! You earned +${amount} coins for completing "${taskTitle}".`, "fa-solid fa-trophy");
+            renderAllUI();
+        } else {
+            showToast(data.error || "This task reward was already claimed today!", "warning", "fa-solid fa-bell");
+        }
+    } catch (e) {
+        showToast("Failed to claim task reward.", "error");
+    }
+}
+
 function renderGamesGrids() {
     const homeGrid = document.getElementById('home-featured-games');
     const fullGrid = document.getElementById('arcade-full-grid');
@@ -289,7 +402,6 @@ function renderGamesGrids() {
     if (fullGrid) fullGrid.innerHTML = gamesList.map(cardHTML).join('');
 }
 
-// Launch Arcade Game Overlays
 function launchGame(file, name) {
     if (!currentUser) return;
     const url = `${API_BASE}/${file}?userId=${currentUser.id}`;
@@ -305,11 +417,10 @@ document.getElementById('btn-exit-game').addEventListener('click', async () => {
     await refreshUserProfile();
 });
 
-// Real-time score listener from games
 window.addEventListener('message', async (event) => {
     if (event.data && event.data.type === 'GAME_SCORE') {
         const score = event.data.score || 0;
-        const coinsEarned = Math.min(score, 50); // Cap coins per session
+        const coinsEarned = Math.min(score, 50);
         if (coinsEarned > 0 && currentUser) {
             try {
                 await fetch(`${API_BASE}/api/users/adjust-coins`, {
@@ -330,7 +441,6 @@ window.addEventListener('message', async (event) => {
     }
 });
 
-// Render Recent Transactions History
 async function renderTransactionsHistory() {
     const container = document.getElementById('wallet-history-list');
     if (!container || !currentUser) return;
@@ -379,14 +489,13 @@ function setupNavigation() {
     
     const claimHeroBtn = document.getElementById('btn-claim-daily-hero');
     if (claimHeroBtn) {
-        claimHeroBtn.addEventListener('click', () => handleCheckinClick(0, true));
+        claimHeroBtn.onclick = () => handleCheckinClick(0, true);
     }
 }
 
 function switchTab(tabId) {
     currentActiveTab = tabId;
     
-    // Update Tab Panes
     document.querySelectorAll('.tab-pane').forEach(pane => {
         if (pane.id === tabId) {
             pane.classList.add('active');
@@ -395,7 +504,6 @@ function switchTab(tabId) {
         }
     });
 
-    // Update Nav Bar Indicators
     document.querySelectorAll('.nav-item').forEach(item => {
         if (item.getAttribute('data-tab') === tabId) {
             item.classList.add('active');
@@ -406,7 +514,7 @@ function switchTab(tabId) {
 }
 
 // -------------------------------------------------------------
-// AUTHENTICATION HANDLERS
+// AUTHENTICATION & CASHOUT HANDLERS
 // -------------------------------------------------------------
 const btnSendOtp = document.getElementById('btn-send-otp');
 const btnVerifyLogin = document.getElementById('btn-verify-login');
@@ -416,7 +524,7 @@ if (btnSendOtp) {
         const name = document.getElementById('login-name').value.trim();
         const phone = document.getElementById('login-phone').value.trim();
         if (!name || !phone || phone.length !== 10) {
-            alert("Please enter full name and 10-digit mobile number.");
+            showToast("Please enter full name and 10-digit mobile number.", "warning");
             return;
         }
         document.getElementById('auth-form-step').style.display = 'none';
@@ -440,14 +548,14 @@ if (btnVerifyLogin) {
                 localStorage.setItem("extraearn_user", JSON.stringify(currentUser));
                 showScreen('dashboard');
                 renderAllUI();
+                showToast(`Welcome back, ${currentUser.name}!`, "success");
             }
         } catch (e) {
-            alert("Login failed. Please check network connection.");
+            showToast("Login failed. Please check network connection.", "error");
         }
     });
 }
 
-// Redeem & Cashout Form Handler
 const btnSubmitRedeem = document.getElementById('btn-submit-redeem');
 if (btnSubmitRedeem) {
     btnSubmitRedeem.addEventListener('click', async () => {
@@ -456,15 +564,15 @@ if (btnSubmitRedeem) {
         const details = document.getElementById('redeem-details').value.trim();
 
         if (!amount || amount < 100) {
-            alert("Minimum cashout is 100 coins.");
+            showToast("Minimum cashout threshold is 100 coins.", "warning");
             return;
         }
         if (!details) {
-            alert("Please enter your payment account details.");
+            showToast("Please enter your payment account / UPI details.", "warning");
             return;
         }
         if (currentUser.coins < amount) {
-            alert("Insufficient coin balance!");
+            showToast("Insufficient coin balance in vault!", "error");
             return;
         }
 
@@ -483,24 +591,31 @@ if (btnSubmitRedeem) {
             if (data.success) {
                 currentUser = data.user;
                 localStorage.setItem("extraearn_user", JSON.stringify(currentUser));
-                alert("✅ Cashout request submitted successfully!");
+                showAppModal("✅ Cashout Request Submitted!", `Your withdrawal request of ${amount} coins via ${method} has been submitted for admin processing.`, "fa-solid fa-circle-check");
                 document.getElementById('redeem-amount').value = '';
                 document.getElementById('redeem-details').value = '';
                 renderAllUI();
             }
         } catch (e) {
-            alert("Failed to submit cashout request.");
+            showToast("Failed to submit cashout request.", "error");
         }
     });
 }
 
-// Share & Copy Referral Code
 const btnCopyRef = document.getElementById('btn-copy-ref');
 if (btnCopyRef) {
     btnCopyRef.addEventListener('click', () => {
         const codeInput = document.getElementById('ref-code-input');
         codeInput.select();
         document.execCommand('copy');
-        alert("Referral code copied to clipboard!");
+        showToast("Referral code copied to clipboard!", "success", "fa-solid fa-copy");
+    });
+}
+
+const btnShareWhatsapp = document.getElementById('btn-share-whatsapp');
+if (btnShareWhatsapp) {
+    btnShareWhatsapp.addEventListener('click', () => {
+        const text = `Hey! Join ExtraEarn app and claim free daily cash rewards & games! Use my referral code: EXTRA2026`;
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
     });
 }

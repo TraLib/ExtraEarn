@@ -874,6 +874,225 @@ body {
     height: calc(75px + env(safe-area-inset-bottom, 0px));
 }
 
+/* -------------------------------------------------------------
+ * TOAST NOTIFICATIONS (No raw API URLs in alerts)
+ * ------------------------------------------------------------- */
+.toast-container {
+    position: fixed;
+    top: calc(15px + env(safe-area-inset-top, 0px));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+    width: 90%;
+    max-width: 380px;
+}
+
+.custom-toast {
+    background: rgba(18, 20, 34, 0.95);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 12px 16px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: toastIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: auto;
+}
+
+.custom-toast.success {
+    border-color: var(--color-emerald);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.25);
+}
+
+.custom-toast.error {
+    border-color: var(--color-rose);
+    box-shadow: 0 8px 25px rgba(244, 63, 94, 0.25);
+}
+
+.custom-toast.warning {
+    border-color: var(--color-primary);
+    box-shadow: 0 8px 25px var(--color-primary-glow);
+}
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* -------------------------------------------------------------
+ * CUSTOM APP MODAL BACKDROP (Replaces native browser alert)
+ * ------------------------------------------------------------- */
+.app-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(4, 5, 10, 0.82);
+    backdrop-filter: blur(14px);
+    z-index: 99990;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.app-modal-card {
+    background: linear-gradient(145deg, rgba(22, 25, 42, 0.96) 0%, rgba(12, 14, 24, 0.98) 100%);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+    width: 100%;
+    max-width: 360px;
+    padding: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+@keyframes modalPop {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.modal-icon-badge {
+    width: 60px;
+    height: 60px;
+    border-radius: 20px;
+    background: rgba(255, 184, 0, 0.15);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    margin-bottom: 16px;
+    border: 1px solid var(--color-primary);
+    box-shadow: 0 0 20px var(--color-primary-glow);
+}
+
+.app-modal-header h3 {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.app-modal-body p {
+    font-size: 13px;
+    color: var(--color-muted);
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.app-modal-footer {
+    width: 100%;
+}
+
+/* -------------------------------------------------------------
+ * TASKS OFFERWALL (WinZO / TaskBucks Style)
+ * ------------------------------------------------------------- */
+.tasks-section {
+    margin-bottom: 24px;
+}
+
+.tasks-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.task-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.task-card:active {
+    transform: scale(0.98);
+}
+
+.task-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.task-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.task-title {
+    font-weight: 800;
+    font-size: 13.5px;
+    color: #fff;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.task-desc {
+    font-size: 11px;
+    color: var(--color-muted);
+}
+
+.task-btn {
+    background: rgba(255, 184, 0, 0.12);
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    font-weight: 800;
+    font-size: 12px;
+    padding: 8px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.task-card.claimed .task-btn {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: var(--color-emerald);
+    color: var(--color-emerald);
+    cursor: default;
+}
+
+/* Checkin Grid States */
+.checkin-day.claimed {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.4);
+    color: var(--color-emerald);
+}
+
+.checkin-day.claimed .reward-val {
+    color: var(--color-emerald);
+}
+
+
 .app-content {
     padding-bottom: calc(95px + env(safe-area-inset-bottom, 0px));
 }
