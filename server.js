@@ -326,7 +326,124 @@ const server = http.createServer((req, res) => {
                 return;
             }
 
-            // 10. GET /api/admin/games
+            // 10. GET /api/app-ui (Full API-driven UI bundle with version tag)
+            if (req.url === '/api/app-ui' && req.method === 'GET') {
+                try {
+                    const htmlPath = path.join(__dirname, 'app_code', 'index.html');
+                    const cssPath = path.join(__dirname, 'app_code', 'app.css');
+                    const jsPath = path.join(__dirname, 'app_code', 'app.js');
+                    
+                    const html = fs.existsSync(htmlPath) ? fs.readFileSync(htmlPath, 'utf8') : '';
+                    const css = fs.existsSync(cssPath) ? fs.readFileSync(cssPath, 'utf8') : '';
+                    const js = fs.existsSync(jsPath) ? fs.readFileSync(jsPath, 'utf8') : '';
+
+                    const htmlStat = fs.existsSync(htmlPath) ? fs.statSync(htmlPath).mtimeMs : 0;
+                    const cssStat = fs.existsSync(cssPath) ? fs.statSync(cssPath).mtimeMs : 0;
+                    const jsStat = fs.existsSync(jsPath) ? fs.statSync(jsPath).mtimeMs : 0;
+                    const version = `ui_${htmlStat}_${cssStat}_${jsStat}`;
+
+                    res.end(JSON.stringify({
+                        success: true,
+                        version,
+                        settings: db.settings,
+                        uiHtml: html,
+                        uiCss: css,
+                        uiJs: js
+                    }));
+                } catch (err) {
+                    res.writeHead(500, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: err.message }));
+                }
+                return;
+            }
+
+            // 11. GET /api/admin/code/files (List editable app UI & server code files)
+            if (req.url === '/api/admin/code/files' && req.method === 'GET') {
+                try {
+                    const rootFiles = fs.readdirSync(__dirname);
+                    const games = rootFiles.filter(f => f.endsWith('.html') && f !== 'index.html');
+                    
+                    const fileList = [
+                        { category: "App UI Code", path: "app_code/index.html", label: "App UI Markup (index.html)" },
+                        { category: "App UI Code", path: "app_code/app.css", label: "App UI Styling (app.css)" },
+                        { category: "App UI Code", path: "app_code/app.js", label: "App UI Controller (app.js)" },
+                        { category: "Backend & Server", path: "server.js", label: "Backend Express Server (server.js)" },
+                        { category: "Backend & Server", path: "database.json", label: "Database Storage (database.json)" },
+                        ...games.map(g => ({ category: "Arcade Games", path: g, label: `Game: ${g}` }))
+                    ];
+                    res.end(JSON.stringify({ success: true, files: fileList }));
+                } catch (err) {
+                    res.writeHead(500, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: err.message }));
+                }
+                return;
+            }
+
+            // 12. GET /api/admin/code (Read source code of any app UI or server file)
+            if (req.url.startsWith('/api/admin/code') && req.method === 'GET') {
+                const urlObj = new URL(req.url, `http://${req.headers.host}`);
+                let file = urlObj.searchParams.get('file');
+                if (!file) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: "Missing file parameter" }));
+                    return;
+                }
+                
+                const normalizedRel = path.normalize(file).replace(/^(\.\.[\/\\])+/, '');
+                const filePath = path.join(__dirname, normalizedRel);
+                if (!filePath.startsWith(__dirname)) {
+                    res.writeHead(403, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: "Access denied" }));
+                    return;
+                }
+
+                try {
+                    if (fs.existsSync(filePath)) {
+                        const code = fs.readFileSync(filePath, 'utf8');
+                        res.end(JSON.stringify({ success: true, file: normalizedRel, code }));
+                    } else {
+                        res.writeHead(404, { 'Content-Type': 'application/json' });
+                        res.end(JSON.stringify({ error: "File not found" }));
+                    }
+                } catch (err) {
+                    res.writeHead(500, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: err.message }));
+                }
+                return;
+            }
+
+            // 13. POST /api/admin/code (Save code changes to app UI or server file live)
+            if (req.url === '/api/admin/code' && req.method === 'POST') {
+                const { file, code } = jsonBody;
+                if (!file || typeof code !== 'string') {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: "Invalid file or code content" }));
+                    return;
+                }
+
+                const normalizedRel = path.normalize(file).replace(/^(\.\.[\/\\])+/, '');
+                const filePath = path.join(__dirname, normalizedRel);
+                if (!filePath.startsWith(__dirname)) {
+                    res.writeHead(403, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: "Access denied" }));
+                    return;
+                }
+
+                try {
+                    fs.writeFileSync(filePath, code, 'utf8');
+                    // If database.json was updated, reload in memory immediately
+                    if (normalizedRel === 'database.json') {
+                        loadDatabase();
+                    }
+                    res.end(JSON.stringify({ success: true, message: `Successfully updated ${normalizedRel} live!` }));
+                } catch (err) {
+                    res.writeHead(500, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: err.message }));
+                }
+                return;
+            }
+
+            // 14. GET /api/admin/games
             if (req.url === '/api/admin/games' && req.method === 'GET') {
                 try {
                     const files = fs.readdirSync(__dirname);
@@ -339,7 +456,7 @@ const server = http.createServer((req, res) => {
                 return;
             }
 
-            // 11. GET /api/admin/games/code
+            // 15. GET /api/admin/games/code
             if (req.url.startsWith('/api/admin/games/code') && req.method === 'GET') {
                 const urlObj = new URL(req.url, `http://${req.headers.host}`);
                 const file = urlObj.searchParams.get('file');
@@ -369,7 +486,7 @@ const server = http.createServer((req, res) => {
                 return;
             }
 
-            // 12. POST /api/admin/games/code
+            // 16. POST /api/admin/games/code
             if (req.url === '/api/admin/games/code' && req.method === 'POST') {
                 const { file, code } = jsonBody;
                 if (!file || !file.endsWith('.html') || file === 'index.html') {

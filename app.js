@@ -549,3 +549,151 @@ async function deleteUser(userId) {
         logEvent("ERROR", "Failed to delete user.", "text-danger");
     }
 }
+
+// ==========================================================================
+// APP UI & BACKEND LIVE CODE STUDIO CONTROLLER
+// ==========================================================================
+let currentStudioFile = 'app_code/index.html';
+
+// Open Studio Modal
+async function openStudioModal() {
+    const modal = document.getElementById("studio-modal");
+    if (modal) {
+        modal.style.display = "flex";
+        await populateStudioGamesDropdown();
+        await loadStudioFile(currentStudioFile);
+    }
+}
+
+// Close Studio Modal
+function closeStudioModal() {
+    const modal = document.getElementById("studio-modal");
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+
+// Populate Games in Studio Dropdown
+async function populateStudioGamesDropdown() {
+    try {
+        const res = await fetch(`${API_BASE}/api/admin/games`);
+        if (res.ok) {
+            const games = await res.json();
+            const dropdown = document.getElementById("studio-game-select");
+            if (dropdown && Array.isArray(games)) {
+                dropdown.innerHTML = `<option value="" disabled selected>Select Game File...</option>` +
+                    games.map(g => `<option value="${g}">🎮 ${g}</option>`).join("");
+            }
+        }
+    } catch (e) {
+        console.error("Error loading studio games:", e);
+    }
+}
+
+// Load Studio File into Editor
+async function loadStudioFile(filePath) {
+    if (!filePath) return;
+    currentStudioFile = filePath;
+
+    // Update active tab buttons
+    document.querySelectorAll(".studio-file-tab").forEach(tab => {
+        if (tab.getAttribute("data-file") === filePath) {
+            tab.classList.add("active");
+        } else {
+            tab.classList.remove("active");
+        }
+    });
+
+    const activeLabel = document.getElementById("studio-active-filename");
+    if (activeLabel) activeLabel.innerText = filePath;
+
+    const editor = document.getElementById("studio-code-editor");
+    if (editor) {
+        editor.value = "Loading code from API server...";
+        try {
+            const res = await fetch(`${API_BASE}/api/admin/code?file=${encodeURIComponent(filePath)}`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data.success) {
+                    editor.value = data.code;
+                    updateStudioCharCount();
+                } else {
+                    editor.value = `// Error: ${data.error}`;
+                }
+            }
+        } catch (e) {
+            editor.value = `// Connection Error: ${e.message}`;
+        }
+    }
+}
+
+// Save Studio Code Live to API
+async function saveStudioCode() {
+    const editor = document.getElementById("studio-code-editor");
+    if (!editor || !currentStudioFile) return;
+
+    const code = editor.value;
+    try {
+        const res = await fetch(`${API_BASE}/api/admin/code`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ file: currentStudioFile, code })
+        });
+        const data = await res.json();
+        if (data.success) {
+            logEvent("STUDIO", `Successfully saved and deployed ${currentStudioFile} live to API!`, "text-green");
+            alert(`🚀 Live API Deployment Successful!\n${data.message}`);
+            refreshStudioPreview();
+        } else {
+            alert(`Error: ${data.error}`);
+        }
+    } catch (e) {
+        alert(`Failed to save code: ${e.message}`);
+    }
+}
+
+// Refresh Live Preview Frame
+function refreshStudioPreview() {
+    const iframe = document.getElementById("studio-preview-iframe");
+    if (iframe) {
+        iframe.src = `app_code/index.html?t=${Date.now()}`;
+    }
+}
+
+// Character and line count indicator
+function updateStudioCharCount() {
+    const editor = document.getElementById("studio-code-editor");
+    const countSpan = document.getElementById("studio-char-count");
+    if (editor && countSpan) {
+        const lines = editor.value.split('\n').length;
+        const chars = editor.value.length;
+        countSpan.innerText = `${lines} lines | ${chars} chars`;
+    }
+}
+
+// Add event listener for real-time line count
+document.addEventListener("DOMContentLoaded", () => {
+    const editor = document.getElementById("studio-code-editor");
+    if (editor) {
+        editor.addEventListener("input", updateStudioCharCount);
+    }
+});
+
+// Insert quick code snippets
+function insertStudioSnippet(type) {
+    const editor = document.getElementById("studio-code-editor");
+    if (!editor) return;
+
+    let snippet = "";
+    if (type === "card") {
+        snippet = `\n<!-- New Live Dynamic Card -->\n<div class="card-bg-solid margin-top-md" style="padding: 16px; border-radius: 16px; border: 1px solid var(--card-border);">\n    <h3 style="color: #fff; font-size: 16px;">✨ Custom Dynamic Title</h3>\n    <p style="color: var(--text-muted); font-size: 12px; margin-top: 4px;">Dynamic API-driven UI block configured by Admin.</p>\n</div>\n`;
+    } else if (type === "button") {
+        snippet = `\n<button class="btn btn-primary btn-block margin-top-md" onclick="alert('Action Triggered!')">\n    <i class="fa-solid fa-bolt"></i> Live Action Button\n</button>\n`;
+    }
+
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    const val = editor.value;
+    editor.value = val.substring(0, start) + snippet + val.substring(end);
+    updateStudioCharCount();
+}

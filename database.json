@@ -4,7 +4,7 @@
             "id": "usr_1",
             "name": "Hiten Patel",
             "phone": "9876543210",
-            "coins": 2935,
+            "coins": 8500,
             "level": 1,
             "status": "Active",
             "devices": [
@@ -1476,6 +1476,1126 @@
             "timestamp": "2026-07-18 09:03:21",
             "status": "Success",
             "details": "UPI",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281881982_483",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:01",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281882376_218",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:02",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281883396_626",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:03",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281884519_567",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:04",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281884694_507",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:04",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281884872_508",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:04",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281885866_38",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:05",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281885867_727",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:05",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281885869_174",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:05",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281885871_127",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:05",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281885872_433",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:05",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281885874_115",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:05",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281885875_946",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:05",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281887401_428",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:07",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281887403_709",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:07",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281887405_307",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:07",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281887407_42",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:07",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281887409_891",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:07",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281887412_127",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:07",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281887414_790",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:07",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281887416_256",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:07",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281887418_482",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:07",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281887421_334",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:07",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281887423_302",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:07",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281887425_619",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:07",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281887428_110",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:07",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281887431_236",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:07",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888923_781",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888925_265",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888927_695",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888928_72",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888931_152",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888933_341",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888935_454",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888936_2",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888938_483",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888940_385",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888942_55",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888945_908",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888947_232",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888951_827",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888954_54",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888956_148",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888960_694",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888963_617",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888967_759",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888970_226",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888973_963",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888977_992",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888981_27",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888984_978",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888986_518",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888990_624",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888993_877",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281888995_607",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:08",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890416_282",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890418_206",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890421_574",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890424_496",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890426_337",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890428_524",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890430_531",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890432_237",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890434_100",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890436_877",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890438_222",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890442_380",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890443_587",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890445_302",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890449_583",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890452_586",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890455_518",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890459_693",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890462_223",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890466_398",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890469_959",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890472_68",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890475_456",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890477_976",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890478_199",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890481_526",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890484_530",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890485_652",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890489_810",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890491_449",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890493_138",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890495_197",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890498_686",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890500_439",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890502_790",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890506_35",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890509_629",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890512_144",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890515_488",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890517_733",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890519_877",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890523_347",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890526_417",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890527_352",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890529_805",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890532_157",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890534_245",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890537_886",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890541_452",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890543_222",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890548_484",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890552_232",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890556_51",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890559_124",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890562_53",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281890566_399",
+            "userId": "usr_1",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 16:58:10",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788281910021_61",
+            "userId": "usr_1",
+            "type": "Game Reward",
+            "amount": 15,
+            "timestamp": "2026-09-01 16:58:30",
+            "status": "Success",
+            "details": "Star Catcher: scored 15",
             "redeemCode": ""
         }
     ],

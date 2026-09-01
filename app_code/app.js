@@ -9,6 +9,43 @@ let currentUser = null;
 let currentSettings = {};
 let currentActiveTab = 'tab-home';
 
+// Auto Detect Mobile Display Size & Orientation Engine
+function autoDetectDisplaySize() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+    const isLandscape = width > height;
+
+    const root = document.documentElement;
+    const body = document.body;
+
+    // Set dynamic viewport height variable (fixes mobile browser 100vh bug)
+    const vh = height * 0.01;
+    root.style.setProperty('--vh', `${vh}px`);
+    root.style.setProperty('--screen-width', `${width}px`);
+    root.style.setProperty('--screen-height', `${height}px`);
+
+    // Remove previous screen width classes
+    body.classList.remove('display-small', 'display-medium', 'display-large', 'display-landscape');
+
+    // Automatically set responsive layout classes based on screen width
+    if (width <= 360) {
+        body.classList.add('display-small'); // Compact phones (Galaxy Fold outer, iPhone SE)
+    } else if (width <= 480) {
+        body.classList.add('display-medium'); // Standard mobile screens
+    } else {
+        body.classList.add('display-large'); // Tablets & Desktop screens
+    }
+
+    if (isLandscape && height < 500) {
+        body.classList.add('display-landscape');
+    }
+}
+
+window.addEventListener('resize', autoDetectDisplaySize);
+window.addEventListener('orientationchange', autoDetectDisplaySize);
+autoDetectDisplaySize();
+
 // Arcade Games Registry
 const gamesList = [
     { file: "star_catcher.html", name: "Star Catcher", icon: "fa-solid fa-star", color: "#FFB800", desc: "Catch falling stars & boost score" },
@@ -34,15 +71,17 @@ const screens = {
 };
 
 // -------------------------------------------------------------
-// BOOTSTRAP & INITIALIZATION
+// BOOTSTRAP & INITIALIZATION (0ms Instant Load + Live API UI Sync)
 // -------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', async () => {
+    // 1. INSTANT 0ms CACHE RENDER (No millisecond delay for user!)
+    loadCachedSettingsAndTheme();
+
     try {
-        // 1. Fetch System Settings
-        const settingsRes = await fetch(`${API_BASE}/api/settings`);
-        currentSettings = await settingsRes.json();
+        // 2. Fetch Live Dynamic UI & Settings from API in background
+        await syncApiUiBundle();
         
-        // 2. Check Saved User State
+        // 3. Check Saved User State
         const savedUserJson = localStorage.getItem("extraearn_user");
         if (savedUserJson) {
             currentUser = JSON.parse(savedUserJson);
@@ -58,10 +97,58 @@ document.addEventListener('DOMContentLoaded', async () => {
             showScreen('auth');
         }
     } catch (e) {
-        console.error("Initialization error:", e);
-        showScreen('auth');
+        console.error("Initialization background sync error:", e);
+        if (!currentUser) showScreen('auth');
     }
 });
+
+// Load cached settings for 0ms instantaneous boot
+function loadCachedSettingsAndTheme() {
+    try {
+        const cachedStr = localStorage.getItem("extraearn_cached_ui");
+        if (cachedStr) {
+            const data = JSON.parse(cachedStr);
+            currentSettings = data.settings || {};
+            applyDynamicThemeAndBranding(currentSettings);
+        }
+    } catch (e) {
+        console.error("Cache load error:", e);
+    }
+}
+
+// Background API UI sync (Stale-While-Revalidate pattern)
+async function syncApiUiBundle() {
+    try {
+        const res = await fetch(`${API_BASE}/api/app-ui`);
+        if (res.ok) {
+            const data = await res.json();
+            if (data.success && data.settings) {
+                currentSettings = data.settings;
+                localStorage.setItem("extraearn_cached_ui", JSON.stringify(data));
+                applyDynamicThemeAndBranding(currentSettings);
+            }
+        }
+    } catch (e) {
+        console.warn("API UI sync offline/failed, using cached UI:", e);
+    }
+}
+
+// Apply dynamic colors, font styles & branding elements
+function applyDynamicThemeAndBranding(settings) {
+    if (!settings) return;
+    const root = document.documentElement;
+    if (settings.primaryColor) root.style.setProperty('--color-primary', settings.primaryColor);
+    if (settings.secondaryColor) root.style.setProperty('--color-secondary', settings.secondaryColor);
+    if (settings.cardColor) root.style.setProperty('--card-bg-solid', settings.cardColor);
+    if (settings.borderColor) root.style.setProperty('--card-border', settings.borderColor);
+    if (settings.backgroundColor) root.style.setProperty('--app-bg', settings.backgroundColor);
+
+    const splashName = document.getElementById('splash-app-name');
+    if (splashName && settings.appName) splashName.innerText = settings.appName;
+
+    const splashSub = document.getElementById('splash-app-subtitle');
+    if (splashSub && settings.appSubtitle) splashSub.innerText = settings.appSubtitle;
+}
 
 function showScreen(screenKey) {
     Object.keys(screens).forEach(key => {
