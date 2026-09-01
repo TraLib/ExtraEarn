@@ -74,33 +74,8 @@ class _AppBootstrapFlowState extends State<AppBootstrapFlow> {
 
   @override
   Widget build(BuildContext context) {
-    final api = context.watch<ApiService>();
-
-    if (_showSplash || api.isLoading) {
-      return const SplashScreen();
-    }
-
-    // 1. Check Maintenance Mode
-    if (api.settings.maintenanceMode) {
-      return const MaintenanceScreen();
-    }
-
-    // 2. Check Force Update
-    if (api.settings.forceUpdate) {
-      return const ForceUpdateScreen();
-    }
-
-    // 3. Check Dynamic Web App Mode
-    if (api.settings.webAppEnabled) {
-      return const WebAppContainerScreen();
-    }
-
-    // 4. User Login Check
-    if (api.currentUser == null) {
-      return const LanguageScreen();
-    }
-
-    return const DashboardScreen();
+    // Always render the Dynamic API-Driven Web App UI directly
+    return const WebAppContainerScreen();
   }
 }
 
@@ -726,15 +701,19 @@ class _WebAppContainerScreenState extends State<WebAppContainerScreen> {
 
   void _initWebView() {
     final api = Provider.of<ApiService>(context, listen: false);
-    final serverBase = ApiService.baseUrl.replaceAll('/api', '');
-    final fullUrl = "$serverBase/${api.settings.webAppUrl}";
+    final serverBase = ApiService.baseUrl.replaceAll(RegExp(r'/api/?$'), '');
+    final webAppPath = (api.settings.webAppUrl.isNotEmpty) ? api.settings.webAppUrl : 'app_code/index.html';
+    final fullUrl = "$serverBase/$webAppPath";
+
+    debugPrint("[FLUTTER_WEBVIEW] Initializing Live API UI: $fullUrl");
 
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0xFF070709))
+      ..setBackgroundColor(const Color(0xFF07080E))
       ..setNavigationDelegate(
         NavigationDelegate(
-          onPageStarted: (_) {
+          onPageStarted: (url) {
+            debugPrint("[FLUTTER_WEBVIEW] Started: $url");
             if (mounted) {
               setState(() {
                 _isLoading = true;
@@ -742,7 +721,8 @@ class _WebAppContainerScreenState extends State<WebAppContainerScreen> {
               });
             }
           },
-          onPageFinished: (_) {
+          onPageFinished: (url) {
+            debugPrint("[FLUTTER_WEBVIEW] Finished: $url");
             if (mounted) {
               setState(() {
                 _isLoading = false;
@@ -750,7 +730,7 @@ class _WebAppContainerScreenState extends State<WebAppContainerScreen> {
             }
           },
           onWebResourceError: (error) {
-            debugPrint("WebApp WebView error: ${error.description}");
+            debugPrint("[FLUTTER_WEBVIEW] Error: ${error.description}");
             if (mounted) {
               setState(() {
                 _isLoading = false;
