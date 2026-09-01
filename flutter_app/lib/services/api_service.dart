@@ -30,7 +30,7 @@ class ApiService extends ChangeNotifier {
     secondaryColor: '#7C3AED',
     cardColor: '#14141B',
     borderColor: '#252535',
-    webAppEnabled: false,
+    webAppEnabled: true,
     webAppUrl: 'app_code/index.html',
     quickGames: [],
     onboardingSlides: [],

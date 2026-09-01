@@ -31,7 +31,7 @@ let db = {
         cardColor: "#14141B",
         borderColor: "#252535",
         backgroundColor: "#070709",
-        webAppEnabled: false,
+        webAppEnabled: true,
         webAppUrl: "app_code/index.html"
     }
 };
@@ -45,7 +45,7 @@ function loadDatabase() {
                 users: loadedDb.users || db.users,
                 transactions: loadedDb.transactions || db.transactions,
                 settings: {
-                    webAppEnabled: false,
+                    webAppEnabled: true,
                     webAppUrl: "app_code/index.html",
                     ...db.settings,
                     ...loadedDb.settings

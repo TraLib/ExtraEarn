@@ -181,6 +181,17 @@
                 "android_9pfpdi"
             ],
             "lastCheckInDate": "2026-07-18"
+        },
+        {
+            "id": "ASTC1G",
+            "name": "king",
+            "phone": "2323233432",
+            "coins": 200,
+            "level": 1,
+            "status": "Active",
+            "devices": [
+                "android_brkax"
+            ]
         }
     ],
     "transactions": [
@@ -2597,10 +2608,30 @@
             "status": "Success",
             "details": "Star Catcher: scored 15",
             "redeemCode": ""
+        },
+        {
+            "id": "tx_1788282195456_965",
+            "userId": "ASTC1G",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 17:03:15",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
+        },
+        {
+            "id": "tx_1788282197375_541",
+            "userId": "ASTC1G",
+            "type": "earn",
+            "amount": 50,
+            "timestamp": "2026-09-01 17:03:17",
+            "status": "Success",
+            "details": "Daily Check-in Reward",
+            "redeemCode": ""
         }
     ],
     "settings": {
-        "webAppEnabled": false,
+        "webAppEnabled": true,
         "webAppUrl": "app_code/index.html",
         "maintenanceMode": false,
         "forceUpdate": false,
