@@ -326,11 +326,47 @@
             }
         }
 
+        function playCatchSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1400, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            } catch(e) {}
+        }
+
+        function playHitSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(120, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            } catch(e) {}
+        }
+
         function checkCollisions() {
             for (let i = gameObjects.length - 1; i >= 0; i--) {
                 let item = gameObjects[i];
 
-                // Standard bounding-box overlap tracking
                 if (item.y + item.radius >= paddle.y && 
                     item.y - item.radius <= paddle.y + paddle.height &&
                     item.x + item.radius >= paddle.x && 
@@ -339,20 +375,22 @@
                     if (item.type === 'star') {
                         score++;
                         scoreEl.innerText = score;
+                        playCatchSound();
                     } else {
                         lives--;
                         livesEl.innerText = lives;
+                        playHitSound();
                         if (lives <= 0) triggerGameOver();
                     }
                     gameObjects.splice(i, 1);
                     continue;
                 }
 
-                // If object exits bottom boundary line completely
                 if (item.y - item.radius > canvas.height) {
                     if (item.type === 'star') {
                         lives--;
                         livesEl.innerText = lives;
+                        playHitSound();
                         if (lives <= 0) triggerGameOver();
                     }
                     gameObjects.splice(i, 1);

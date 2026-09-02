@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ExtraEarn Dynamic Web Client JavaScript Controller — Pro v2.5 Live
+   ExtraEarn Dynamic Web Client JavaScript Controller — Pro v3.0 Ultra Edition
    ========================================================================== */
 
 const API_BASE = window.location.origin;
@@ -8,9 +8,160 @@ const API_BASE = window.location.origin;
 let currentUser = null;
 let currentSettings = {};
 let currentActiveTab = 'tab-home';
+let isSoundMuted = localStorage.getItem("extraearn_sound_muted") === "true";
 
-// Custom Toast System (NO raw API host URLs displayed in popups!)
+// -------------------------------------------------------------
+// WEB AUDIO API SOUND SYNTHESIZER ENGINE (Zero asset dependencies!)
+// -------------------------------------------------------------
+class SoundEngine {
+    constructor() {
+        this.ctx = null;
+    }
+
+    initCtx() {
+        if (!this.ctx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) this.ctx = new AudioContext();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+            this.ctx.resume();
+        }
+    }
+
+    playCoin() {
+        if (isSoundMuted) return;
+        this.initCtx();
+        if (!this.ctx) return;
+
+        try {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(987.77, this.ctx.currentTime); // B5
+            osc.frequency.exponentialRampToValueAtTime(1318.51, this.ctx.currentTime + 0.1); // E6
+
+            gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.25);
+
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+
+            osc.start();
+            osc.stop(this.ctx.currentTime + 0.25);
+        } catch (e) { console.warn("Audio play error:", e); }
+    }
+
+    playSuccess() {
+        if (isSoundMuted) return;
+        this.initCtx();
+        if (!this.ctx) return;
+
+        try {
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+            notes.forEach((freq, idx) => {
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.value = freq;
+
+                const startTime = this.ctx.currentTime + (idx * 0.08);
+                gain.gain.setValueAtTime(0.25, startTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.3);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(startTime);
+                osc.stop(startTime + 0.3);
+            });
+        } catch (e) { console.warn("Audio play error:", e); }
+    }
+
+    playClick() {
+        if (isSoundMuted) return;
+        this.initCtx();
+        if (!this.ctx) return;
+
+        try {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+            gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.05);
+
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+
+            osc.start();
+            osc.stop(this.ctx.currentTime + 0.05);
+        } catch (e) { console.warn("Audio play error:", e); }
+    }
+
+    playError() {
+        if (isSoundMuted) return;
+        this.initCtx();
+        if (!this.ctx) return;
+
+        try {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+            osc.frequency.setValueAtTime(160, this.ctx.currentTime + 0.1);
+
+            gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.25);
+
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+
+            osc.start();
+            osc.stop(this.ctx.currentTime + 0.25);
+        } catch (e) { console.warn("Audio play error:", e); }
+    }
+}
+
+const AppSoundEngine = new SoundEngine();
+
+// -------------------------------------------------------------
+// CONFETTI BURST ANIMATION ENGINE
+// -------------------------------------------------------------
+function triggerConfettiBurst() {
+    const count = 30;
+    const colors = ['#10B981', '#F59E0B', '#6366F1', '#EC4899', '#06B6D4'];
+
+    for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.style.position = 'fixed';
+        p.style.left = `${Math.random() * 100}vw`;
+        p.style.top = `-10px`;
+        p.style.width = `${Math.random() * 8 + 6}px`;
+        p.style.height = `${Math.random() * 8 + 6}px`;
+        p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        p.style.borderRadius = '50%';
+        p.style.zIndex = '999999';
+        p.style.pointerEvents = 'none';
+        p.style.transition = `all ${Math.random() * 1.5 + 1}s ease-out`;
+
+        document.body.appendChild(p);
+
+        requestAnimationFrame(() => {
+            p.style.top = `${Math.random() * 60 + 40}vh`;
+            p.style.transform = `scale(${Math.random() * 1.5}) rotate(${Math.random() * 360}deg)`;
+            p.style.opacity = '0';
+        });
+
+        setTimeout(() => p.remove(), 2500);
+    }
+}
+
+// Custom Toast System
 function showToast(message, type = "success", icon = null) {
+    if (type === "success") AppSoundEngine.playCoin();
+    else if (type === "error") AppSoundEngine.playError();
+    else AppSoundEngine.playClick();
+
     const container = document.getElementById("toast-container");
     if (!container) return;
 
@@ -18,10 +169,9 @@ function showToast(message, type = "success", icon = null) {
     toast.className = `custom-toast ${type}`;
     
     let iconClass = icon || (type === "success" ? "fa-solid fa-circle-check" : type === "error" ? "fa-solid fa-triangle-exclamation" : "fa-solid fa-bell");
-    let iconColor = type === "success" ? "var(--color-emerald)" : type === "error" ? "var(--color-rose)" : "var(--color-primary)";
 
     toast.innerHTML = `
-        <i class="${iconClass}" style="font-size: 18px; color: ${iconColor};"></i>
+        <i class="${iconClass}" style="font-size: 18px;"></i>
         <span>${message}</span>
     `;
 
@@ -35,8 +185,11 @@ function showToast(message, type = "success", icon = null) {
     }, 3200);
 }
 
-// Custom Modal Dialog (Replaces native browser alert)
+// Custom Modal Dialog
 function showAppModal(title, message, iconClass = "fa-solid fa-gift") {
+    AppSoundEngine.playSuccess();
+    triggerConfettiBurst();
+
     const modal = document.getElementById("app-modal");
     if (!modal) {
         showToast(message, "success");
@@ -57,12 +210,13 @@ function showAppModal(title, message, iconClass = "fa-solid fa-gift") {
 const btnCloseModal = document.getElementById("btn-modal-close");
 if (btnCloseModal) {
     btnCloseModal.addEventListener("click", () => {
+        AppSoundEngine.playClick();
         const modal = document.getElementById("app-modal");
         if (modal) modal.style.display = "none";
     });
 }
 
-// Auto Detect Mobile Display Size & Orientation Engine
+// Auto Detect Mobile Display Size
 function autoDetectDisplaySize() {
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -71,7 +225,6 @@ function autoDetectDisplaySize() {
     const root = document.documentElement;
     const body = document.body;
 
-    // Set dynamic viewport height variable (fixes mobile browser 100vh bug)
     const vh = height * 0.01;
     root.style.setProperty('--vh', `${vh}px`);
     root.style.setProperty('--screen-width', `${width}px`);
@@ -98,9 +251,9 @@ autoDetectDisplaySize();
 
 // Arcade Games Registry
 const gamesList = [
-    { file: "star_catcher.html", name: "Star Catcher", icon: "fa-solid fa-star", color: "#FFB800", desc: "Catch falling stars & boost score" },
-    { file: "space_dodger.html", name: "Space Dodger", icon: "fa-solid fa-rocket", color: "#3B82F6", desc: "Navigate rocket, avoid asteroids" },
-    { file: "block_breaker.html", name: "Block Breaker", icon: "fa-solid fa-border-all", color: "#F59E0B", desc: "Bounce ball to smash blocks" },
+    { file: "star_catcher.html", name: "Star Catcher", icon: "fa-solid fa-star", color: "#F59E0B", desc: "Catch falling stars & boost score" },
+    { file: "space_dodger.html", name: "Space Dodger", icon: "fa-solid fa-rocket", color: "#6366F1", desc: "Navigate rocket, avoid asteroids" },
+    { file: "block_breaker.html", name: "Block Breaker", icon: "fa-solid fa-border-all", color: "#10B981", desc: "Bounce ball to smash blocks" },
     { file: "memory_match.html", name: "Memory Match", icon: "fa-solid fa-brain", color: "#8B5CF6", desc: "Match identical cyber card blocks" },
     { file: "flappy_bird.html", name: "Flappy Bird", icon: "fa-solid fa-dove", color: "#06B6D4", desc: "Fly bird between obstacles safely" },
     { file: "color_tap.html", name: "Color Tap", icon: "fa-solid fa-palette", color: "#EC4899", desc: "Tap the matching text color fast" },
@@ -124,6 +277,7 @@ const screens = {
 // BOOTSTRAP & INITIALIZATION
 // -------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', async () => {
+    setupSoundToggle();
     loadCachedSettingsAndTheme();
 
     try {
@@ -148,6 +302,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!currentUser) showScreen('auth');
     }
 });
+
+function setupSoundToggle() {
+    const btn = document.getElementById("btn-toggle-sound");
+    if (!btn) return;
+
+    updateSoundBtnUI();
+
+    btn.addEventListener("click", () => {
+        isSoundMuted = !isSoundMuted;
+        localStorage.setItem("extraearn_sound_muted", isSoundMuted ? "true" : "false");
+        updateSoundBtnUI();
+        if (!isSoundMuted) AppSoundEngine.playClick();
+    });
+}
+
+function updateSoundBtnUI() {
+    const btn = document.getElementById("btn-toggle-sound");
+    if (!btn) return;
+    if (isSoundMuted) {
+        btn.classList.add("muted");
+        btn.innerHTML = `<i class="fa-solid fa-volume-xmark"></i>`;
+    } else {
+        btn.classList.remove("muted");
+        btn.innerHTML = `<i class="fa-solid fa-volume-high"></i>`;
+    }
+}
 
 function loadCachedSettingsAndTheme() {
     try {
@@ -238,9 +418,6 @@ function updateHeaderCoins() {
     }
 }
 
-// -------------------------------------------------------------
-// CHECK-IN LIMIT GUARD (1 claim per calendar day per user)
-// -------------------------------------------------------------
 function isAlreadyClaimedToday() {
     if (!currentUser || !currentUser.lastCheckInDate) return false;
     const options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' };
@@ -288,13 +465,13 @@ function renderCheckinGrid() {
     if (heroBtn) {
         if (claimedToday) {
             heroBtn.innerHTML = `<i class="fa-solid fa-circle-check"></i> CLAIMED TODAY ✔`;
-            heroBtn.style.background = "rgba(16, 185, 129, 0.2)";
+            heroBtn.style.background = "#ECFDF5";
             heroBtn.style.color = "var(--color-emerald)";
-            heroBtn.style.border = "1px solid var(--color-emerald)";
+            heroBtn.style.border = "1.5px solid var(--color-emerald)";
         } else {
             heroBtn.innerHTML = `<i class="fa-solid fa-calendar-check"></i> CLAIM DAILY CHECK-IN (+50)`;
             heroBtn.style.background = "var(--color-primary)";
-            heroBtn.style.color = "#000";
+            heroBtn.style.color = "#FFFFFF";
             heroBtn.style.border = "none";
         }
     }
@@ -323,6 +500,7 @@ function renderCheckinGrid() {
 }
 
 async function handleCheckinClick(dayIdx, isToday) {
+    AppSoundEngine.playClick();
     if (isAlreadyClaimedToday()) {
         showToast("You have already claimed today's daily reward! Come back tomorrow.", "warning", "fa-solid fa-clock");
         return;
@@ -353,8 +531,8 @@ async function handleCheckinClick(dayIdx, isToday) {
     }
 }
 
-// Tasks Offerwall Claims
 async function handleTaskClaim(taskId, amount, taskTitle) {
+    AppSoundEngine.playClick();
     if (!currentUser) return;
     try {
         const res = await fetch(`${API_BASE}/api/users/adjust-coins`, {
@@ -387,7 +565,7 @@ function renderGamesGrids() {
 
     const cardHTML = (game) => `
         <div class="game-card" onclick="launchGame('${game.file}', '${game.name}')">
-            <div class="game-icon-box">
+            <div class="game-icon-box" style="color: ${game.color};">
                 <i class="${game.icon}"></i>
             </div>
             <h5>${game.name}</h5>
@@ -403,6 +581,7 @@ function renderGamesGrids() {
 }
 
 function launchGame(file, name) {
+    AppSoundEngine.playClick();
     if (!currentUser) return;
     const url = `${API_BASE}/${file}?userId=${currentUser.id}`;
     document.getElementById('active-game-title').innerText = name;
@@ -412,6 +591,7 @@ function launchGame(file, name) {
 }
 
 document.getElementById('btn-exit-game').addEventListener('click', async () => {
+    AppSoundEngine.playClick();
     document.getElementById('game-frame').src = '';
     showScreen('dashboard');
     await refreshUserProfile();
@@ -433,6 +613,7 @@ window.addEventListener('message', async (event) => {
                         details: `Arcade Reward (${event.data.game || 'Game'})`
                     })
                 });
+                AppSoundEngine.playCoin();
                 await refreshUserProfile();
             } catch (e) {
                 console.error("Score sync error:", e);
@@ -450,14 +631,14 @@ async function renderTransactionsHistory() {
         if (res.ok) {
             const list = await res.json();
             if (list.length === 0) {
-                container.innerHTML = `<div style="text-align: center; color: var(--color-muted); padding: 20px;">No transactions yet</div>`;
+                container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 20px;">No transactions yet</div>`;
                 return;
             }
             container.innerHTML = list.slice(-5).reverse().map(tx => `
-                <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 14px; display: flex; align-items: center; justify-content: space-between;">
+                <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 14px; padding: 14px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow-sm);">
                     <div>
-                        <div style="font-weight: 700; color: #fff; font-size: 14px;">${tx.details || tx.type}</div>
-                        <div style="font-size: 11px; color: var(--color-muted);">${new Date(tx.timestamp).toLocaleString()}</div>
+                        <div style="font-weight: 700; color: var(--text-heading); font-size: 14px;">${tx.details || tx.type}</div>
+                        <div style="font-size: 11px; color: var(--text-muted);">${new Date(tx.timestamp).toLocaleString()}</div>
                     </div>
                     <div style="font-weight: 800; font-size: 15px; color: ${tx.amount >= 0 ? 'var(--color-emerald)' : 'var(--color-rose)'};">
                         ${tx.amount >= 0 ? '+' : ''}${tx.amount} Coins
@@ -477,6 +658,7 @@ function setupNavigation() {
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
         item.addEventListener('click', () => {
+            AppSoundEngine.playClick();
             const targetTab = item.getAttribute('data-tab');
             if (targetTab) switchTab(targetTab);
         });
@@ -484,7 +666,10 @@ function setupNavigation() {
 
     const seeAllBtn = document.getElementById('btn-see-all-games');
     if (seeAllBtn) {
-        seeAllBtn.addEventListener('click', () => switchTab('tab-games'));
+        seeAllBtn.addEventListener('click', () => {
+            AppSoundEngine.playClick();
+            switchTab('tab-games');
+        });
     }
     
     const claimHeroBtn = document.getElementById('btn-claim-daily-hero');
@@ -521,6 +706,7 @@ const btnVerifyLogin = document.getElementById('btn-verify-login');
 
 if (btnSendOtp) {
     btnSendOtp.addEventListener('click', () => {
+        AppSoundEngine.playClick();
         const name = document.getElementById('login-name').value.trim();
         const phone = document.getElementById('login-phone').value.trim();
         if (!name || !phone || phone.length !== 10) {
@@ -534,6 +720,7 @@ if (btnSendOtp) {
 
 if (btnVerifyLogin) {
     btnVerifyLogin.addEventListener('click', async () => {
+        AppSoundEngine.playClick();
         const name = document.getElementById('login-name').value.trim();
         const phone = document.getElementById('login-phone').value.trim();
         try {
@@ -559,6 +746,7 @@ if (btnVerifyLogin) {
 const btnSubmitRedeem = document.getElementById('btn-submit-redeem');
 if (btnSubmitRedeem) {
     btnSubmitRedeem.addEventListener('click', async () => {
+        AppSoundEngine.playClick();
         const amount = parseInt(document.getElementById('redeem-amount').value, 10);
         const method = document.getElementById('redeem-method').value;
         const details = document.getElementById('redeem-details').value.trim();
@@ -605,6 +793,7 @@ if (btnSubmitRedeem) {
 const btnCopyRef = document.getElementById('btn-copy-ref');
 if (btnCopyRef) {
     btnCopyRef.addEventListener('click', () => {
+        AppSoundEngine.playClick();
         const codeInput = document.getElementById('ref-code-input');
         codeInput.select();
         document.execCommand('copy');
@@ -615,6 +804,7 @@ if (btnCopyRef) {
 const btnShareWhatsapp = document.getElementById('btn-share-whatsapp');
 if (btnShareWhatsapp) {
     btnShareWhatsapp.addEventListener('click', () => {
+        AppSoundEngine.playClick();
         const text = `Hey! Join ExtraEarn app and claim free daily cash rewards & games! Use my referral code: EXTRA2026`;
         window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
     });

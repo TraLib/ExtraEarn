@@ -26,11 +26,11 @@ let db = {
         appName: "ExtraEarn",
         appTitle: "Earn Daily Rewards",
         appSubtitle: "Earn coins by checking in, watching ads, and playing games!",
-        primaryColor: "#FFD54A",
-        secondaryColor: "#7C3AED",
-        cardColor: "#14141B",
-        borderColor: "#252535",
-        backgroundColor: "#070709",
+        primaryColor: "#10B981",
+        secondaryColor: "#6366F1",
+        cardColor: "#FFFFFF",
+        borderColor: "#E2E8F0",
+        backgroundColor: "#F4F6FC",
         webAppEnabled: true,
         webAppUrl: "app_code/index.html"
     }
