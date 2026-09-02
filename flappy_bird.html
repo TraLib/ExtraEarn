@@ -3,32 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Arcade - Neon Flap</title>
+    <title>Arcade - Flappy Bird Light</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: none; }
-        body { background: radial-gradient(circle at center, #0b0f19 0%, #030712 100%); font-family: system-ui, -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; color: #fff; }
+        body { background: #F4F7FC; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; color: #0F172A; }
         #gameWrapper { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
         canvas { display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        #uiOverlay { position: absolute; top: 24px; left: 24px; right: 24px; display: flex; justify-content: space-between; z-index: 10; pointer-events: none; }
-        .glass-card { background: rgba(15, 23, 42, 0.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); padding: 14px 24px; border-radius: 16px; font-weight: 700; font-size: clamp(0.9rem, 3vw, 1.2rem); letter-spacing: 0.05em; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); display: flex; align-items: center; gap: 8px; }
-        #scoreBoard { color: #a855f7; border-bottom: 2px solid rgba(168, 85, 247, 0.4); box-shadow: 0 0 20px rgba(168, 85, 247, 0.15); }
-        #gameOverScreen, #authScreen { position: absolute; inset: 0; background: rgba(3, 7, 18, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; padding: 20px; text-align: center; }
+        #uiOverlay { position: absolute; top: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; z-index: 10; pointer-events: none; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border: 1px solid #E2E8F0; padding: 12px 20px; border-radius: 16px; font-weight: 800; font-size: 1rem; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); display: flex; align-items: center; gap: 8px; color: #0F172A; }
+        #scoreBoard { color: #06B6D4; border-left: 4px solid #06B6D4; }
+        #gameOverScreen, #authScreen { position: absolute; inset: 0; background: rgba(244, 247, 252, 0.95); backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; padding: 20px; text-align: center; }
         #gameOverScreen { display: none; }
-        #gameOverScreen h2 { font-size: clamp(2.5rem, 10vw, 4.5rem); color: #f87171; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 40px rgba(248, 113, 113, 0.6); }
-        #gameOverScreen p { font-size: clamp(1.1rem, 4vw, 1.4rem); color: #9ca3af; margin-bottom: 12px; }
-        #gameOverScreen span { color: #fbbf24; font-weight: 800; }
-        #syncStatus { font-size: 1rem; color: #34d399; margin-bottom: 32px; font-weight: 600; }
-        button { padding: 16px 40px; font-size: 1.1rem; font-weight: 700; background: #38bdf8; color: #030712; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.45); transition: all 0.2s ease-in-out; }
-        button:hover { background: #0ea5e9; transform: translateY(-3px); }
-        #authScreen h2 { font-size: clamp(2rem, 8vw, 3rem); color: #38bdf8; margin-bottom: 16px; }
-        #authScreen p { color: #9ca3af; font-size: 1.1rem; max-width: 400px; line-height: 1.6; }
+        #gameOverScreen h2 { font-size: clamp(2rem, 8vw, 3.5rem); color: #EF4444; margin-bottom: 8px; font-weight: 900; }
+        #gameOverScreen p { font-size: 1.1rem; color: #64748B; margin-bottom: 12px; font-weight: 600; }
+        #gameOverScreen span { color: #F59E0B; font-weight: 900; }
+        #syncStatus { font-size: 1rem; color: #10B981; margin-bottom: 24px; font-weight: 700; }
+        button { padding: 14px 32px; font-size: 1rem; font-weight: 800; background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%); color: #FFFFFF; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 20px rgba(6, 182, 212, 0.3); transition: all 0.2s ease; }
+        button:hover { transform: translateY(-2px); }
     </style>
 </head>
 <body>
 
     <div id="gameWrapper">
         <div id="uiOverlay">
-            <div id="scoreBoard" class="glass-card">🛸 PASSES: <span id="score">0</span></div>
+            <div id="scoreBoard" class="glass-card">🐤 PASSES: <span id="score">0</span></div>
         </div>
 
         <div id="authScreen" style="display: none;">
@@ -37,7 +35,7 @@
         </div>
         
         <div id="gameOverScreen">
-            <h2>Crash Alert</h2>
+            <h2>Bird Crashed!</h2>
             <p>Score reached: <span><span id="finalScore">0</span> points</span></p>
             <div id="syncStatus">Syncing rewards...</div>
             <button id="restartBtn" onclick="resetGame()" style="display: none;">Try Again</button>
@@ -69,18 +67,75 @@
         const bird = {
             x: 50,
             y: 200,
-            radius: 12,
+            radius: 14,
             gravity: 0.35,
             velocity: 0,
             jump: -6.5,
-            color: '#a855f7'
+            color: '#06B6D4'
         };
 
         let pipes = [];
         const pipeWidth = 60;
-        const pipeGap = 150;
+        const pipeGap = 160;
         const pipeSpeed = 2.2;
         let spawnTimer = 0;
+
+        function playFlapSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(750, audioCtx.currentTime + 0.06);
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.06);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.06);
+            } catch(e) {}
+        }
+
+        function playPointSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.08);
+            } catch(e) {}
+        }
+
+        function playCrashSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(60, audioCtx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.2);
+            } catch(e) {}
+        }
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -109,38 +164,38 @@
             if (!userId || gameOver) return;
             if (e.target.tagName !== 'BUTTON') {
                 bird.velocity = bird.jump;
+                playFlapSound();
             }
         });
 
         function triggerGameOver() {
             gameOver = true;
+            playCrashSound();
             finalScoreEl.innerText = score;
             gameOverScreen.style.display = 'flex';
             syncStatusEl.innerText = "Syncing reward coins...";
             restartBtn.style.display = "none";
 
-            // Reward 3 coins per passed pipe (maximum 60 coins)
             const rewardCoins = Math.min(60, score * 3);
 
             if (rewardCoins > 0) {
                 fetch('/api/games/submit-score', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userId: userId, score: rewardCoins, gameName: 'Neon Flap' })
+                    body: JSON.stringify({ userId: userId, score: rewardCoins, gameName: 'Flappy Bird' })
                 })
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        syncStatusEl.innerText = `Reward claimed! +${data.coinsEarned}
-if (window.parent) { window.parent.postMessage({ type: 'SCORE_SUBMITTED', score: (data || res).coinsEarned }, '*'); } Coins added to your account!`;
+                        syncStatusEl.innerText = `Reward claimed! +${data.coinsEarned} Coins added!`;
+                        if (window.parent) { window.parent.postMessage({ type: 'GAME_SCORE', score: data.coinsEarned, game: 'Flappy Bird' }, '*'); }
                     } else {
                         syncStatusEl.innerText = `Sync status: ${data.error || "Claim failed"}`;
                     }
                     restartBtn.style.display = "block";
                 })
                 .catch(err => {
-                    console.error("Score submission failed:", err);
-                    syncStatusEl.innerText = "Failed to sync coins. Check internet connection.";
+                    syncStatusEl.innerText = "Failed to sync coins. Check connection.";
                     restartBtn.style.display = "block";
                 });
             } else {
@@ -165,28 +220,26 @@ if (window.parent) { window.parent.postMessage({ type: 'SCORE_SUBMITTED', score:
             if (!userId || gameOver) return;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#F4F7FC';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Bird physics
             bird.velocity += bird.gravity;
             bird.y += bird.velocity;
 
-            // Ground/Ceiling check
             if (bird.y + bird.radius > canvas.height || bird.y - bird.radius < 0) {
                 triggerGameOver();
                 return;
             }
 
-            // Draw bird (styled as glowing neon orb)
             ctx.beginPath();
             ctx.arc(bird.x, bird.y, bird.radius, 0, Math.PI * 2);
             ctx.fillStyle = bird.color;
-            ctx.shadowBlur = 20;
-            ctx.shadowColor = bird.color;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = 'rgba(6, 182, 212, 0.3)';
             ctx.fill();
             ctx.shadowBlur = 0;
             ctx.closePath();
 
-            // Pipes updates
             spawnTimer++;
             if (spawnTimer > 120) {
                 spawnPipe();
@@ -197,17 +250,10 @@ if (window.parent) { window.parent.postMessage({ type: 'SCORE_SUBMITTED', score:
                 const p = pipes[i];
                 p.x -= pipeSpeed;
 
-                // Draw Top Pipe
-                ctx.fillStyle = '#38bdf8';
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = '#38bdf8';
+                ctx.fillStyle = '#6366F1';
                 ctx.fillRect(p.x, 0, pipeWidth, p.topHeight);
-
-                // Draw Bottom Pipe
                 ctx.fillRect(p.x, p.bottomY, pipeWidth, canvas.height - p.bottomY);
-                ctx.shadowBlur = 0;
 
-                // Collision detection
                 if (bird.x + bird.radius > p.x && bird.x - bird.radius < p.x + pipeWidth) {
                     if (bird.y - bird.radius < p.topHeight || bird.y + bird.radius > p.bottomY) {
                         triggerGameOver();
@@ -215,14 +261,13 @@ if (window.parent) { window.parent.postMessage({ type: 'SCORE_SUBMITTED', score:
                     }
                 }
 
-                // Scoring check
                 if (!p.passed && p.x + pipeWidth < bird.x) {
                     p.passed = true;
                     score++;
                     scoreEl.innerText = score;
+                    playPointSound();
                 }
 
-                // Remove out of screen pipes
                 if (p.x + pipeWidth < 0) {
                     pipes.splice(i, 1);
                 }

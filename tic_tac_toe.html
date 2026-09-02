@@ -3,29 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Arcade - Neon Tic Tac Toe</title>
+    <title>Arcade - Tic Tac Toe Light</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
-        body { background: radial-gradient(circle at center, #0b0f19 0%, #030712 100%); font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; color: #fff; }
+        body { background: #F4F7FC; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; color: #0F172A; }
         #gameWrapper { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         #uiOverlay { display: flex; justify-content: center; width: 100%; max-width: 320px; margin-bottom: 24px; z-index: 10; }
-        .glass-card { background: rgba(15, 23, 42, 0.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); padding: 14px 24px; border-radius: 16px; font-weight: 700; font-size: 1.1rem; letter-spacing: 0.05em; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); display: flex; align-items: center; gap: 8px; color: #34d399; border-bottom: 2px solid rgba(52, 211, 153, 0.4); }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border: 1px solid #E2E8F0; padding: 12px 24px; border-radius: 16px; font-weight: 800; font-size: 1.1rem; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); display: flex; align-items: center; gap: 8px; color: #10B981; border-left: 4px solid #10B981; }
         #board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; max-width: 320px; aspect-ratio: 1; z-index: 5; }
-        .cell { background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 800; cursor: pointer; transition: background 0.2s, box-shadow 0.2s; aspect-ratio: 1; }
-        .cell:active { background: rgba(15, 23, 42, 0.8); }
-        .cell.x { color: #f87171; text-shadow: 0 0 20px rgba(248, 113, 113, 0.6); }
-        .cell.o { color: #38bdf8; text-shadow: 0 0 20px rgba(56, 189, 248, 0.6); }
-        #gameOverScreen, #authScreen { position: absolute; inset: 0; background: rgba(3, 7, 18, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; padding: 20px; text-align: center; }
+        .cell { background: #FFFFFF; border: 2px solid #E2E8F0; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 900; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; aspect-ratio: 1; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05); }
+        .cell:active { transform: scale(0.95); }
+        .cell.x { color: #EF4444; }
+        .cell.o { color: #06B6D4; }
+        #gameOverScreen, #authScreen { position: absolute; inset: 0; background: rgba(244, 247, 252, 0.95); backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; padding: 20px; text-align: center; }
         #gameOverScreen { display: none; }
-        #gameOverScreen h2 { font-size: 2.5rem; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 2px; }
-        #gameOverScreen p { font-size: 1.2rem; color: #9ca3af; margin-bottom: 12px; }
-        #gameOverScreen span { color: #fbbf24; font-weight: 800; }
-        #syncStatus { font-size: 1rem; color: #34d399; margin-bottom: 32px; font-weight: 600; }
-        button { padding: 16px 40px; font-size: 1.1rem; font-weight: 700; background: #38bdf8; color: #030712; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.45); transition: all 0.2s ease-in-out; }
-        button:hover { background: #0ea5e9; transform: translateY(-3px); }
-        #authScreen h2 { font-size: 2rem; color: #38bdf8; margin-bottom: 16px; }
-        #authScreen p { color: #9ca3af; font-size: 1.1rem; max-width: 400px; line-height: 1.6; }
-        #turnIndicator { margin-top: 20px; font-size: 1.1rem; color: #9ca3af; font-weight: 600; }
+        #gameOverScreen h2 { font-size: clamp(2rem, 8vw, 3.5rem); margin-bottom: 8px; font-weight: 900; }
+        #gameOverScreen p { font-size: 1.1rem; color: #64748B; margin-bottom: 12px; font-weight: 600; }
+        #gameOverScreen span { color: #F59E0B; font-weight: 900; }
+        #syncStatus { font-size: 1rem; color: #10B981; margin-bottom: 24px; font-weight: 700; }
+        button { padding: 14px 32px; font-size: 1rem; font-weight: 800; background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #FFFFFF; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3); transition: all 0.2s ease; }
+        button:hover { transform: translateY(-2px); }
+        #turnIndicator { margin-top: 20px; font-size: 1.1rem; color: #64748B; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
 <body>
@@ -86,10 +84,50 @@
         let gameActive = true;
 
         const winConditions = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-            [0, 4, 8], [2, 4, 6]             // Diagonals
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
         ];
+
+        function playMoveSound(player) {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = player === 'X' ? 'triangle' : 'sine';
+                osc.frequency.setValueAtTime(player === 'X' ? 523.25 : 659.25, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.08);
+            } catch(e) {}
+        }
+
+        function playWinSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.value = freq;
+                    const startTime = audioCtx.currentTime + (idx * 0.07);
+                    gain.gain.setValueAtTime(0.15, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.15);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.15);
+                });
+            } catch(e) {}
+        }
 
         cells.forEach(cell => {
             cell.addEventListener('click', () => handleCellClick(cell));
@@ -119,6 +157,7 @@
         }
 
         function makeMove(idx, player) {
+            playMoveSound(player);
             board[idx] = player;
             cells[idx].innerText = player;
             cells[idx].classList.add(player.toLowerCase());
@@ -127,7 +166,6 @@
         function aiMove() {
             if (!gameActive) return;
 
-            // Simple AI logic: try to win, block player, or take random
             let bestMove = findWinningMove('O') || findWinningMove('X') || takeCenter() || takeCorner() || takeRandom();
 
             if (bestMove !== null) {
@@ -186,19 +224,17 @@
 
             let rewardCoins = 0;
             if (result === 'win') {
+                playWinSound();
                 endTitleEl.innerText = "YOU WON!";
-                endTitleEl.style.color = "#10b981";
-                endTitleEl.style.textShadow = "0 0 30px rgba(16, 185, 129, 0.6)";
+                endTitleEl.style.color = "#10B981";
                 rewardCoins = 15;
             } else if (result === 'draw') {
                 endTitleEl.innerText = "IT'S A DRAW";
-                endTitleEl.style.color = "#fbbf24";
-                endTitleEl.style.textShadow = "0 0 30px rgba(251, 191, 36, 0.6)";
+                endTitleEl.style.color = "#F59E0B";
                 rewardCoins = 5;
             } else {
                 endTitleEl.innerText = "AI DEFEATED YOU";
-                endTitleEl.style.color = "#f87171";
-                endTitleEl.style.textShadow = "0 0 30px rgba(248, 113, 113, 0.6)";
+                endTitleEl.style.color = "#EF4444";
                 rewardCoins = 0;
             }
 
@@ -213,16 +249,15 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        syncStatusEl.innerText = `Reward claimed! +${data.coinsEarned}
-if (window.parent) { window.parent.postMessage({ type: 'SCORE_SUBMITTED', score: (data || res).coinsEarned }, '*'); } Coins added to your account!`;
+                        syncStatusEl.innerText = `Reward claimed! +${data.coinsEarned} Coins added!`;
+                        if (window.parent) { window.parent.postMessage({ type: 'GAME_SCORE', score: data.coinsEarned, game: 'Tic Tac Toe' }, '*'); }
                     } else {
                         syncStatusEl.innerText = `Sync status: ${data.error || "Claim failed"}`;
                     }
                     restartBtn.style.display = "block";
                 })
                 .catch(err => {
-                    console.error("Score submission failed:", err);
-                    syncStatusEl.innerText = "Failed to sync coins. Check internet connection.";
+                    syncStatusEl.innerText = "Failed to sync coins. Check connection.";
                     restartBtn.style.display = "block";
                 });
             } else {

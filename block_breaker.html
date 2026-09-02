@@ -3,26 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Arcade - Block Breaker</title>
+    <title>Arcade - Block Breaker Light</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: none; }
-        body { background: radial-gradient(circle at center, #0b0f19 0%, #030712 100%); font-family: system-ui, -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; color: #fff; }
+        body { background: #F4F7FC; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; color: #0F172A; }
         #gameWrapper { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
         canvas { display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        #uiOverlay { position: absolute; top: 24px; left: 24px; right: 24px; display: flex; justify-content: space-between; z-index: 10; pointer-events: none; }
-        .glass-card { background: rgba(15, 23, 42, 0.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); padding: 12px 20px; border-radius: 14px; font-weight: 700; font-size: 0.95rem; letter-spacing: 0.05em; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); display: flex; align-items: center; gap: 8px; }
-        #scoreBoard { color: #10b981; border-bottom: 2px solid rgba(16, 185, 129, 0.4); }
-        #livesBoard { color: #f87171; border-bottom: 2px solid rgba(248, 113, 113, 0.4); }
-        #gameOverScreen, #authScreen { position: absolute; inset: 0; background: rgba(3, 7, 18, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; padding: 20px; text-align: center; }
+        #uiOverlay { position: absolute; top: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; z-index: 10; pointer-events: none; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border: 1px solid #E2E8F0; padding: 12px 20px; border-radius: 16px; font-weight: 800; font-size: 1rem; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); display: flex; align-items: center; gap: 8px; color: #0F172A; }
+        #scoreBoard { color: #10B981; border-left: 4px solid #10B981; }
+        #livesBoard { color: #EF4444; border-left: 4px solid #EF4444; }
+        #gameOverScreen, #authScreen { position: absolute; inset: 0; background: rgba(244, 247, 252, 0.95); backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; padding: 20px; text-align: center; }
         #gameOverScreen { display: none; }
-        #gameOverScreen h2 { font-size: 2.5rem; color: #f87171; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 40px rgba(248, 113, 113, 0.6); }
-        #gameOverScreen p { font-size: 1.2rem; color: #9ca3af; margin-bottom: 12px; }
-        #gameOverScreen span { color: #fbbf24; font-weight: 800; }
-        #syncStatus { font-size: 1rem; color: #34d399; margin-bottom: 32px; font-weight: 600; }
-        button { padding: 16px 40px; font-size: 1.1rem; font-weight: 700; background: #38bdf8; color: #030712; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.45); transition: all 0.2s ease-in-out; }
-        button:hover { background: #0ea5e9; transform: translateY(-3px); }
-        #authScreen h2 { font-size: 2rem; color: #38bdf8; margin-bottom: 16px; }
-        #authScreen p { color: #9ca3af; font-size: 1.1rem; max-width: 400px; line-height: 1.6; }
+        #gameOverScreen h2 { font-size: clamp(2rem, 8vw, 3.5rem); color: #EF4444; margin-bottom: 8px; font-weight: 900; }
+        #gameOverScreen p { font-size: 1.1rem; color: #64748B; margin-bottom: 12px; font-weight: 600; }
+        #gameOverScreen span { color: #F59E0B; font-weight: 900; }
+        #syncStatus { font-size: 1rem; color: #10B981; margin-bottom: 24px; font-weight: 700; }
+        button { padding: 14px 32px; font-size: 1rem; font-weight: 800; background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #FFFFFF; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3); transition: all 0.2s ease; }
+        button:hover { transform: translateY(-2px); }
     </style>
 </head>
 <body>
@@ -72,20 +70,20 @@
         let gameOver = false;
 
         const paddle = {
-            width: 100,
-            height: 12,
+            width: 110,
+            height: 14,
             x: 0,
             y: 0,
-            color: '#38bdf8'
+            color: '#10B981'
         };
 
         const ball = {
             x: 0,
             y: 0,
-            radius: 8,
+            radius: 9,
             dx: 4,
             dy: -4,
-            color: '#ffffff'
+            color: '#6366F1'
         };
 
         let bricks = [];
@@ -93,8 +91,45 @@
         const brickColumnCount = 6;
         const brickHeight = 24;
         const brickPadding = 8;
-        const brickOffsetTop = 100;
-        const colors = ['#f87171', '#fbbf24', '#34d399', '#38bdf8', '#c084fc'];
+        const brickOffsetTop = 90;
+        const colors = ['#EF4444', '#F59E0B', '#10B981', '#06B6D4', '#8B5CF6'];
+
+        function playBounceSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(450, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.06);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.06);
+            } catch(e) {}
+        }
+
+        function playSmashSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(900, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1500, audioCtx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.08);
+            } catch(e) {}
+        }
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -130,7 +165,6 @@
             ball.dy = -5;
         }
 
-        // Drag controls
         window.addEventListener('pointermove', (e) => {
             if (!userId || gameOver) return;
             const relativeX = e.clientX;
@@ -153,6 +187,7 @@
                             b.status = 0;
                             score += 5;
                             scoreEl.innerText = score;
+                            playSmashSound();
                         }
                     }
                 }
@@ -164,10 +199,10 @@
 
         function drawPaddle() {
             ctx.beginPath();
-            ctx.roundRect(paddle.x, paddle.y, paddle.width, paddle.height, 6);
+            ctx.roundRect(paddle.x, paddle.y, paddle.width, paddle.height, 8);
             ctx.fillStyle = paddle.color;
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = paddle.color;
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = 'rgba(16, 185, 129, 0.3)';
             ctx.fill();
             ctx.shadowBlur = 0;
             ctx.closePath();
@@ -177,10 +212,7 @@
             ctx.beginPath();
             ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
             ctx.fillStyle = ball.color;
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = ball.color;
             ctx.fill();
-            ctx.shadowBlur = 0;
             ctx.closePath();
         }
 
@@ -190,7 +222,7 @@
                     const b = bricks[c][r];
                     if (b.status === 1) {
                         ctx.beginPath();
-                        ctx.roundRect(b.x, b.y, b.width, brickHeight, 4);
+                        ctx.roundRect(b.x, b.y, b.width, brickHeight, 6);
                         ctx.fillStyle = b.color;
                         ctx.fill();
                         ctx.closePath();
@@ -202,13 +234,12 @@
         function triggerGameOver(win = false) {
             gameOver = true;
             finalScoreEl.innerText = score;
-            endTitleEl.innerText = win ? "victory!" : "game over";
-            endTitleEl.style.color = win ? "#10b981" : "#f87171";
+            endTitleEl.innerText = win ? "VICTORY!" : "GAME OVER";
+            endTitleEl.style.color = win ? "#10B981" : "#EF4444";
             gameOverScreen.style.display = 'flex';
             syncStatusEl.innerText = "Syncing reward coins...";
             restartBtn.style.display = "none";
 
-            // Reward 1 coin per 5 points (maximum 50 coins)
             const rewardCoins = Math.min(50, Math.floor(score / 5));
 
             if (rewardCoins > 0) {
@@ -220,16 +251,15 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        syncStatusEl.innerText = `Reward claimed! +${data.coinsEarned}
-if (window.parent) { window.parent.postMessage({ type: 'SCORE_SUBMITTED', score: (data || res).coinsEarned }, '*'); } Coins added to your account!`;
+                        syncStatusEl.innerText = `Reward claimed! +${data.coinsEarned} Coins added!`;
+                        if (window.parent) { window.parent.postMessage({ type: 'GAME_SCORE', score: data.coinsEarned, game: 'Block Breaker' }, '*'); }
                     } else {
                         syncStatusEl.innerText = `Sync status: ${data.error || "Claim failed"}`;
                     }
                     restartBtn.style.display = "block";
                 })
                 .catch(err => {
-                    console.error("Score submission failed:", err);
-                    syncStatusEl.innerText = "Failed to sync coins. Check internet connection.";
+                    syncStatusEl.innerText = "Failed to sync coins. Check connection.";
                     restartBtn.style.display = "block";
                 });
             } else {
@@ -254,24 +284,27 @@ if (window.parent) { window.parent.postMessage({ type: 'SCORE_SUBMITTED', score:
             if (!userId || gameOver) return;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#F4F7FC';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
             drawBricks();
             drawBall();
             drawPaddle();
             collisionDetection();
 
-            // Wall collisions
             if (ball.x + ball.dx > canvas.width - ball.radius || ball.x + ball.dx < ball.radius) {
                 ball.dx = -ball.dx;
+                playBounceSound();
             }
             if (ball.y + ball.dy < ball.radius) {
                 ball.dy = -ball.dy;
+                playBounceSound();
             } else if (ball.y + ball.dy > paddle.y - ball.radius) {
-                // Paddle check
                 if (ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
-                    // Control bounce angle depending on where the ball hits the paddle
                     let relativeHit = (ball.x - (paddle.x + paddle.width/2)) / (paddle.width/2);
                     ball.dx = relativeHit * 6;
                     ball.dy = -Math.abs(ball.dy);
+                    playBounceSound();
                 } else if (ball.y + ball.dy > canvas.height) {
                     lives--;
                     livesEl.innerText = lives;

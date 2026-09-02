@@ -3,25 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Arcade - Tower Blocks</title>
+    <title>Arcade - Tower Blocks Light</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: none; }
-        body { background: radial-gradient(circle at center, #0b0f19 0%, #030712 100%); font-family: system-ui, -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; color: #fff; }
+        body { background: #F4F7FC; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; color: #0F172A; }
         #gameWrapper { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
         canvas { display: block; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-        #uiOverlay { position: absolute; top: 24px; left: 24px; right: 24px; display: flex; justify-content: space-between; z-index: 10; pointer-events: none; }
-        .glass-card { background: rgba(15, 23, 42, 0.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); padding: 14px 24px; border-radius: 16px; font-weight: 700; font-size: clamp(0.9rem, 3vw, 1.2rem); letter-spacing: 0.05em; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); display: flex; align-items: center; gap: 8px; }
-        #scoreBoard { color: #38bdf8; border-bottom: 2px solid rgba(56, 189, 248, 0.4); box-shadow: 0 0 20px rgba(56, 189, 248, 0.15); }
-        #gameOverScreen, #authScreen { position: absolute; inset: 0; background: rgba(3, 7, 18, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; padding: 20px; text-align: center; }
+        #uiOverlay { position: absolute; top: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; z-index: 10; pointer-events: none; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border: 1px solid #E2E8F0; padding: 12px 20px; border-radius: 16px; font-weight: 800; font-size: 1rem; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); display: flex; align-items: center; gap: 8px; color: #0F172A; }
+        #scoreBoard { color: #8B5CF6; border-left: 4px solid #8B5CF6; }
+        #gameOverScreen, #authScreen { position: absolute; inset: 0; background: rgba(244, 247, 252, 0.95); backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; padding: 20px; text-align: center; }
         #gameOverScreen { display: none; }
-        #gameOverScreen h2 { font-size: clamp(2.5rem, 10vw, 4.5rem); color: #f87171; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 40px rgba(248, 113, 113, 0.6); }
-        #gameOverScreen p { font-size: clamp(1.1rem, 4vw, 1.4rem); color: #9ca3af; margin-bottom: 12px; }
-        #gameOverScreen span { color: #fbbf24; font-weight: 800; }
-        #syncStatus { font-size: 1rem; color: #34d399; margin-bottom: 32px; font-weight: 600; text-shadow: 0 0 15px rgba(52, 211, 153, 0.3); }
-        button { padding: 16px 40px; font-size: 1.1rem; font-weight: 700; background: #38bdf8; color: #030712; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.45); transition: all 0.2s ease-in-out; }
-        button:hover { background: #0ea5e9; transform: translateY(-3px); box-shadow: 0 0 35px rgba(14, 165, 233, 0.75); }
-        #authScreen h2 { font-size: clamp(2rem, 8vw, 3rem); color: #38bdf8; margin-bottom: 16px; }
-        #authScreen p { color: #9ca3af; font-size: 1.1rem; max-width: 400px; line-height: 1.6; }
+        #gameOverScreen h2 { font-size: clamp(2rem, 8vw, 3.5rem); color: #EF4444; margin-bottom: 8px; font-weight: 900; }
+        #gameOverScreen p { font-size: 1.1rem; color: #64748B; margin-bottom: 12px; font-weight: 600; }
+        #gameOverScreen span { color: #F59E0B; font-weight: 900; }
+        #syncStatus { font-size: 1rem; color: #10B981; margin-bottom: 24px; font-weight: 700; }
+        button { padding: 14px 32px; font-size: 1rem; font-weight: 800; background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); color: #FFFFFF; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3); transition: all 0.2s ease; }
+        button:hover { transform: translateY(-2px); }
     </style>
 </head>
 <body>
@@ -66,7 +64,6 @@
         let score = 0;
         let gameOver = false;
         
-        // Stacker specific properties
         let blocks = [];
         let blockHeight = 40;
         let currentBlock = {};
@@ -74,6 +71,43 @@
         let blockDirection = 1;
         let baseWidth = 200;
         let viewOffset = 0;
+
+        function playDropSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300 + (score % 12) * 40, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.08);
+            } catch(e) {}
+        }
+
+        function playCollapseSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(50, audioCtx.currentTime + 0.25);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.25);
+            } catch(e) {}
+        }
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -89,7 +123,7 @@
                 x: canvas.width / 2 - baseWidth / 2,
                 y: canvas.height - 80,
                 width: baseWidth,
-                color: '#38bdf8'
+                color: '#8B5CF6'
             }];
             spawnNewBlock();
         }
@@ -100,7 +134,7 @@
                 x: blockDirection > 0 ? 0 : canvas.width - previousBlock.width,
                 y: previousBlock.y - blockHeight,
                 width: previousBlock.width,
-                color: `hsl(${(blocks.length * 20) % 360}, 80%, 60%)`
+                color: `hsl(${(blocks.length * 25) % 360}, 85%, 55%)`
             };
             blockSpeed = 3 + Math.min(blocks.length * 0.15, 6);
         }
@@ -112,14 +146,11 @@
             const leftBound = previousBlock.x;
             const rightBound = previousBlock.x + previousBlock.width;
 
-            // Check overlap
             if (currentBlock.x + currentBlock.width < leftBound || currentBlock.x > rightBound) {
-                // Completely missed
                 triggerGameOver();
                 return;
             }
 
-            // Cut off the overhang
             let newX = Math.max(currentBlock.x, leftBound);
             let newWidth = Math.min(currentBlock.x + currentBlock.width, rightBound) - newX;
 
@@ -127,10 +158,10 @@
             currentBlock.width = newWidth;
             blocks.push({...currentBlock});
 
+            playDropSound();
             score++;
             scoreEl.innerText = score;
 
-            // Camera shift down if tower gets high
             const targetOffset = Math.max(0, (blocks.length - 6) * blockHeight);
             animateViewOffset(targetOffset);
 
@@ -159,6 +190,7 @@
 
         function triggerGameOver() {
             gameOver = true;
+            playCollapseSound();
             finalScoreEl.innerText = score;
             gameOverScreen.style.display = 'flex';
             syncStatusEl.innerText = "Syncing reward coins...";
@@ -173,16 +205,15 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        syncStatusEl.innerText = `Reward claimed! +${data.coinsEarned}
-if (window.parent) { window.parent.postMessage({ type: 'SCORE_SUBMITTED', score: (data || res).coinsEarned }, '*'); } Coins added to your account!`;
+                        syncStatusEl.innerText = `Reward claimed! +${data.coinsEarned} Coins added!`;
+                        if (window.parent) { window.parent.postMessage({ type: 'GAME_SCORE', score: data.coinsEarned, game: 'Tower Blocks' }, '*'); }
                     } else {
                         syncStatusEl.innerText = `Sync status: ${data.error || "Claim failed"}`;
                     }
                     restartBtn.style.display = "block";
                 })
                 .catch(err => {
-                    console.error("Score submission failed:", err);
-                    syncStatusEl.innerText = "Failed to sync coins. Check internet connection.";
+                    syncStatusEl.innerText = "Failed to sync coins. Check connection.";
                     restartBtn.style.display = "block";
                 });
             } else {
@@ -205,27 +236,25 @@ if (window.parent) { window.parent.postMessage({ type: 'SCORE_SUBMITTED', score:
             if (!userId || gameOver) return;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#F4F7FC';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Draw stacked blocks
             ctx.save();
             ctx.translate(0, viewOffset);
             
             blocks.forEach((b) => {
                 ctx.fillStyle = b.color;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = b.color;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = 'rgba(0,0,0,0.1)';
                 ctx.fillRect(b.x, b.y, b.width, blockHeight - 2);
             });
 
-            // Draw current flying block
             ctx.fillStyle = currentBlock.color;
-            ctx.shadowColor = currentBlock.color;
             ctx.fillRect(currentBlock.x, currentBlock.y, currentBlock.width, blockHeight - 2);
             
             ctx.restore();
             ctx.shadowBlur = 0;
 
-            // Move block
             currentBlock.x += blockSpeed * blockDirection;
             if (currentBlock.x + currentBlock.width > canvas.width || currentBlock.x < 0) {
                 blockDirection *= -1;

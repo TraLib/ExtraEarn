@@ -3,29 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Arcade - Speed Tap</title>
+    <title>Arcade - Speed Tap Light</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: none; }
-        body { background: radial-gradient(circle at center, #0b0f19 0%, #030712 100%); font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; color: #fff; }
+        body { background: #F4F7FC; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; color: #0F172A; }
         #gameWrapper { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         #uiOverlay { display: flex; justify-content: space-between; width: 100%; max-width: 400px; margin-bottom: 40px; z-index: 10; }
-        .glass-card { background: rgba(15, 23, 42, 0.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); padding: 14px 20px; border-radius: 16px; font-weight: 700; font-size: 1rem; letter-spacing: 0.05em; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); display: flex; align-items: center; gap: 8px; }
-        #scoreBoard { color: #fbbf24; border-bottom: 2px solid rgba(251, 191, 36, 0.4); }
-        #timerBoard { color: #f87171; border-bottom: 2px solid rgba(248, 113, 113, 0.4); }
-        #tapArea { display: flex; align-items: center; justify-content: center; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, #3b82f6 0%, #1d4ed8 100%); border: 8px solid rgba(255,255,255,0.1); box-shadow: 0 0 50px rgba(59, 130, 246, 0.6); cursor: pointer; transition: transform 0.05s, box-shadow 0.1s; z-index: 5; }
-        #tapArea:active { transform: scale(0.92); box-shadow: 0 0 80px rgba(59, 130, 246, 0.9); }
-        #tapAreaText { font-size: 2.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        #instructions { margin-top: 30px; font-size: 1rem; color: #9ca3af; text-align: center; max-width: 300px; line-height: 1.5; }
-        #gameOverScreen, #authScreen { position: absolute; inset: 0; background: rgba(3, 7, 18, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; padding: 20px; text-align: center; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border: 1px solid #E2E8F0; padding: 12px 20px; border-radius: 16px; font-weight: 800; font-size: 1rem; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); display: flex; align-items: center; gap: 8px; color: #0F172A; }
+        #scoreBoard { color: #10B981; border-left: 4px solid #10B981; }
+        #timerBoard { color: #F59E0B; border-left: 4px solid #F59E0B; }
+        #tapArea { display: flex; align-items: center; justify-content: center; width: 220px; height: 220px; border-radius: 50%; background: linear-gradient(135deg, #10B981 0%, #059669 100%); border: 8px solid #FFFFFF; box-shadow: 0 12px 36px rgba(16, 185, 129, 0.35); cursor: pointer; transition: transform 0.05s, box-shadow 0.1s; z-index: 5; }
+        #tapArea:active { transform: scale(0.92); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5); }
+        #tapAreaText { font-size: 2.2rem; font-weight: 900; text-transform: uppercase; color: #FFFFFF; letter-spacing: 2px; text-shadow: 0 2px 10px rgba(0,0,0,0.15); }
+        #instructions { margin-top: 30px; font-size: 1rem; color: #64748B; text-align: center; max-width: 300px; font-weight: 600; line-height: 1.5; }
+        #gameOverScreen, #authScreen { position: absolute; inset: 0; background: rgba(244, 247, 252, 0.95); backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; padding: 20px; text-align: center; }
         #gameOverScreen { display: none; }
-        #gameOverScreen h2 { font-size: 2.5rem; color: #fbbf24; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 40px rgba(251, 191, 36, 0.6); }
-        #gameOverScreen p { font-size: 1.2rem; color: #9ca3af; margin-bottom: 12px; }
-        #gameOverScreen span { color: #34d399; font-weight: 800; }
-        #syncStatus { font-size: 1rem; color: #34d399; margin-bottom: 32px; font-weight: 600; }
-        button { padding: 16px 40px; font-size: 1.1rem; font-weight: 700; background: #38bdf8; color: #030712; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.45); transition: all 0.2s ease-in-out; }
-        button:hover { background: #0ea5e9; transform: translateY(-3px); }
-        #authScreen h2 { font-size: 2rem; color: #38bdf8; margin-bottom: 16px; }
-        #authScreen p { color: #9ca3af; font-size: 1.1rem; max-width: 400px; line-height: 1.6; }
+        #gameOverScreen h2 { font-size: clamp(2rem, 8vw, 3.5rem); color: #10B981; margin-bottom: 8px; font-weight: 900; }
+        #gameOverScreen p { font-size: 1.1rem; color: #64748B; margin-bottom: 12px; font-weight: 600; }
+        #gameOverScreen span { color: #F59E0B; font-weight: 900; }
+        #syncStatus { font-size: 1rem; color: #10B981; margin-bottom: 24px; font-weight: 700; }
+        button { padding: 14px 32px; font-size: 1rem; font-weight: 800; background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: #FFFFFF; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3); transition: all 0.2s ease; }
+        button:hover { transform: translateY(-2px); }
     </style>
 </head>
 <body>
@@ -78,6 +76,25 @@
         let gameActive = false;
         let timerInterval = null;
 
+        function playSpeedTapSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                const freq = 600 + (score % 20) * 35;
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.05);
+            } catch(e) {}
+        }
+
         function startTimer() {
             gameActive = true;
             timeLeft = 15.0;
@@ -99,6 +116,7 @@
         tapArea.addEventListener('pointerdown', (e) => {
             if (!userId || gameOverScreen.style.display === 'flex') return;
             
+            playSpeedTapSound();
             if (!gameActive) {
                 startTimer();
                 tapAreaText.innerText = "TAP FAST!";
@@ -115,7 +133,6 @@
             syncStatusEl.innerText = "Syncing reward coins...";
             restartBtn.style.display = "none";
 
-            // Limit reward maximum to 60 coins (e.g. 1 coin per 2 taps)
             const rewardScore = Math.min(60, Math.floor(score / 2));
 
             if (rewardScore > 0) {
@@ -127,16 +144,15 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        syncStatusEl.innerText = `Reward claimed! +${data.coinsEarned}
-if (window.parent) { window.parent.postMessage({ type: 'SCORE_SUBMITTED', score: (data || res).coinsEarned }, '*'); } Coins added to your account!`;
+                        syncStatusEl.innerText = `Reward claimed! +${data.coinsEarned} Coins added!`;
+                        if (window.parent) { window.parent.postMessage({ type: 'GAME_SCORE', score: data.coinsEarned, game: 'Speed Tap' }, '*'); }
                     } else {
                         syncStatusEl.innerText = `Sync status: ${data.error || "Claim failed"}`;
                     }
                     restartBtn.style.display = "block";
                 })
                 .catch(err => {
-                    console.error("Score submission failed:", err);
-                    syncStatusEl.innerText = "Failed to sync coins. Check internet connection.";
+                    syncStatusEl.innerText = "Failed to sync coins. Check connection.";
                     restartBtn.style.display = "block";
                 });
             } else {

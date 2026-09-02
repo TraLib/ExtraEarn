@@ -3,49 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Arcade - Number Slider</title>
+    <title>Arcade - Number Slider Light</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; touch-action: none; }
-        body { background: radial-gradient(circle at center, #0b0f19 0%, #030712 100%); font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; color: #fff; }
+        body { background: #F4F7FC; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; color: #0F172A; }
         #gameWrapper { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         #uiOverlay { display: flex; justify-content: space-between; width: 100%; max-width: 320px; margin-bottom: 20px; z-index: 10; }
-        .glass-card { background: rgba(15, 23, 42, 0.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); padding: 12px 20px; border-radius: 14px; font-weight: 700; font-size: 0.95rem; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); display: flex; align-items: center; gap: 8px; }
-        #scoreBoard { color: #38bdf8; border-bottom: 2px solid rgba(56, 189, 248, 0.4); }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border: 1px solid #E2E8F0; padding: 12px 20px; border-radius: 16px; font-weight: 800; font-size: 1rem; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); display: flex; align-items: center; gap: 8px; color: #0F172A; }
+        #scoreBoard { color: #EF4444; border-left: 4px solid #EF4444; }
         
-        #grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; width: 100%; max-width: 320px; aspect-ratio: 1; background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 8px; z-index: 5; margin-bottom: 20px; }
-        .cell { background: rgba(15, 23, 42, 0.6); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; aspect-ratio: 1; transition: background 0.15s, transform 0.1s; }
+        #grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; max-width: 320px; aspect-ratio: 1; background: #E2E8F0; border-radius: 20px; padding: 10px; z-index: 5; margin-bottom: 20px; box-shadow: inset 0 2px 8px rgba(0,0,0,0.05); }
+        .cell { background: #CBD5E1; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 900; aspect-ratio: 1; transition: background 0.15s, transform 0.1s; }
         
         /* Grid color blocks */
-        .val-2 { background: #1e293b; color: #94a3b8; }
-        .val-4 { background: #334155; color: #cbd5e1; }
-        .val-8 { background: #f97316; color: #fff; box-shadow: 0 0 10px rgba(249, 115, 22, 0.3); }
-        .val-16 { background: #ea580c; color: #fff; box-shadow: 0 0 15px rgba(234, 88, 12, 0.4); }
-        .val-32 { background: #ef4444; color: #fff; box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
-        .val-64 { background: #dc2626; color: #fff; box-shadow: 0 0 20px rgba(220, 38, 38, 0.5); }
-        .val-128 { background: #eab308; color: #fff; box-shadow: 0 0 20px rgba(234, 179, 8, 0.5); }
-        .val-256 { background: #ca8a04; color: #fff; box-shadow: 0 0 25px rgba(202, 138, 4, 0.6); }
-        .val-512 { background: #10b981; color: #fff; box-shadow: 0 0 25px rgba(16, 185, 129, 0.6); }
-        .val-1024 { background: #069668; color: #fff; box-shadow: 0 0 30px rgba(6, 150, 104, 0.7); }
-        .val-2048 { background: #8b5cf6; color: #fff; box-shadow: 0 0 35px rgba(139, 92, 246, 0.8); }
+        .val-2 { background: #FFFFFF; color: #475569; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .val-4 { background: #FEF3C7; color: #D97706; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .val-8 { background: #FFEDD5; color: #EA580C; box-shadow: 0 4px 12px rgba(234, 88, 12, 0.2); }
+        .val-16 { background: #FEE2E2; color: #DC2626; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2); }
+        .val-32 { background: #EF4444; color: #FFFFFF; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
+        .val-64 { background: #DC2626; color: #FFFFFF; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4); }
+        .val-128 { background: #F59E0B; color: #FFFFFF; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4); }
+        .val-256 { background: #D97706; color: #FFFFFF; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4); }
+        .val-512 { background: #10B981; color: #FFFFFF; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4); }
+        .val-1024 { background: #059669; color: #FFFFFF; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.5); }
+        .val-2048 { background: #8B5CF6; color: #FFFFFF; box-shadow: 0 4px 16px rgba(139, 92, 246, 0.6); }
 
         #controls { display: grid; grid-template-areas: ". up ." "left down right"; gap: 10px; z-index: 5; margin-top: 10px; width: 100%; max-width: 200px; }
-        .dir-btn { width: 60px; height: 50px; border-radius: 12px; background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; color: #fff; font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-        .dir-btn:active { background: rgba(56, 189, 248, 0.3); border-color: #38bdf8; }
+        .dir-btn { width: 60px; height: 50px; border-radius: 14px; background: #FFFFFF; border: 2px solid #E2E8F0; cursor: pointer; color: #0F172A; font-size: 1.2rem; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .dir-btn:active { background: #EF4444; color: #FFFFFF; border-color: #EF4444; }
         #btn-up { grid-area: up; }
         #btn-left { grid-area: left; }
         #btn-down { grid-area: down; }
         #btn-right { grid-area: right; }
 
-        #gameOverScreen, #authScreen { position: absolute; inset: 0; background: rgba(3, 7, 18, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; padding: 20px; text-align: center; }
+        #gameOverScreen, #authScreen { position: absolute; inset: 0; background: rgba(244, 247, 252, 0.95); backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; padding: 20px; text-align: center; }
         #gameOverScreen { display: none; }
-        #gameOverScreen h2 { font-size: 2.5rem; color: #f87171; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 2px; }
-        #gameOverScreen p { font-size: 1.2rem; color: #9ca3af; margin-bottom: 12px; }
-        #gameOverScreen span { color: #fbbf24; font-weight: 800; }
-        #syncStatus { font-size: 1rem; color: #34d399; margin-bottom: 32px; font-weight: 600; }
-        button.action-btn { padding: 16px 40px; font-size: 1.1rem; font-weight: 700; background: #38bdf8; color: #030712; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.45); transition: all 0.2s ease-in-out; }
-        button.action-btn:hover { background: #0ea5e9; transform: translateY(-3px); }
-        #authScreen h2 { font-size: 2rem; color: #38bdf8; margin-bottom: 16px; }
-        #authScreen p { color: #9ca3af; font-size: 1.1rem; max-width: 400px; line-height: 1.6; }
+        #gameOverScreen h2 { font-size: clamp(2rem, 8vw, 3.5rem); color: #EF4444; margin-bottom: 8px; font-weight: 900; }
+        #gameOverScreen p { font-size: 1.1rem; color: #64748B; margin-bottom: 12px; font-weight: 600; }
+        #gameOverScreen span { color: #F59E0B; font-weight: 900; }
+        #syncStatus { font-size: 1rem; color: #10B981; margin-bottom: 24px; font-weight: 700; }
+        button.action-btn { padding: 14px 32px; font-size: 1rem; font-weight: 800; background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); color: #FFFFFF; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3); transition: all 0.2s ease; }
+        button.action-btn:hover { transform: translateY(-2px); }
     </style>
 </head>
 <body>
@@ -114,6 +112,43 @@
         let score = 0;
         let gameOver = false;
 
+        function playSlideSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(350, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.05);
+            } catch(e) {}
+        }
+
+        function playMergeSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.1);
+            } catch(e) {}
+        }
+
         function initGame() {
             board = Array(16).fill(0);
             score = 0;
@@ -152,6 +187,7 @@
 
         function slideLeft() {
             let moved = false;
+            let mergedThisMove = false;
             for (let r = 0; r < 4; r++) {
                 let row = board.slice(r * 4, r * 4 + 4).filter(val => val > 0);
                 let newRow = [];
@@ -161,6 +197,7 @@
                         score += row[i] * 2;
                         i++;
                         moved = true;
+                        mergedThisMove = true;
                     } else {
                         newRow.push(row[i]);
                     }
@@ -176,6 +213,8 @@
                     board[idx] = newRow[c];
                 }
             }
+            if (mergedThisMove) playMergeSound();
+            else if (moved) playSlideSound();
             return moved;
         }
 
@@ -220,7 +259,6 @@
             return true;
         }
 
-        // Swipe Gesture Detection
         let touchStartX = 0;
         let touchStartY = 0;
         window.addEventListener('touchstart', (e) => {
@@ -246,7 +284,6 @@
             }
         }, { passive: true });
 
-        // Key bindings
         window.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowUp') slide('up');
             if (e.key === 'ArrowLeft') slide('left');
@@ -261,7 +298,6 @@
             syncStatusEl.innerText = "Syncing reward coins...";
             restartBtn.style.display = "none";
 
-            // Reward 1 coin per 10 points (maximum 60 coins)
             const rewardCoins = Math.min(60, Math.floor(score / 10));
 
             if (rewardCoins > 0) {
@@ -273,16 +309,15 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
-                        syncStatusEl.innerText = `Reward claimed! +${data.coinsEarned}
-if (window.parent) { window.parent.postMessage({ type: 'SCORE_SUBMITTED', score: (data || res).coinsEarned }, '*'); } Coins added to your account!`;
+                        syncStatusEl.innerText = `Reward claimed! +${data.coinsEarned} Coins added!`;
+                        if (window.parent) { window.parent.postMessage({ type: 'GAME_SCORE', score: data.coinsEarned, game: 'Number Slider' }, '*'); }
                     } else {
                         syncStatusEl.innerText = `Sync status: ${data.error || "Claim failed"}`;
                     }
                     restartBtn.style.display = "block";
                 })
                 .catch(err => {
-                    console.error("Score submission failed:", err);
-                    syncStatusEl.innerText = "Failed to sync coins. Check internet connection.";
+                    syncStatusEl.innerText = "Failed to sync coins. Check connection.";
                     restartBtn.style.display = "block";
                 });
             } else {

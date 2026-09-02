@@ -3,32 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Arcade - Memory Match</title>
+    <title>Arcade - Memory Match Light</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
-        body { background: radial-gradient(circle at center, #0b0f19 0%, #030712 100%); font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; color: #fff; }
+        body { background: #F4F7FC; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; color: #0F172A; }
         #gameWrapper { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         #uiOverlay { display: flex; justify-content: space-between; width: 100%; max-width: 400px; margin-bottom: 20px; z-index: 10; }
-        .glass-card { background: rgba(15, 23, 42, 0.45); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); padding: 14px 20px; border-radius: 16px; font-weight: 700; font-size: 1rem; letter-spacing: 0.05em; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4); display: flex; align-items: center; gap: 8px; }
-        #scoreBoard { color: #38bdf8; border-bottom: 2px solid rgba(56, 189, 248, 0.4); }
-        #grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; max-width: 400px; aspect-ratio: 1; z-index: 5; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border: 1px solid #E2E8F0; padding: 12px 20px; border-radius: 16px; font-weight: 800; font-size: 1rem; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); display: flex; align-items: center; gap: 8px; color: #0F172A; }
+        #scoreBoard { color: #8B5CF6; border-left: 4px solid #8B5CF6; }
+        #grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; width: 100%; max-width: 400px; aspect-ratio: 1; z-index: 5; }
         .card { perspective: 1000px; aspect-ratio: 1; cursor: pointer; }
-        .card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.5s; transform-style: preserve-3d; }
+        .card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
         .card.flipped .card-inner { transform: rotateY(180deg); }
-        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 2rem; }
-        .card-front { background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: inset 0 0 15px rgba(56, 189, 248, 0.1); color: #38bdf8; }
-        .card-back { background: linear-gradient(135deg, #3b82f6, #1d4ed8); transform: rotateY(180deg); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
-        .card.matched .card-back { background: linear-gradient(135deg, #10b981, #065f46); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
-        #gameOverScreen, #authScreen { position: absolute; inset: 0; background: rgba(3, 7, 18, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; padding: 20px; text-align: center; }
+        .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; }
+        .card-front { background: #FFFFFF; border: 2px solid #E2E8F0; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05); color: #8B5CF6; font-weight: 800; }
+        .card-back { background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); transform: rotateY(180deg); color: #FFFFFF; box-shadow: 0 6px 16px rgba(139, 92, 246, 0.3); }
+        .card.matched .card-back { background: linear-gradient(135deg, #10B981 0%, #059669 100%); box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3); }
+        #gameOverScreen, #authScreen { position: absolute; inset: 0; background: rgba(244, 247, 252, 0.95); backdrop-filter: blur(20px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 20; padding: 20px; text-align: center; }
         #gameOverScreen { display: none; }
-        #gameOverScreen h2 { font-size: 2.5rem; color: #10b981; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 3px; text-shadow: 0 0 40px rgba(16, 185, 129, 0.6); }
-        #gameOverScreen p { font-size: 1.2rem; color: #9ca3af; margin-bottom: 12px; }
-        #gameOverScreen span { color: #fbbf24; font-weight: 800; }
-        #syncStatus { font-size: 1rem; color: #34d399; margin-bottom: 32px; font-weight: 600; }
-        button { padding: 16px 40px; font-size: 1.1rem; font-weight: 700; background: #38bdf8; color: #030712; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px; box-shadow: 0 0 25px rgba(56, 189, 248, 0.45); transition: all 0.2s ease-in-out; }
-        button:hover { background: #0ea5e9; transform: translateY(-3px); }
-        #authScreen h2 { font-size: 2rem; color: #38bdf8; margin-bottom: 16px; }
-        #authScreen p { color: #9ca3af; font-size: 1.1rem; max-width: 400px; line-height: 1.6; }
+        #gameOverScreen h2 { font-size: clamp(2rem, 8vw, 3.5rem); color: #10B981; margin-bottom: 8px; font-weight: 900; }
+        #gameOverScreen p { font-size: 1.1rem; color: #64748B; margin-bottom: 12px; font-weight: 600; }
+        #gameOverScreen span { color: #F59E0B; font-weight: 900; }
+        #syncStatus { font-size: 1rem; color: #10B981; margin-bottom: 24px; font-weight: 700; }
+        button { padding: 14px 32px; font-size: 1rem; font-weight: 800; background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%); color: #FFFFFF; border: none; border-radius: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3); transition: all 0.2s ease; }
+        button:hover { transform: translateY(-2px); }
     </style>
 </head>
 <body>
@@ -76,10 +74,69 @@
         let turns = 0;
         let canFlip = true;
 
+        function playFlipSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(500, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.05);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.05);
+            } catch(e) {}
+        }
+
+        function playMatchSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.value = freq;
+                    const startTime = audioCtx.currentTime + (idx * 0.06);
+                    gain.gain.setValueAtTime(0.15, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.15);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.15);
+                });
+            } catch(e) {}
+        }
+
+        function playMismatchSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(250, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(200, audioCtx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.16);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.16);
+            } catch(e) {}
+        }
+
         function initGame() {
             gridEl.innerHTML = '';
             cards = [...emojis, ...emojis];
-            // Shuffle
             cards.sort(() => Math.random() - 0.5);
 
             cards.forEach((emoji, index) => {
@@ -108,6 +165,7 @@
         function flipCard(card) {
             if (!userId || !canFlip || card.classList.contains('flipped') || card.classList.contains('matched')) return;
 
+            playFlipSound();
             card.classList.add('flipped');
             flippedCards.push(card);
 
@@ -125,6 +183,7 @@
                 card2.classList.add('matched');
                 matches++;
                 scoreEl.innerText = `${matches}/8`;
+                playMatchSound();
                 flippedCards = [];
                 canFlip = true;
 
@@ -132,12 +191,13 @@
                     setTimeout(triggerGameOver, 600);
                 }
             } else {
+                playMismatchSound();
                 setTimeout(() => {
                     card1.classList.remove('flipped');
                     card2.classList.remove('flipped');
                     flippedCards = [];
                     canFlip = true;
-                }, 1000);
+                }, 800);
             }
         }
 
@@ -147,7 +207,6 @@
             syncStatusEl.innerText = "Syncing reward coins...";
             restartBtn.style.display = "none";
 
-            // Reward calculation: base score of 50 coins for completion, bonus if turns are low
             const rewardCoins = Math.max(10, 80 - turns);
 
             fetch('/api/games/submit-score', {
@@ -158,16 +217,15 @@
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    syncStatusEl.innerText = `Reward claimed! +${data.coinsEarned}
-if (window.parent) { window.parent.postMessage({ type: 'SCORE_SUBMITTED', score: (data || res).coinsEarned }, '*'); } Coins added to your account!`;
+                    syncStatusEl.innerText = `Reward claimed! +${data.coinsEarned} Coins added!`;
+                    if (window.parent) { window.parent.postMessage({ type: 'GAME_SCORE', score: data.coinsEarned, game: 'Memory Match' }, '*'); }
                 } else {
                     syncStatusEl.innerText = `Sync status: ${data.error || "Claim failed"}`;
                 }
                 restartBtn.style.display = "block";
             })
             .catch(err => {
-                console.error("Score submission failed:", err);
-                syncStatusEl.innerText = "Failed to sync coins. Check internet connection.";
+                syncStatusEl.innerText = "Failed to sync coins. Check connection.";
                 restartBtn.style.display = "block";
             });
         }
