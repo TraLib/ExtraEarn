@@ -416,12 +416,12 @@ window.addEventListener("DOMContentLoaded", () => {
     fetchTransactions();
     fetchGames();
     
-    // Poll updates every 5 seconds to keep the admin dashboard fresh and alive
+    // Poll updates every 12 seconds to keep the admin dashboard fresh without rate limiting
     setInterval(() => {
         fetchSettings();
         fetchUsers();
         fetchTransactions();
-    }, 5000);
+    }, 12000);
 });
 
 let allGames = [];

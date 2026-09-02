@@ -692,6 +692,7 @@ class _WebAppContainerScreenState extends State<WebAppContainerScreen> {
   late final WebViewController _controller;
   bool _isLoading = true;
   bool _hasError = false;
+  bool _useNativeFallback = false;
 
   @override
   void initState() {
@@ -730,8 +731,9 @@ class _WebAppContainerScreenState extends State<WebAppContainerScreen> {
             }
           },
           onWebResourceError: (error) {
-            debugPrint("[FLUTTER_WEBVIEW] Error: ${error.description}");
-            if (mounted) {
+            debugPrint("[FLUTTER_WEBVIEW] Error: ${error.description}, isMainFrame: ${error.isForMainFrame}");
+            // ONLY flag error if main frame failed to load (ignore subresource/ad/favicon errors)
+            if (error.isForMainFrame == true && mounted) {
               setState(() {
                 _isLoading = false;
                 _hasError = true;
@@ -746,8 +748,63 @@ class _WebAppContainerScreenState extends State<WebAppContainerScreen> {
       );
   }
 
+  void _showChangeUrlDialog(BuildContext context, ApiService api) {
+    final textController = TextEditingController(text: ApiService.baseUrl);
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: api.cardColor,
+        title: const Text("Set Server API URL", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Enter your backend server base API URL (e.g., http://10.0.2.2:3000/api for emulator, http://192.168.1.100:3000/api for local WiFi, or https://extraearn.onrender.com/api):",
+              style: TextStyle(color: Colors.grey, fontSize: 12),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: textController,
+              style: const TextStyle(color: Colors.white, fontSize: 13),
+              decoration: InputDecoration(
+                hintText: "http://10.0.2.2:3000/api",
+                hintStyle: TextStyle(color: Colors.grey.shade600),
+                filled: true,
+                fillColor: Colors.black26,
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text("Cancel", style: TextStyle(color: Colors.grey)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: api.primaryColor, foregroundColor: Colors.black),
+            onPressed: () async {
+              final newUrl = textController.text.trim();
+              if (newUrl.isNotEmpty) {
+                await api.updateCustomUrl(newUrl);
+                if (mounted) Navigator.pop(ctx);
+                _initWebView();
+              }
+            },
+            child: const Text("Save & Reconnect", style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_useNativeFallback) {
+      return const DashboardScreen();
+    }
+
     final api = context.watch<ApiService>();
     return Scaffold(
       backgroundColor: api.backgroundColor,
@@ -766,25 +823,49 @@ class _WebAppContainerScreenState extends State<WebAppContainerScreen> {
                       Icon(Icons.wifi_off_rounded, size: 64, color: api.primaryColor),
                       const SizedBox(height: 16),
                       const Text(
-                        "Connection Failed",
+                        "Live Server Connection Alert",
                         style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
-                      const Text(
-                        "Unable to load the Live App from the server. Please check your internet connection and try again.",
+                      Text(
+                        "Current Server Target: ${ApiService.baseUrl}\nUnable to load live interface from host.",
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.grey, fontSize: 13),
+                        style: const TextStyle(color: Colors.grey, fontSize: 12),
                       ),
                       const SizedBox(height: 24),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: api.primaryColor,
-                          foregroundColor: Colors.black,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: api.primaryColor,
+                              foregroundColor: Colors.black,
+                            ),
+                            onPressed: _initWebView,
+                            icon: const Icon(Icons.refresh),
+                            label: const Text("Retry Connection", style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                          const SizedBox(width: 12),
+                          OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              side: BorderSide(color: api.primaryColor),
+                            ),
+                            onPressed: () => _showChangeUrlDialog(context, api),
+                            icon: const Icon(Icons.settings_input_antenna),
+                            label: const Text("Change Server URL"),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      TextButton.icon(
                         onPressed: () {
-                          _initWebView();
+                          setState(() {
+                            _useNativeFallback = true;
+                          });
                         },
-                        child: const Text("Retry Connection", style: TextStyle(fontWeight: FontWeight.bold)),
+                        icon: const Icon(Icons.phone_android, color: Colors.grey),
+                        label: const Text("Use Embedded Native App UI", style: TextStyle(color: Colors.grey)),
                       ),
                     ],
                   ),

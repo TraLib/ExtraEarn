@@ -85,14 +85,22 @@ class ApiService extends ChangeNotifier {
     _loadLocalFallback();
     fetchSettings(showLoading: true);
     
-    // Global background sync timer
-    _syncTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+    // Global background sync timer (15 seconds to prevent rate limits)
+    _syncTimer = Timer.periodic(const Duration(seconds: 15), (timer) {
       fetchSettings();
       if (_currentUser != null) {
         fetchUserProfile();
         fetchTransactions();
       }
     });
+  }
+
+  Future<void> updateCustomUrl(String newUrl) async {
+    _customUrl = newUrl.trim();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('custom_api_url', _customUrl);
+    notifyListeners();
+    fetchSettings(showLoading: true);
   }
 
   @override
