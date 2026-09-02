@@ -55,6 +55,66 @@
         </div>
     </div>
 
+    <!-- USER PROFILE EDIT MODAL SCREEN -->
+    <div id="profile-modal" class="app-modal-backdrop" style="display: none;">
+        <div class="app-modal-card profile-card-modal" style="max-width: 360px; text-align: left; background: #14141B; border: 1px solid #252535; border-radius: 20px; padding: 20px;">
+            <div class="app-modal-header" style="position: relative; padding-bottom: 10px; border-bottom: 1px solid #252535;">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <h3 style="font-family: var(--font-heading); font-size: 18px; font-weight: 800; color: #FFFFFF; margin: 0;">
+                        <i class="fa-solid fa-user-gear" style="color: #FFD54A; margin-right: 8px;"></i> User Profile Settings
+                    </h3>
+                    <button id="btn-close-profile" style="background: none; border: none; color: #94A3B8; font-size: 18px; cursor: pointer;">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="app-modal-body" style="margin: 16px 0;">
+                <!-- Avatar Selection Bar -->
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="position: relative; display: inline-block;">
+                        <img id="profile-avatar-preview" src="https://api.dicebear.com/7.x/bottts/svg?seed=ProUser" alt="Avatar" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #FFD54A; background: #1E293B; padding: 4px;">
+                        <button id="btn-random-avatar" title="Shuffle Avatar" style="position: absolute; bottom: 0; right: 0; background: #FFD54A; color: #000; border: none; border-radius: 50%; width: 28px; height: 28px; font-size: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <i class="fa-solid fa-shuffle"></i>
+                        </button>
+                    </div>
+                    <div style="font-size: 11px; color: #94A3B8; margin-top: 6px;">Tap shuffle icon to pick a new avatar!</div>
+                </div>
+
+                <!-- Input Fields -->
+                <div class="input-group" style="margin-bottom: 12px;">
+                    <label style="font-size: 11px; font-weight: 700; color: #CBD5E1; display: block; margin-bottom: 4px;">Display Name</label>
+                    <input type="text" id="edit-profile-name" placeholder="Enter your full name" style="width: 100%; padding: 10px 12px; background: #0F172A; border: 1px solid #334155; border-radius: 10px; color: #FFF; font-size: 14px; font-weight: 600;">
+                </div>
+
+                <div class="input-group" style="margin-bottom: 12px;">
+                    <label style="font-size: 11px; font-weight: 700; color: #CBD5E1; display: block; margin-bottom: 4px;">Mobile Phone Number</label>
+                    <input type="text" id="edit-profile-phone" placeholder="Mobile Number" style="width: 100%; padding: 10px 12px; background: #0F172A; border: 1px solid #334155; border-radius: 10px; color: #94A3B8; font-size: 14px; font-weight: 600;" readonly>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px;">
+                    <div style="background: #0F172A; padding: 10px; border-radius: 10px; border: 1px solid #334155;">
+                        <span style="font-size: 10px; color: #94A3B8; display: block;">User ID</span>
+                        <strong id="edit-profile-id" style="font-size: 12px; color: #FFD54A;">USR_XXXX</strong>
+                    </div>
+                    <div style="background: #0F172A; padding: 10px; border-radius: 10px; border: 1px solid #334155;">
+                        <span style="font-size: 10px; color: #94A3B8; display: block;">EE Coin Vault</span>
+                        <strong id="edit-profile-coins" style="font-size: 12px; color: #10B981;">0 Coins</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="app-modal-footer" style="display: flex; flex-direction: column; gap: 8px;">
+                <button id="btn-save-profile" class="btn btn-primary" style="width: 100%; padding: 12px; font-weight: 800;">
+                    <i class="fa-solid fa-floppy-disk"></i> SAVE PROFILE CHANGES
+                </button>
+                <button id="btn-logout-account" class="btn btn-secondary" style="width: 100%; padding: 10px; background: #331010; color: #EF4444; border: 1px solid #7F1D1D; font-weight: 700;">
+                    <i class="fa-solid fa-right-from-bracket"></i> LOG OUT ACCOUNT
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- 1. SPLASH SCREEN -->
     <div id="splash-screen" class="app-screen active">
         <div class="splash-content">
@@ -125,7 +185,7 @@
     <div id="dashboard-screen" class="app-screen">
         <!-- Dashboard Header -->
         <header class="app-header">
-            <div class="user-meta">
+            <div class="user-meta" id="user-profile-trigger" style="cursor: pointer;" title="Click to view & edit profile">
                 <div class="avatar-wrapper">
                     <img id="user-avatar" src="https://api.dicebear.com/7.x/bottts/svg?seed=ProUser" alt="Avatar" class="avatar-img">
                     <div class="avatar-badge"></div>

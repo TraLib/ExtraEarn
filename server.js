@@ -153,6 +153,22 @@ const server = http.createServer((req, res) => {
                 return;
             }
 
+            // 3.5. POST /api/users/update (Update user profile live)
+            if (req.url === '/api/users/update' && req.method === 'POST') {
+                const { userId, name, phone, avatar } = jsonBody;
+                const user = db.users.find(u => u.id === userId);
+                if (user) {
+                    if (name) user.name = name;
+                    if (phone) user.phone = phone;
+                    if (avatar) user.avatar = avatar;
+                    saveDatabase();
+                    res.end(JSON.stringify({ success: true, user }));
+                } else {
+                    res.end(JSON.stringify({ success: false, error: "User not found" }));
+                }
+                return;
+            }
+
             // 4. POST /api/users/adjust-coins
             if (req.url === '/api/users/adjust-coins' && req.method === 'POST') {
                 const { userId, amount, type, details } = jsonBody;

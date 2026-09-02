@@ -708,6 +708,15 @@ class _WebAppContainerScreenState extends State<WebAppContainerScreen> {
 
     debugPrint("[FLUTTER_WEBVIEW] Initializing Live API UI: $fullUrl");
 
+    // Safety auto-dismiss timeout for loading spinner
+    Future.delayed(const Duration(milliseconds: 2500), () {
+      if (mounted && _isLoading) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
+
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0xFF07080E))
@@ -715,7 +724,7 @@ class _WebAppContainerScreenState extends State<WebAppContainerScreen> {
         NavigationDelegate(
           onPageStarted: (url) {
             debugPrint("[FLUTTER_WEBVIEW] Started: $url");
-            if (mounted) {
+            if (mounted && _hasError) {
               setState(() {
                 _isLoading = true;
                 _hasError = false;

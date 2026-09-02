@@ -280,6 +280,19 @@ const screens = {
 document.addEventListener('DOMContentLoaded', async () => {
     setupSoundToggle();
     loadCachedSettingsAndTheme();
+    initProfileModal();
+
+    // Safety timeout to hide splash screen within 1.5s max
+    setTimeout(() => {
+        const splash = document.getElementById('splash-screen');
+        if (splash && splash.classList.contains('active')) {
+            if (currentUser) {
+                showScreen('dashboard');
+            } else {
+                showScreen('auth');
+            }
+        }
+    }, 1500);
 
     try {
         await syncApiUiBundle();
@@ -945,5 +958,114 @@ if (btnSubmitSupport) {
         document.getElementById('support-subject').value = '';
         document.getElementById('support-msg').value = '';
     });
+}
+
+// -------------------------------------------------------------
+// USER PROFILE SCREEN CONTROLLER & EDIT MODAL
+// -------------------------------------------------------------
+function initProfileModal() {
+    const trigger = document.getElementById("user-profile-trigger");
+    const modal = document.getElementById("profile-modal");
+    const btnClose = document.getElementById("btn-close-profile");
+    const btnSave = document.getElementById("btn-save-profile");
+    const btnLogout = document.getElementById("btn-logout-account");
+    const btnRandomAvatar = document.getElementById("btn-random-avatar");
+
+    if (trigger) {
+        trigger.addEventListener("click", () => {
+            AppSoundEngine.playClick();
+            openProfileModal();
+        });
+    }
+
+    if (btnClose) {
+        btnClose.addEventListener("click", () => {
+            AppSoundEngine.playClick();
+            if (modal) modal.style.display = "none";
+        });
+    }
+
+    if (btnRandomAvatar) {
+        btnRandomAvatar.addEventListener("click", () => {
+            AppSoundEngine.playClick();
+            const randomSeed = "User" + Math.floor(Math.random() * 99999);
+            const preview = document.getElementById("profile-avatar-preview");
+            if (preview) preview.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${randomSeed}`;
+        });
+    }
+
+    if (btnSave) {
+        btnSave.addEventListener("click", async () => {
+            AppSoundEngine.playClick();
+            const newName = document.getElementById("edit-profile-name").value.trim();
+            const avatarSrc = document.getElementById("profile-avatar-preview").src;
+            
+            if (!newName) {
+                showAppModal("Name Required", "Please enter a valid display name.", "fa-solid fa-triangle-exclamation");
+                return;
+            }
+
+            if (!currentUser) return;
+
+            btnSave.disabled = true;
+            btnSave.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> SAVING...`;
+
+            try {
+                const res = await fetch(`${API_BASE}/api/users/update`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: currentUser.id,
+                        name: newName,
+                        avatar: avatarSrc
+                    })
+                });
+
+                const data = await res.json();
+                if (data.success && data.user) {
+                    currentUser = data.user;
+                    localStorage.setItem("extraearn_user", JSON.stringify(currentUser));
+                    updateHeaderCoins();
+                    showToast("Profile updated successfully!");
+                    AppSoundEngine.playSuccess();
+                    if (modal) modal.style.display = "none";
+                } else {
+                    showAppModal("Error", data.error || "Could not update profile.", "fa-solid fa-triangle-exclamation");
+                }
+            } catch (e) {
+                showAppModal("Connection Error", "Failed to update profile to server.", "fa-solid fa-triangle-exclamation");
+            } finally {
+                btnSave.disabled = false;
+                btnSave.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> SAVE PROFILE CHANGES`;
+            }
+        });
+    }
+
+    if (btnLogout) {
+        btnLogout.addEventListener("click", () => {
+            AppSoundEngine.playClick();
+            localStorage.removeItem("extraearn_user");
+            currentUser = null;
+            if (modal) modal.style.display = "none";
+            showScreen('auth');
+            showToast("Logged out successfully");
+        });
+    }
+}
+
+function openProfileModal() {
+    const modal = document.getElementById("profile-modal");
+    if (!modal || !currentUser) return;
+
+    document.getElementById("edit-profile-name").value = currentUser.name || "";
+    document.getElementById("edit-profile-phone").value = currentUser.phone || "Not set";
+    document.getElementById("edit-profile-id").innerText = currentUser.id || "USR_0";
+    document.getElementById("edit-profile-coins").innerText = `${(currentUser.coins || 0).toLocaleString()} Coins`;
+
+    const avatarSeed = currentUser.name || "ProUser";
+    const preview = document.getElementById("profile-avatar-preview");
+    if (preview) preview.src = currentUser.avatar || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(avatarSeed)}`;
+
+    modal.style.display = "flex";
 }
 
