@@ -80,11 +80,24 @@
         const pipeSpeed = 2.2;
         let spawnTimer = 0;
 
+        let globalAudioCtx = null;
+        function getAudioCtx() {
+            if (!globalAudioCtx) {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (AudioCtx) globalAudioCtx = new AudioCtx();
+            }
+            if (globalAudioCtx && globalAudioCtx.state === 'suspended') {
+                globalAudioCtx.resume();
+            }
+            return globalAudioCtx;
+        }
+        window.addEventListener('touchstart', getAudioCtx, { passive: true });
+        window.addEventListener('click', getAudioCtx, { passive: true });
+
         function playFlapSound() {
             try {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                if (!AudioCtx) return;
-                const audioCtx = new AudioCtx();
+                const audioCtx = getAudioCtx();
+                if (!audioCtx) return;
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sine';

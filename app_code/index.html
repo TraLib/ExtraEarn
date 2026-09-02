@@ -7,15 +7,15 @@
     <!-- Google Fonts & FontAwesome -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="app.css">
 </head>
 <body>
-    <!-- TOAST CONTAINER (No raw API URLs in alerts!) -->
+    <!-- TOAST CONTAINER -->
     <div id="toast-container" class="toast-container"></div>
 
-    <!-- CUSTOM APP MODAL (Replaces browser alert popup) -->
+    <!-- CUSTOM APP MODAL -->
     <div id="app-modal" class="app-modal-backdrop" style="display: none;">
         <div class="app-modal-card">
             <div class="app-modal-header">
@@ -33,6 +33,24 @@
         </div>
     </div>
 
+    <!-- ADMOB INTERSTITIAL TEST AD MODAL -->
+    <div id="admob-interstitial-modal" class="admob-ad-backdrop" style="display: none;">
+        <div class="admob-ad-card">
+            <div class="admob-badge"><i class="fa-solid fa-rectangle-ad"></i> AdMob Test Ad</div>
+            <div class="admob-content">
+                <i class="fa-solid fa-play-circle admob-icon"></i>
+                <h4>Sponsor Video Ad Playing</h4>
+                <p>Please watch for <span id="admob-secs">15</span> seconds to claim reward</p>
+                <div class="admob-progress-bg">
+                    <div id="admob-progress-bar" class="admob-progress-fill"></div>
+                </div>
+            </div>
+            <button id="btn-close-admob-ad" class="btn btn-secondary" style="margin-top: 15px; display: none;">
+                <i class="fa-solid fa-xmark"></i> CLOSE AD & CLAIM
+            </button>
+        </div>
+    </div>
+
     <!-- 1. SPLASH SCREEN -->
     <div id="splash-screen" class="app-screen active">
         <div class="splash-content">
@@ -44,7 +62,7 @@
             <div class="loader-bar">
                 <div class="loader-progress"></div>
             </div>
-            <span class="version-label">v2.5 Live Edition</span>
+            <span class="version-label">v3.0 Ultra Light Edition</span>
         </div>
     </div>
 
@@ -55,7 +73,7 @@
                 <div class="auth-icon-badge">
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
-                <h2>Welcome Back</h2>
+                <h2>Welcome to ExtraEarn</h2>
                 <p>Enter your details to access your coin vault.</p>
             </div>
             
@@ -119,7 +137,7 @@
                 </button>
                 <div class="header-coins-badge" id="btn-header-coins">
                     <i class="fa-solid fa-coins gold-coin"></i>
-                    <span id="header-coin-count">0</span>
+                    <span id="header-coin-count">0</span> EE
                 </div>
             </div>
         </header>
@@ -132,9 +150,9 @@
                 <div class="hero-card">
                     <span class="hero-tag"><i class="fa-solid fa-fire"></i> Daily Booster</span>
                     <h3>VIP Coin Reward Vault</h3>
-                    <p>Play games, claim daily check-ins, and complete offerwall tasks for 2x multipliers!</p>
+                    <p>Play games, claim daily check-ins, and complete offerwall tasks for instant EE coins!</p>
                     <button class="btn btn-primary" id="btn-claim-daily-hero" style="width: auto; padding: 10px 22px;">
-                        <i class="fa-solid fa-calendar-check"></i> CLAIM DAILY CHECK-IN
+                        <i class="fa-solid fa-calendar-check"></i> CLAIM DAILY CHECK-IN (+50 EE)
                     </button>
                 </div>
 
@@ -149,44 +167,47 @@
                     </div>
                 </div>
 
-                <!-- WinZO / TaskBucks Style Tasks Offerwall -->
+                <!-- Tasks Offerwall -->
                 <div class="tasks-section">
                     <div class="section-title">
                         <h4><i class="fa-solid fa-bolt" style="color: #F59E0B;"></i> Instant Reward Tasks</h4>
                         <span style="font-size: 11px; color: var(--color-muted);">High Coin Payouts</span>
                     </div>
                     <div class="tasks-grid">
-                        <div class="task-card" onclick="handleTaskClaim('task_video_ad_today', 500, 'Watch Video Ad Reward')">
+                        <!-- Watch Video Bonus Ad (15 Ads Daily Target) -->
+                        <div class="task-card" onclick="triggerWatchVideoAdTask()">
                             <div class="task-icon" style="background: rgba(245, 158, 11, 0.15); color: #F59E0B;">
-                                <i class="fa-solid fa-play"></i>
+                                <i class="fa-solid fa-circle-play"></i>
                             </div>
                             <div class="task-info">
                                 <div class="task-title">Watch Video Bonus Ad</div>
-                                <div class="task-desc">Watch a 15s sponsor video ad</div>
+                                <div class="task-desc">Daily Target: <span id="ad-target-counter" style="font-weight: 800; color: var(--color-primary);">0/15</span> Watched</div>
                             </div>
-                            <button class="task-btn">+500 Coins</button>
+                            <button class="task-btn">+50 EE</button>
                         </div>
 
-                        <div class="task-card" onclick="handleTaskClaim('task_lucky_wheel', 300, 'Daily Lucky Wheel Bonus')">
+                        <!-- Lucky Wheel Spin (1 Spin / Day) -->
+                        <div class="task-card" onclick="launchGame('wheel_spin.html', 'Daily Lucky Wheel')">
                             <div class="task-icon" style="background: rgba(124, 58, 237, 0.15); color: #7C3AED;">
                                 <i class="fa-solid fa-spinner"></i>
                             </div>
                             <div class="task-info">
-                                <div class="task-title">Lucky Spin Teaser</div>
-                                <div class="task-desc">Claim your daily spin bonus</div>
+                                <div class="task-title">Daily Lucky Spin</div>
+                                <div class="task-desc">Win up to 1000 EE Coins (1/Day)</div>
                             </div>
-                            <button class="task-btn">+300 Coins</button>
+                            <button class="task-btn" style="background: #7C3AED;">SPIN NOW</button>
                         </div>
 
-                        <div class="task-card" onclick="handleTaskClaim('task_telegram_join', 250, 'Join Telegram Channel Task')">
-                            <div class="task-icon" style="background: rgba(6, 182, 212, 0.15); color: #06B6D4;">
-                                <i class="fa-brands fa-telegram"></i>
+                        <!-- Follow on Instagram -->
+                        <div class="task-card" onclick="handleInstagramTask()">
+                            <div class="task-icon" style="background: rgba(236, 72, 153, 0.15); color: #EC4899;">
+                                <i class="fa-brands fa-instagram"></i>
                             </div>
                             <div class="task-info">
-                                <div class="task-title">Join Telegram Channel</div>
-                                <div class="task-desc">Get instant payout updates</div>
+                                <div class="task-title">Follow on Instagram</div>
+                                <div class="task-desc">Get latest app updates & bonuses</div>
                             </div>
-                            <button class="task-btn">+250 Coins</button>
+                            <button class="task-btn" style="background: #EC4899;">+100 EE</button>
                         </div>
                     </div>
                 </div>
@@ -207,7 +228,7 @@
             <section id="tab-games" class="tab-pane">
                 <div class="section-title">
                     <h4><i class="fa-solid fa-trophy" style="color: var(--color-primary);"></i> Arcade Gaming Lobby</h4>
-                    <span style="font-size: 11px; color: var(--color-muted);">12 Games Live</span>
+                    <span style="font-size: 11px; color: var(--color-muted);">13 Games Live</span>
                 </div>
                 <div class="games-grid" id="arcade-full-grid">
                     <!-- Dynamically filled in app.js -->
@@ -217,13 +238,13 @@
             <!-- TAB 3: WALLET & CASHOUT TAB -->
             <section id="tab-wallet" class="tab-pane">
                 <div class="wallet-balance-card">
-                    <div class="balance-label">Available Coin Balance</div>
+                    <div class="balance-label">Available EE Coin Balance</div>
                     <div class="balance-amount">
                         <i class="fa-solid fa-coins gold-coin"></i>
-                        <span id="wallet-coin-count">0</span>
+                        <span id="wallet-coin-count">0</span> <span style="font-size: 16px;">EE</span>
                     </div>
                     <div class="cash-estimate">
-                        ≈ ₹<span id="wallet-cash-value">0.00</span> INR
+                        ≈ ₹<span id="wallet-cash-value">0.00</span> INR (100 EE Coins = ₹1 INR)
                     </div>
                 </div>
 
@@ -233,14 +254,14 @@
                         <h4><i class="fa-solid fa-money-bill-transfer" style="color: var(--color-emerald);"></i> Redeem & Cashout</h4>
                     </div>
                     <div class="input-group">
-                        <label for="redeem-amount">Coins to Redeem</label>
-                        <input type="number" id="redeem-amount" placeholder="e.g. 1000 coins" min="100">
+                        <label for="redeem-amount">EE Coins to Redeem (Min 100 EE)</label>
+                        <input type="number" id="redeem-amount" placeholder="e.g. 500 coins" min="100">
                     </div>
                     <div class="input-group">
                         <label for="redeem-method">Payment Method</label>
-                        <select id="redeem-method" class="input-group input" style="background: var(--card-bg-solid); color: #fff; padding: 12px; border-radius: 12px; border: 1px solid var(--card-border);">
+                        <select id="redeem-method" class="input-select">
                             <option value="UPI">UPI ID (Google Pay / PhonePe / Paytm UPI)</option>
-                            <option value="Paytm">Paytm Wallet</option>
+                            <option value="Paytm">Paytm Wallet Number</option>
                             <option value="Google Play Gift Card">Google Play Gift Card Code</option>
                             <option value="Bank Transfer">Direct Bank Transfer (NEFT/IMPS)</option>
                         </select>
@@ -267,10 +288,10 @@
 
             <!-- TAB 4: REFERRAL & SHARE TAB -->
             <section id="tab-referral" class="tab-pane">
-                <div class="hero-card" style="background: linear-gradient(135deg, rgba(6,182,212,0.25) 0%, rgba(20,22,36,0.85) 100%); border-color: rgba(6,182,212,0.3);">
+                <div class="hero-card" style="background: linear-gradient(135deg, rgba(6,182,212,0.2) 0%, rgba(255,255,255,0.9) 100%); border-color: rgba(6,182,212,0.3);">
                     <span class="hero-tag" style="background: rgba(6,182,212,0.15); color: var(--color-cyan); border-color: rgba(6,182,212,0.3);"><i class="fa-solid fa-users"></i> Earn Together</span>
                     <h3>Invite Friends & Win</h3>
-                    <p>Get 200 bonus coins instantly whenever a friend joins ExtraEarn using your unique code!</p>
+                    <p>Get 200 bonus EE coins instantly whenever a friend joins ExtraEarn using your unique code!</p>
                 </div>
 
                 <div class="cashout-section">
@@ -284,24 +305,65 @@
                         </div>
                     </div>
                     <button id="btn-share-whatsapp" class="btn" style="background: #25D366; color: #fff; margin-top: 10px;">
-                        <i class="fa-brands fa-whatsapp"></i> Share on WhatsApp
+                        <i class="fa-brands fa-whatsapp"></i> Invite via WhatsApp Native App
                     </button>
                 </div>
             </section>
 
-            <!-- TAB 5: SUPPORT TAB -->
+            <!-- TAB 5: HELP & LEGAL SUPPORT TAB -->
             <section id="tab-support" class="tab-pane">
                 <div class="section-title">
-                    <h4><i class="fa-solid fa-headset" style="color: var(--color-primary);"></i> Help & Support Center</h4>
+                    <h4><i class="fa-solid fa-shield-halved" style="color: var(--color-primary);"></i> Help & Legal Support</h4>
                 </div>
-                <div class="cashout-section">
+
+                <!-- Support Sub Nav Accordion -->
+                <div class="legal-accordions">
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion('policy-content')">
+                            <span><i class="fa-solid fa-user-lock" style="color: var(--color-primary);"></i> Privacy Policy</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div id="policy-content" class="accordion-body">
+                            <p><strong>ExtraEarn Privacy Policy:</strong> We respect your privacy. We collect basic account profile data (name, mobile number) strictly for managing your coin earnings, payout processing, and fraud protection. We do not sell or transmit your personal details to external third parties. All transactions are securely processed.</p>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion('terms-content')">
+                            <span><i class="fa-solid fa-file-contract" style="color: var(--color-secondary);"></i> Terms & Conditions</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div id="terms-content" class="accordion-body">
+                            <p><strong>Terms of Service:</strong> By using ExtraEarn, you agree to adhere to our fair play guidelines. Each user is restricted to 1 account per physical mobile device. Any attempt to use automated scripts, emulators, or multi-accounting will result in immediate suspension and forfeiture of EE coin balances.</p>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion('rules-content')">
+                            <span><i class="fa-solid fa-circle-info" style="color: #F59E0B;"></i> App Rules & Coin Policy</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div id="rules-content" class="accordion-body">
+                            <p>• <strong>Daily Check-in:</strong> 1 claim allowed every 24 hours.<br>
+                            • <strong>Daily Lucky Spin:</strong> 1 spin allowed per day per account (probability scaled between 1 to 1000 EE coins).<br>
+                            • <strong>Arcade Games:</strong> Maximum cap of 50 EE coins per game session.<br>
+                            • <strong>Minimum Cashout:</strong> 100 EE Coins (= ₹1 INR).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Support Ticket Form -->
+                <div class="cashout-section" style="margin-top: 20px;">
+                    <div class="section-title">
+                        <h4><i class="fa-solid fa-headset" style="color: var(--color-primary);"></i> Submit Support Ticket</h4>
+                    </div>
                     <div class="input-group">
                         <label for="support-subject">Query Subject</label>
                         <input type="text" id="support-subject" placeholder="e.g. Withdrawal enquiry">
                     </div>
                     <div class="input-group">
                         <label for="support-msg">Message Details</label>
-                        <textarea id="support-msg" rows="4" style="background: rgba(255,255,255,0.03); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px; color: #fff; outline: none;" placeholder="Describe your query..."></textarea>
+                        <textarea id="support-msg" rows="3" class="input-textarea" placeholder="Describe your query..."></textarea>
                     </div>
                     <button id="btn-submit-support" class="btn btn-primary">
                         <i class="fa-solid fa-paper-plane"></i> SUBMIT TICKET
@@ -309,6 +371,14 @@
                 </div>
             </section>
         </main>
+
+        <!-- ADMOB TEST BANNER CONTAINER -->
+        <div class="admob-banner-container">
+            <span class="admob-banner-label">AdMob Test Banner</span>
+            <div class="admob-banner-content">
+                <i class="fa-solid fa-ad"></i> Sponsored Banner Ad (AdMob ca-app-pub-3940256099942544/6300978111)
+            </div>
+        </div>
 
         <!-- Bottom Glass Navigation Bar -->
         <nav class="app-nav">
@@ -342,16 +412,16 @@
 
     <!-- 4. FULLSCREEN OVERLAY IFRAME FOR ARCADE GAMES -->
     <div id="game-overlay" class="app-screen" style="z-index: 1000;">
-        <div style="height: 50px; background: #0c0d18; border-bottom: 1px solid var(--card-border); display: flex; align-items: center; justify-content: space-between; padding: 0 15px;">
-            <button id="btn-exit-game" style="background: rgba(244,63,94,0.15); border: 1px solid rgba(244,63,94,0.3); color: var(--color-rose); padding: 6px 14px; border-radius: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+        <div style="height: 50px; background: #FFFFFF; border-bottom: 1px solid var(--card-border); display: flex; align-items: center; justify-content: space-between; padding: 0 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <button id="btn-exit-game" style="background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.2); color: var(--color-rose); padding: 6px 14px; border-radius: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
                 <i class="fa-solid fa-chevron-left"></i> EXIT GAME
             </button>
-            <span id="active-game-title" style="font-family: var(--font-heading); font-weight: 800; color: #fff; font-size: 15px;">Game</span>
+            <span id="active-game-title" style="font-family: var(--font-heading); font-weight: 800; color: var(--text-heading); font-size: 15px;">Game</span>
             <div style="font-size: 12px; color: var(--color-primary); font-weight: 700;" id="game-active-coins">
-                <i class="fa-solid fa-coins gold-coin"></i> Sync
+                <i class="fa-solid fa-coins gold-coin"></i> EE Vault
             </div>
         </div>
-        <iframe id="game-frame" src="" style="width: 100%; height: calc(100% - 50px); border: none; background: #000;"></iframe>
+        <iframe id="game-frame" src="" style="width: 100%; height: calc(100% - 50px); border: none; background: #F4F7FC;"></iframe>
     </div>
 
     <script src="app.js"></script>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ExtraEarn - Daily Lucky Spin</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+        body { 
+            background: #F4F7FC; 
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            width: 100vw; height: 100vh; overflow: hidden; color: #0F172A; 
+        }
+
+        #spinWrapper {
+            width: 100%; max-width: 440px; height: 100%;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+            padding: 16px; position: relative;
+        }
+
+        .header-card {
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px);
+            border: 1px solid #E2E8F0; padding: 12px 20px; border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); width: 100%;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .header-title {
+            font-family: 'Fredoka', cursive, sans-serif; font-size: 1.4rem; color: #7C3AED;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .coin-badge {
+            background: rgba(245, 158, 11, 0.15); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 0.95rem;
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        /* Wheel Container */
+        .wheel-container {
+            position: relative; width: 310px; height: 310px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 20px 0;
+        }
+
+        #wheelCanvas {
+            width: 100%; height: 100%; border-radius: 50%;
+            box-shadow: 0 12px 36px rgba(124, 58, 237, 0.25), 0 0 0 12px #FFFFFF;
+            transition: transform 5s cubic-bezier(0.15, 0.99, 0.15, 1);
+        }
+
+        .pointer-marker {
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+            width: 32px; height: 38px; z-index: 20; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        .center-btn {
+            position: absolute; width: 70px; height: 70px; border-radius: 50%;
+            background: linear-gradient(135deg, #7C3AED, #6D28D9); color: #FFF;
+            border: 4px solid #FFFFFF; box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+            font-family: 'Fredoka', cursive, sans-serif; font-weight: 700; font-size: 1rem;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            z-index: 10; text-transform: uppercase; letter-spacing: 0.5px;
+            transition: transform 0.15s;
+        }
+        .center-btn:active { transform: scale(0.92); }
+        .center-btn.disabled { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
+
+        .spin-limit-info {
+            text-align: center; font-size: 0.9rem; color: #64748B; font-weight: 700;
+            background: #FFFFFF; padding: 10px 18px; border-radius: 14px; border: 1px solid #E2E8F0;
+        }
+
+        /* Result Popup Modal */
+        #resultModal {
+            position: absolute; inset: 0; background: rgba(244, 247, 252, 0.96);
+            backdrop-filter: blur(20px); display: none; flex-direction: column;
+            align-items: center; justify-content: center; z-index: 100; padding: 24px; text-align: center;
+        }
+
+        .modal-icon {
+            font-size: 4rem; color: #F59E0B; margin-bottom: 12px;
+            animation: bounce 1s infinite alternate ease-in-out;
+        }
+        @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-12px); } }
+
+        #resultModal h2 {
+            font-family: 'Fredoka', cursive, sans-serif; font-size: 2.2rem; color: #7C3AED;
+            margin-bottom: 6px; font-weight: 700;
+        }
+
+        #resultModal p {
+            font-size: 1.1rem; color: #64748B; margin-bottom: 24px; font-weight: 600;
+        }
+
+        .btn-group {
+            display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 320px;
+        }
+
+        button.btn-2x {
+            padding: 16px; font-size: 1.05rem; font-weight: 800;
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: #FFFFFF;
+            border: none; border-radius: 16px; cursor: pointer; text-transform: uppercase;
+            letter-spacing: 1px; box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            transition: transform 0.15s;
+        }
+        button.btn-2x:active { transform: scale(0.97); }
+
+        button.btn-claim {
+            padding: 14px; font-size: 0.95rem; font-weight: 700;
+            background: #E2E8F0; color: #475569; border: none; border-radius: 16px;
+            cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+            transition: transform 0.15s;
+        }
+        button.btn-claim:active { transform: scale(0.97); }
+
+        #adModal {
+            position: absolute; inset: 0; background: rgba(15, 23, 42, 0.95);
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 200; color: #FFF; padding: 24px; text-align: center;
+        }
+        .ad-loader {
+            width: 48px; height: 48px; border: 4px solid rgba(255,255,255,0.2);
+            border-top-color: #F59E0B; border-radius: 50%; animation: spin 1s infinite linear;
+            margin-bottom: 16px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <div id="spinWrapper">
+        <div class="header-card">
+            <div class="header-title">
+                <i class="fa-solid fa-spinner"></i> Lucky Wheel
+            </div>
+            <div class="coin-badge">
+                <i class="fa-solid fa-coins"></i> <span id="userCoins">0</span> EE Coins
+            </div>
+        </div>
+
+        <div class="wheel-container">
+            <svg class="pointer-marker" viewBox="0 0 30 36">
+                <polygon points="15,36 0,0 30,0" fill="#EF4444" stroke="#FFFFFF" stroke-width="3"/>
+            </svg>
+            <canvas id="wheelCanvas" width="310" height="310"></canvas>
+            <div class="center-btn" id="spinBtn" onclick="startSpin()">SPIN</div>
+        </div>
+
+        <div class="spin-limit-info" id="limitNotice">
+            🎁 Guaranteed reward on every daily spin! Limit: 1 Spin / Day.
+        </div>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="resultModal">
+        <div class="modal-icon"><i class="fa-solid fa-trophy"></i></div>
+        <h2 id="winTitle">YOU WON 50 COINS!</h2>
+        <p id="winSub">Double your prize by watching a quick sponsor video!</p>
+        <div class="btn-group">
+            <button class="btn-2x" id="btn2X" onclick="claim2XReward()">
+                <i class="fa-solid fa-bolt"></i> GET 2X REWARD (<span id="doubleAmount">100</span> COINS)
+            </button>
+            <button class="btn-claim" onclick="claimBaseReward()">
+                NOT NOW, CLAIM <span id="baseAmount">50</span> COINS
+            </button>
+        </div>
+    </div>
+
+    <!-- Ad Overlay Simulation -->
+    <div id="adModal">
+        <div class="ad-loader"></div>
+        <h3>Playing Sponsor Video Ad...</h3>
+        <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 8px;">Please wait <span id="adSecs">3</span>s for 2X Reward</p>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('userId');
+
+        const canvas = document.getElementById('wheelCanvas');
+        const ctx = canvas.getContext('2d');
+        const spinBtn = document.getElementById('spinBtn');
+        const limitNotice = document.getElementById('limitNotice');
+        const userCoinsEl = document.getElementById('userCoins');
+        const resultModal = document.getElementById('resultModal');
+        const winTitle = document.getElementById('winTitle');
+        const baseAmountEl = document.getElementById('baseAmount');
+        const doubleAmountEl = document.getElementById('doubleAmount');
+        const adModal = document.getElementById('adModal');
+        const adSecsEl = document.getElementById('adSecs');
+
+        const prizes = [10, 20, 30, 50, 75, 100, 150, 1000];
+        const colors = ['#8B5CF6', '#EC4899', '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#06B6D4', '#6366F1'];
+        const sliceAngle = (2 * Math.PI) / prizes.length;
+
+        let currentRotation = 0;
+        let isSpinning = false;
+        let wonCoins = 0;
+
+        function playSpinTickSound() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.04);
+            } catch(e) {}
+        }
+
+        function playWinFanfare() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const audioCtx = new AudioCtx();
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.value = freq;
+                    const startTime = audioCtx.currentTime + (idx * 0.08);
+                    gain.gain.setValueAtTime(0.15, startTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, startTime + 0.2);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.2);
+                });
+            } catch(e) {}
+        }
+
+        function drawWheel() {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = canvas.width / 2;
+
+            for (let i = 0; i < prizes.length; i++) {
+                const angle = i * sliceAngle;
+                ctx.beginPath();
+                ctx.fillStyle = colors[i];
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, angle, angle + sliceAngle);
+                ctx.closePath();
+                ctx.fill();
+
+                // Draw Text
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(angle + sliceAngle / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = "#FFFFFF";
+                ctx.font = "bold 16px 'Plus Jakarta Sans', sans-serif";
+                ctx.fillText(prizes[i] + " EE", radius - 20, 6);
+                ctx.restore();
+            }
+        }
+
+        drawWheel();
+
+        // Fetch User Profile
+        if (userId) {
+            fetch(`/api/users/profile?userId=${userId}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.user) {
+                        userCoinsEl.innerText = data.user.coins;
+                        const todayStr = new Date().toISOString().split('T')[0];
+                        if (data.user.lastSpinDate === todayStr) {
+                            spinBtn.classList.add('disabled');
+                            limitNotice.innerText = "❌ 1 Spin Per Day limit reached for today! Come back tomorrow.";
+                            limitNotice.style.color = "#EF4444";
+                        }
+                    }
+                }).catch(e => {});
+        }
+
+        function startSpin() {
+            if (isSpinning || !userId) return;
+            isSpinning = true;
+
+            fetch('/api/users/spin-wheel', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: userId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    wonCoins = data.coinsWon;
+                    
+                    // Calculate wheel slice for wonCoins
+                    let sliceIdx = prizes.indexOf(wonCoins);
+                    if (sliceIdx === -1) sliceIdx = 0;
+
+                    // Calculate rotation to align winning slice with top marker (pointer at top = -90deg or 270deg)
+                    const targetAngle = (prizes.length - sliceIdx - 1) * sliceAngle + (sliceAngle / 2) + (Math.PI * 1.5);
+                    const totalRotation = (Math.PI * 2 * 6) + targetAngle; // 6 full spins
+
+                    canvas.style.transform = `rotate(${totalRotation}rad)`;
+                    
+                    // Sound ticks
+                    let ticks = 0;
+                    const interval = setInterval(() => {
+                        playSpinTickSound();
+                        ticks++;
+                        if (ticks >= 20) clearInterval(interval);
+                    }, 200);
+
+                    setTimeout(() => {
+                        isSpinning = false;
+                        playWinFanfare();
+                        showResultModal(wonCoins);
+                    }, 5200);
+                } else {
+                    isSpinning = false;
+                    alert(data.error || "Spin error!");
+                }
+            })
+            .catch(err => {
+                isSpinning = false;
+                alert("Spin request failed. Check internet connection.");
+            });
+        }
+
+        function showResultModal(coins) {
+            winTitle.innerText = `YOU WON ${coins} EE COINS!`;
+            baseAmountEl.innerText = coins;
+            doubleAmountEl.innerText = coins * 2;
+            resultModal.style.display = 'flex';
+        }
+
+        function claimBaseReward() {
+            resultModal.style.display = 'none';
+            if (window.parent) {
+                window.parent.postMessage({ type: 'GAME_SCORE', score: 0, game: 'Lucky Spin' }, '*');
+                window.parent.postMessage({ type: 'CLOSE_GAME_OVERLAY' }, '*');
+            }
+        }
+
+        function claim2XReward() {
+            adModal.style.display = 'flex';
+            let secs = 3;
+            adSecsEl.innerText = secs;
+            const timer = setInterval(() => {
+                secs--;
+                adSecsEl.innerText = secs;
+                if (secs <= 0) {
+                    clearInterval(timer);
+                    adModal.style.display = 'none';
+                    
+                    // Call 2X claim endpoint
+                    fetch('/api/users/spin-wheel', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ userId: userId, is2xClaim: true })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        resultModal.style.display = 'none';
+                        if (window.parent) {
+                            window.parent.postMessage({ type: 'GAME_SCORE', score: 0, game: 'Lucky Spin 2X' }, '*');
+                            window.parent.postMessage({ type: 'CLOSE_GAME_OVERLAY' }, '*');
+                        }
+                    });
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

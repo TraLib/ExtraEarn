@@ -250,6 +250,130 @@ const server = http.createServer((req, res) => {
                 return;
             }
 
+            // 4d. POST /api/users/spin-wheel
+            if (req.url === '/api/users/spin-wheel' && req.method === 'POST') {
+                const { userId, is2xClaim } = jsonBody;
+                const user = db.users.find(u => u.id === userId);
+                if (!user) {
+                    res.end(JSON.stringify({ success: false, error: "User not found" }));
+                    return;
+                }
+
+                const options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' };
+                const formatter = new Intl.DateTimeFormat('en-US', options);
+                const parts = formatter.formatToParts(new Date());
+                const month = parts.find(p => p.type === 'month').value;
+                const day = parts.find(p => p.type === 'day').value;
+                const year = parts.find(p => p.type === 'year').value;
+                const todayStr = `${year}-${month}-${day}`;
+
+                if (is2xClaim) {
+                    // Double the last spin reward
+                    if (user.pendingSpinBonus && !user.spinDoubledToday) {
+                        const bonusCoins = user.pendingSpinBonus; // Give the extra 1x
+                        user.coins += bonusCoins;
+                        user.spinDoubledToday = true;
+                        db.transactions.push({
+                            id: "tx_" + Date.now() + "_" + Math.floor(Math.random() * 1000),
+                            userId,
+                            type: "Lucky Spin 2X",
+                            amount: bonusCoins,
+                            timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+                            status: "Success",
+                            details: `Lucky Spin 2X Ad Bonus (+${bonusCoins} EE Coins)`,
+                            redeemCode: ""
+                        });
+                        saveDatabase();
+                        res.end(JSON.stringify({ success: true, user, extraCoins: bonusCoins }));
+                    } else {
+                        res.end(JSON.stringify({ success: false, error: "2X bonus already claimed or expired." }));
+                    }
+                    return;
+                }
+
+                if (user.lastSpinDate === todayStr) {
+                    res.end(JSON.stringify({ success: false, error: "You have already claimed your 1 Daily Spin today! Come back tomorrow." }));
+                    return;
+                }
+
+                let prizeCoins = 0;
+                // 1 in 5000 probability for 1000 coins
+                const roll = Math.floor(Math.random() * 5000);
+                if (roll === 2500) {
+                    prizeCoins = 1000;
+                } else {
+                    const prizes = [10, 20, 30, 50, 75, 100, 125, 150, 180];
+                    prizeCoins = prizes[Math.floor(Math.random() * prizes.length)];
+                }
+
+                user.lastSpinDate = todayStr;
+                user.pendingSpinBonus = prizeCoins;
+                user.spinDoubledToday = false;
+                user.coins += prizeCoins;
+
+                db.transactions.push({
+                    id: "tx_" + Date.now() + "_" + Math.floor(Math.random() * 1000),
+                    userId,
+                    type: "Lucky Spin",
+                    amount: prizeCoins,
+                    timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+                    status: "Success",
+                    details: `Daily Lucky Spin (+${prizeCoins} EE Coins)`,
+                    redeemCode: ""
+                });
+
+                saveDatabase();
+                res.end(JSON.stringify({ success: true, user, coinsWon: prizeCoins }));
+                return;
+            }
+
+            // 4e. POST /api/users/watch-ad
+            if (req.url === '/api/users/watch-ad' && req.method === 'POST') {
+                const { userId } = jsonBody;
+                const user = db.users.find(u => u.id === userId);
+                if (!user) {
+                    res.end(JSON.stringify({ success: false, error: "User not found" }));
+                    return;
+                }
+
+                const options = { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' };
+                const formatter = new Intl.DateTimeFormat('en-US', options);
+                const parts = formatter.formatToParts(new Date());
+                const month = parts.find(p => p.type === 'month').value;
+                const day = parts.find(p => p.type === 'day').value;
+                const year = parts.find(p => p.type === 'year').value;
+                const todayStr = `${year}-${month}-${day}`;
+
+                if (user.lastAdDate !== todayStr) {
+                    user.lastAdDate = todayStr;
+                    user.dailyAdsWatched = 0;
+                }
+
+                if ((user.dailyAdsWatched || 0) >= 15) {
+                    res.end(JSON.stringify({ success: false, error: "Daily Ad Limit Reached! You have watched 15/15 ads today. Come back tomorrow!" }));
+                    return;
+                }
+
+                user.dailyAdsWatched = (user.dailyAdsWatched || 0) + 1;
+                const adRewardCoins = 50;
+                user.coins += adRewardCoins;
+
+                db.transactions.push({
+                    id: "tx_" + Date.now() + "_" + Math.floor(Math.random() * 1000),
+                    userId,
+                    type: "Ad Bonus",
+                    amount: adRewardCoins,
+                    timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
+                    status: "Success",
+                    details: `Watch Video Bonus Ad #${user.dailyAdsWatched}/15 (+${adRewardCoins} EE Coins)`,
+                    redeemCode: ""
+                });
+
+                saveDatabase();
+                res.end(JSON.stringify({ success: true, user, coinsEarned: adRewardCoins, adsWatched: user.dailyAdsWatched }));
+                return;
+            }
+
             // 4b. GET /api/users/profile
             if (req.url.startsWith('/api/users/profile') && req.method === 'GET') {
                 const urlObj = new URL(req.url, `http://${req.headers.host}`);

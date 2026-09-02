@@ -251,6 +251,7 @@ autoDetectDisplaySize();
 
 // Arcade Games Registry
 const gamesList = [
+    { file: "wheel_spin.html", name: "Daily Lucky Spin", icon: "fa-solid fa-spinner", color: "#7C3AED", desc: "Spin wheel for up to 1000 EE Coins" },
     { file: "star_catcher.html", name: "Star Catcher", icon: "fa-solid fa-star", color: "#F59E0B", desc: "Catch falling stars & boost score" },
     { file: "space_dodger.html", name: "Space Dodger", icon: "fa-solid fa-rocket", color: "#6366F1", desc: "Navigate rocket, avoid asteroids" },
     { file: "block_breaker.html", name: "Block Breaker", icon: "fa-solid fa-border-all", color: "#10B981", desc: "Bounce ball to smash blocks" },
@@ -415,6 +416,12 @@ function updateHeaderCoins() {
     document.getElementById('user-vip-level').innerText = `Level ${currentUser.level || 1} VIP`;
     if (currentUser.name) {
         document.getElementById('user-avatar').src = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(currentUser.name)}`;
+    }
+
+    const adCounter = document.getElementById('ad-target-counter');
+    if (adCounter) {
+        const watched = currentUser.dailyAdsWatched || 0;
+        adCounter.innerText = `${watched}/15`;
     }
 }
 
@@ -583,6 +590,35 @@ function renderGamesGrids() {
 function launchGame(file, name) {
     AppSoundEngine.playClick();
     if (!currentUser) return;
+
+    const adModal = document.getElementById('admob-interstitial-modal');
+    const adSecs = document.getElementById('admob-secs');
+    const progressBar = document.getElementById('admob-progress-bar');
+    const closeBtn = document.getElementById('btn-close-admob-ad');
+
+    if (adModal && file !== 'wheel_spin.html') {
+        adModal.style.display = 'flex';
+        if (closeBtn) closeBtn.style.display = 'none';
+        let secs = 3;
+        if (adSecs) adSecs.innerText = secs;
+        if (progressBar) progressBar.style.width = '0%';
+
+        const timer = setInterval(() => {
+            secs--;
+            if (adSecs) adSecs.innerText = secs;
+            if (progressBar) progressBar.style.width = `${((3 - secs) / 3) * 100}%`;
+            if (secs <= 0) {
+                clearInterval(timer);
+                adModal.style.display = 'none';
+                openGameIframe(file, name);
+            }
+        }, 1000);
+    } else {
+        openGameIframe(file, name);
+    }
+}
+
+function openGameIframe(file, name) {
     const url = `${API_BASE}/${file}?userId=${currentUser.id}`;
     document.getElementById('active-game-title').innerText = name;
     const iframe = document.getElementById('game-frame');
@@ -598,7 +634,16 @@ document.getElementById('btn-exit-game').addEventListener('click', async () => {
 });
 
 window.addEventListener('message', async (event) => {
-    if (event.data && event.data.type === 'GAME_SCORE') {
+    if (!event.data) return;
+
+    if (event.data.type === 'CLOSE_GAME_OVERLAY') {
+        document.getElementById('game-frame').src = '';
+        showScreen('dashboard');
+        await refreshUserProfile();
+        return;
+    }
+
+    if (event.data.type === 'GAME_SCORE') {
         const score = event.data.score || 0;
         const coinsEarned = Math.min(score, 50);
         if (coinsEarned > 0 && currentUser) {
@@ -806,6 +851,99 @@ if (btnShareWhatsapp) {
     btnShareWhatsapp.addEventListener('click', () => {
         AppSoundEngine.playClick();
         const text = `Hey! Join ExtraEarn app and claim free daily cash rewards & games! Use my referral code: EXTRA2026`;
-        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+        const nativeUrl = `whatsapp://send?text=${encodeURIComponent(text)}`;
+        const fallbackUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+        
+        try {
+            window.location.href = nativeUrl;
+        } catch(e) {
+            window.open(fallbackUrl, '_blank');
+        }
     });
 }
+
+// -------------------------------------------------------------
+// ADMOB VIDEO ADS & TASK HANDLERS
+// -------------------------------------------------------------
+async function triggerWatchVideoAdTask() {
+    AppSoundEngine.playClick();
+    if (!currentUser) return;
+
+    const watched = currentUser.dailyAdsWatched || 0;
+    if (watched >= 15) {
+        showToast("Daily Ad Limit Reached! You have watched 15/15 ads today. Come back tomorrow!", "warning", "fa-solid fa-clock");
+        return;
+    }
+
+    const adModal = document.getElementById('admob-interstitial-modal');
+    const adSecs = document.getElementById('admob-secs');
+    const progressBar = document.getElementById('admob-progress-bar');
+
+    if (adModal) {
+        adModal.style.display = 'flex';
+        let secs = 5; // 5-second test video ad simulation
+        if (adSecs) adSecs.innerText = secs;
+        if (progressBar) progressBar.style.width = '0%';
+
+        const timer = setInterval(async () => {
+            secs--;
+            if (adSecs) adSecs.innerText = secs;
+            if (progressBar) progressBar.style.width = `${((5 - secs) / 5) * 100}%`;
+            if (secs <= 0) {
+                clearInterval(timer);
+                adModal.style.display = 'none';
+
+                try {
+                    const res = await fetch(`${API_BASE}/api/users/watch-ad`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ userId: currentUser.id })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        currentUser = data.user;
+                        localStorage.setItem("extraearn_user", JSON.stringify(currentUser));
+                        showAppModal("🎉 Video Ad Bonus Claimed!", `Awesome! +50 EE Coins added to your vault. (${data.adsWatched}/15 Ads Watched Today)`, "fa-solid fa-play-circle");
+                        renderAllUI();
+                    } else {
+                        showToast(data.error || "Ad limit reached for today!", "warning");
+                    }
+                } catch (e) {
+                    showToast("Failed to process ad reward.", "error");
+                }
+            }
+        }, 1000);
+    }
+}
+
+async function handleInstagramTask() {
+    AppSoundEngine.playClick();
+    window.open("https://instagram.com/extraearn_official", "_blank");
+    await handleTaskClaim("task_instagram_follow", 100, "Follow on Instagram");
+}
+
+function toggleAccordion(contentId) {
+    AppSoundEngine.playClick();
+    const el = document.getElementById(contentId);
+    if (!el) return;
+    const isVisible = el.classList.contains('open');
+    document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('open'));
+    if (!isVisible) el.classList.add('open');
+}
+
+const btnSubmitSupport = document.getElementById('btn-submit-support');
+if (btnSubmitSupport) {
+    btnSubmitSupport.addEventListener('click', () => {
+        AppSoundEngine.playClick();
+        const subject = document.getElementById('support-subject').value.trim();
+        const msg = document.getElementById('support-msg').value.trim();
+        if (!subject || !msg) {
+            showToast("Please enter query subject and details.", "warning");
+            return;
+        }
+        showAppModal("✅ Ticket Submitted", "Thank you for contacting ExtraEarn support! Your ticket has been recorded. Our team will get back to you shortly.", "fa-solid fa-circle-check");
+        document.getElementById('support-subject').value = '';
+        document.getElementById('support-msg').value = '';
+    });
+}
+
