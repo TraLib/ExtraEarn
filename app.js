@@ -12,13 +12,17 @@ let allTransactions = [];
 // Log events helper
 function logEvent(tag, message, color = "text-muted") {
     const consoleBox = document.getElementById("admin-console");
-    if (!consoleBox) return;
+    const miniConsoleBox = document.getElementById("admin-overview-mini-log");
     const now = new Date().toLocaleTimeString();
-    const line = document.createElement("div");
-    line.className = `console-line ${color}`;
-    line.innerHTML = `[${now}] <strong>[${tag}]</strong> ${message}`;
-    consoleBox.appendChild(line);
-    consoleBox.scrollTop = consoleBox.scrollHeight;
+    
+    [consoleBox, miniConsoleBox].forEach(box => {
+        if (!box) return;
+        const line = document.createElement("div");
+        line.className = `console-line ${color}`;
+        line.innerHTML = `[${now}] <strong>[${tag}]</strong> ${message}`;
+        box.appendChild(line);
+        box.scrollTop = box.scrollHeight;
+    });
 }
 
 // Fetch settings from API
@@ -113,7 +117,8 @@ function refreshStatsGrid() {
     const pendingTotalCoins = pendingTxs.reduce((sum, t) => sum + Math.abs(t.amount), 0);
     const pendingTotalINR = pendingTotalCoins / 100;
     document.getElementById('admin-payout-value').innerText = `₹${pendingTotalINR.toFixed(2)} to review`;
-    document.getElementById('pending-cashout-badge').innerText = `${pendingTxs.length} Requests`;
+    if (document.getElementById('pending-cashout-badge')) document.getElementById('pending-cashout-badge').innerText = `${pendingTxs.length} Pending`;
+    if (document.getElementById('pending-cashout-badge-dept')) document.getElementById('pending-cashout-badge-dept').innerText = `${pendingTxs.length} Pending Requests`;
 }
 
 // Update settings to API

@@ -3,167 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ExtraEarn - Admin Control Portal</title>
+    <title>ExtraEarn - Command Center & Admin Console</title>
     <!-- Google Fonts for premium typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome for UI Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Main Style Sheet -->
+    <!-- Main Admin Style Sheet -->
     <link rel="stylesheet" href="app.css">
 </head>
 <body>
-    <!-- Background Tech Grid Effect -->
+    <!-- Background Tech Grid & Glow Orbs -->
     <div class="tech-grid"></div>
     <div class="glow-orb orb-1"></div>
     <div class="glow-orb orb-2"></div>
 
+    <!-- 1. TOP COMMAND BAR HEADER -->
     <header class="app-header">
         <div class="brand">
-            <div class="logo-icon"><i class="fa-solid fa-coins"></i></div>
+            <div class="logo-icon"><i class="fa-solid fa-crown"></i></div>
             <div class="brand-text">
-                <h1>ExtraEarn</h1>
-                <span>Live Admin Control Panel</span>
+                <h1>ExtraEarn Pro</h1>
+                <span>Executive Command Center v3.0</span>
             </div>
         </div>
-        <div class="header-actions" style="display: flex; gap: 12px; align-items: center;">
-            <button class="btn btn-primary" onclick="openStudioModal()" style="font-weight: 700; background: linear-gradient(135deg, #7C3AED 0%, #3B82F6 100%); border: none; padding: 8px 18px; border-radius: 20px; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4); cursor: pointer;">
-                <i class="fa-solid fa-code"></i> APP UI & CODE STUDIO
-            </button>
-            <span class="status-badge live-connected" style="background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 8px;">
-                <i class="fa-solid fa-circle-nodes"></i> API SERVER CONNECTED
+        
+        <div class="header-actions">
+            <span class="status-badge live-connected">
+                <i class="fa-solid fa-signal text-green"></i> API SERVER LIVE
             </span>
+            <button class="btn btn-studio" onclick="openStudioModal()">
+                <i class="fa-solid fa-code"></i> APP CODE STUDIO
+            </button>
         </div>
     </header>
 
     <main class="main-container">
-        <!-- Admin Dashboard Panel -->
-        <section class="admin-section" id="admin-panel" style="width: 100%;">
-            <div class="section-title">
-                <h2><i class="fa-solid fa-sliders text-gold"></i> Live Console Manager</h2>
-                <p>Manage application settings, check-ins, bans, and payouts in real-time via REST API.</p>
-            </div>
-
-            <!-- Stats Analytics Grid -->
-            <div class="admin-stats-grid">
-                <div class="admin-stat-card">
-                    <div class="sc-meta">
-                        <span>Total Registered Users</span>
-                        <i class="fa-solid fa-users text-primary"></i>
-                    </div>
+        <!-- 2. EXECUTIVE METRICS DASHBOARD (MAIN MAIN CHIZE BAHAR RAKHO) -->
+        <section class="admin-top-summary">
+            <div class="summary-card text-card-blue">
+                <div class="sc-meta">
+                    <span>Total Registered Users</span>
+                    <i class="fa-solid fa-users icon-badge bg-blue"></i>
+                </div>
+                <div class="sc-value-row">
                     <h2 id="admin-total-users">0</h2>
-                    <span class="sub text-green"><i class="fa-solid fa-arrow-trend-up"></i> Live Sync</span>
+                    <button class="btn-mock-add" onclick="createNewMockUser()" title="Add Test User">
+                        <i class="fa-solid fa-user-plus"></i> +Mock
+                    </button>
                 </div>
-                <div class="admin-stat-card">
-                    <div class="sc-meta">
-                        <span>System Coin Pool</span>
-                        <i class="fa-solid fa-coins text-gold"></i>
-                    </div>
-                    <h2 id="admin-coin-pool">0</h2>
-                    <span class="sub">100 coins = ₹1.00</span>
-                </div>
-                <div class="admin-stat-card">
-                    <div class="sc-meta">
-                        <span>Pending Payouts</span>
-                        <i class="fa-solid fa-clock-rotate-left text-warning"></i>
-                    </div>
-                    <h2 id="admin-pending-payouts">0</h2>
-                    <span class="sub text-danger" id="admin-payout-value">₹0.00 to review</span>
-                </div>
-                <div class="admin-stat-card">
-                    <div class="sc-meta">
-                        <span>Ad Mediation Revenue</span>
-                        <i class="fa-solid fa-money-bill-trend-up text-green"></i>
-                    </div>
-                    <h2 id="admin-ad-revenue">₹0.00</h2>
-                    <span class="sub text-green"><i class="fa-solid fa-chart-line"></i> Estimated</span>
-                </div>
+                <span class="sub text-blue"><i class="fa-solid fa-circle-check"></i> Live Database Users</span>
             </div>
 
-            <!-- Split Panel: User Management & Config -->
-            <div class="admin-split-grid">
-                
-                <!-- Admin Column Left: Users & Payouts -->
+            <div class="summary-card text-card-gold">
+                <div class="sc-meta">
+                    <span>System Coin Pool</span>
+                    <i class="fa-solid fa-coins icon-badge bg-gold"></i>
+                </div>
+                <div class="sc-value-row">
+                    <h2 id="admin-coin-pool">0</h2>
+                </div>
+                <span class="sub text-gold"><i class="fa-solid fa-calculator"></i> 100 EE Coins = ₹1.00 INR</span>
+            </div>
+
+            <div class="summary-card text-card-rose">
+                <div class="sc-meta">
+                    <span>Pending Payout Requests</span>
+                    <i class="fa-solid fa-clock-rotate-left icon-badge bg-rose"></i>
+                </div>
+                <div class="sc-value-row">
+                    <h2 id="admin-pending-payouts">0</h2>
+                    <span class="badge-alert-count" id="pending-cashout-badge">0 Pending</span>
+                </div>
+                <span class="sub text-rose" id="admin-payout-value">₹0.00 pending review</span>
+            </div>
+
+            <div class="summary-card text-card-green">
+                <div class="sc-meta">
+                    <span>Ad Mediation Revenue</span>
+                    <i class="fa-solid fa-chart-line icon-badge bg-green"></i>
+                </div>
+                <div class="sc-value-row">
+                    <h2 id="admin-ad-revenue">₹0.00</h2>
+                </div>
+                <span class="sub text-green"><i class="fa-solid fa-arrow-trend-up"></i> Live AdMob Mediation</span>
+            </div>
+        </section>
+
+        <!-- 3. DEPARTMENT NAVIGATION TABS BAR -->
+        <nav class="admin-dept-nav">
+            <button class="admin-dept-nav-btn active" data-dept="dept-overview" onclick="switchAdminDept('dept-overview')">
+                <i class="fa-solid fa-chart-pie"></i> Executive Overview
+            </button>
+            <button class="admin-dept-nav-btn" data-dept="dept-users" onclick="switchAdminDept('dept-users')">
+                <i class="fa-solid fa-users-gear"></i> User Directory
+            </button>
+            <button class="admin-dept-nav-btn" data-dept="dept-payouts" onclick="switchAdminDept('dept-payouts')">
+                <i class="fa-solid fa-money-bill-transfer"></i> Payouts & Finance
+            </button>
+            <button class="admin-dept-nav-btn" data-dept="dept-arcade" onclick="switchAdminDept('dept-arcade')">
+                <i class="fa-solid fa-gamepad"></i> Arcade Studio
+            </button>
+            <button class="admin-dept-nav-btn" data-dept="dept-monetization" onclick="switchAdminDept('dept-monetization')">
+                <i class="fa-solid fa-sliders"></i> Monetization & Theme
+            </button>
+            <button class="admin-dept-nav-btn" data-dept="dept-broadcast" onclick="switchAdminDept('dept-broadcast')">
+                <i class="fa-solid fa-paper-plane"></i> Broadcast & Security
+            </button>
+            <button class="admin-dept-nav-btn" data-dept="dept-logs" onclick="switchAdminDept('dept-logs')">
+                <i class="fa-solid fa-terminal"></i> Audit Logs
+            </button>
+        </nav>
+
+        <!-- 4. DEPARTMENT CONTENT PANES -->
+        
+        <!-- DEPARTMENT 1: EXECUTIVE OVERVIEW -->
+        <div id="dept-overview" class="admin-dept-pane active">
+            <div class="dept-grid-2">
+                <!-- Quick Control Switches -->
                 <div class="admin-column-card">
                     <div class="card-header">
-                        <h3><i class="fa-solid fa-wallet text-gold"></i> Pending Payouts Review</h3>
-                        <span class="badge badge-warning" id="pending-cashout-badge">0 Requests</span>
-                    </div>
-                    <div class="table-container">
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>User</th>
-                                    <th>Method</th>
-                                    <th>Target ID</th>
-                                    <th>Amount</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-withdrawals-tbody">
-                                <tr>
-                                    <td colspan="5" class="text-center text-muted">Loading pending payouts...</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <h3><i class="fa-solid fa-bolt text-gold"></i> Live Quick Controls</h3>
+                        <span class="badge badge-info">Real-time API Sync</span>
                     </div>
 
-                    <div class="card-header margin-top-lg">
-                        <h3><i class="fa-solid fa-users-gear text-primary"></i> Registered Users Directory</h3>
-                        <button class="btn btn-secondary btn-sm" onclick="createNewMockUser()"><i class="fa-solid fa-plus"></i> Mock User</button>
-                    </div>
-                    <div class="table-container">
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Phone</th>
-                                    <th>Coins</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-users-tbody">
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted">Loading registered users...</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="card-header margin-top-lg">
-                        <h3><i class="fa-solid fa-list-check text-gold"></i> Live Transaction History Log</h3>
-                    </div>
-                    <div class="table-container">
-                        <table class="admin-table">
-                            <thead>
-                                <tr>
-                                    <th>User</th>
-                                    <th>Type</th>
-                                    <th>Amount</th>
-                                    <th>Timestamp</th>
-                                    <th>Details</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-transactions-tbody">
-                                <tr>
-                                    <td colspan="5" class="text-center text-muted">Loading transactions...</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Admin Column Right: Security & Switches -->
-                <div class="admin-column-card">
-                    <h3><i class="fa-solid fa-gears text-gold"></i> App Configuration Switches</h3>
-                    
                     <div class="setting-toggle-box">
                         <div class="toggle-meta">
                             <h4>Server Maintenance Mode</h4>
-                            <p>Instantly locks client app to show maintenance screen.</p>
+                            <p>Instantly locks mobile & web apps with a maintenance screen.</p>
                         </div>
                         <label class="toggle-switch">
                             <input type="checkbox" id="toggle-maintenance" onchange="updateSettingsFromWeb()">
@@ -173,19 +141,8 @@
 
                     <div class="setting-toggle-box">
                         <div class="toggle-meta">
-                            <h4>Play Store Force Update</h4>
-                            <p>Forcibly prompt users to update to v1.0.0 Pro from Google Play.</p>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="toggle-force-update" onchange="updateSettingsFromWeb()">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-
-                    <div class="setting-toggle-box">
-                        <div class="toggle-meta">
-                            <h4>Anti-Fraud Auto Ban</h4>
-                            <p>Autoban users when VPN, Emulator, or root is detected.</p>
+                            <h4>Anti-Fraud Auto Ban Shield</h4>
+                            <p>Auto-bans accounts upon VPN, root, or emulator detection.</p>
                         </div>
                         <label class="toggle-switch">
                             <input type="checkbox" id="toggle-anti-fraud" onchange="updateSettingsFromWeb()">
@@ -195,8 +152,19 @@
 
                     <div class="setting-toggle-box">
                         <div class="toggle-meta">
-                            <h4>Dynamic Web App Mode</h4>
-                            <p>Serve the entire app UI live from the server's <code>app_code</code> folder.</p>
+                            <h4>Play Store Force Update Prompt</h4>
+                            <p>Forces client apps to open Google Play Store for critical updates.</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="toggle-force-update" onchange="updateSettingsFromWeb()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-toggle-box">
+                        <div class="toggle-meta">
+                            <h4>Dynamic Web App API Engine</h4>
+                            <p>Serves full app interface dynamically from server's <code>app_code</code> folder.</p>
                         </div>
                         <label class="toggle-switch">
                             <input type="checkbox" id="toggle-web-app-enabled" onchange="updateSettingsFromWeb(); document.getElementById('web-app-url-container').style.display = this.checked ? 'block' : 'none';">
@@ -204,146 +172,292 @@
                         </label>
                     </div>
 
-                    <div class="margin-top-sm" id="web-app-url-container" style="display: none; margin-top: 8px; margin-bottom: 12px;">
-                        <label for="web-app-url-val" style="font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 4px;">Web App Entry Path</label>
-                        <input type="text" id="web-app-url-val" value="app_code/index.html" onchange="updateSettingsFromWeb()" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; color: #fff; font-size: 12px;">
+                    <div id="web-app-url-container" style="display: none; margin-top: 10px;">
+                        <label for="web-app-url-val" style="font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 4px;">Web App Source Path</label>
+                        <input type="text" id="web-app-url-val" value="app_code/index.html" onchange="updateSettingsFromWeb()" class="input-dark">
+                    </div>
+                </div>
+
+                <!-- Quick Broadcast & Activity Feed -->
+                <div class="admin-column-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-bullhorn text-primary"></i> Fast Push Broadcaster</h3>
+                    </div>
+                    <form onsubmit="broadcastNotification(event)" class="margin-top-sm">
+                        <div class="input-group-dark">
+                            <label for="admin-push-title">Announcement Title</label>
+                            <input type="text" id="admin-push-title" placeholder="e.g. 🌟 Weekend Double Bonus Active!" required class="input-dark">
+                        </div>
+                        <div class="input-group-dark margin-top-sm">
+                            <label for="admin-push-msg">Message Content</label>
+                            <input type="text" id="admin-push-msg" placeholder="e.g. Play games today and get double EE coins!" required class="input-dark">
+                        </div>
+                        <button type="submit" class="btn btn-primary margin-top-md btn-block">
+                            <i class="fa-solid fa-paper-plane"></i> DISPATCH BROADCAST NOTIFICATION
+                        </button>
+                    </form>
+
+                    <div class="card-header margin-top-lg">
+                        <h3><i class="fa-solid fa-clock-rotate-left text-cyan"></i> System Activity Stream</h3>
+                    </div>
+                    <div class="console-box" style="height: 160px;" id="admin-overview-mini-log">
+                        <div class="console-line text-green">[SYS] ExtraEarn Admin Center Operational.</div>
+                        <div class="console-line text-blue">[API] Listening for client app requests on port 3000.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEPARTMENT 2: USER CENTRAL & DIRECTORY -->
+        <div id="dept-users" class="admin-dept-pane">
+            <div class="admin-column-card">
+                <div class="card-header">
+                    <div>
+                        <h3><i class="fa-solid fa-users-gear text-primary"></i> Registered Users Directory</h3>
+                        <p class="text-muted text-xs">View all registered users, adjust coin balances, and manage account statuses.</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="text" id="user-search-input" placeholder="Search user by name or phone..." onkeyup="filterUsersTable()" class="input-dark" style="width: 250px; padding: 8px 12px; font-size: 13px;">
+                        <button class="btn btn-primary btn-sm" onclick="createNewMockUser()">
+                            <i class="fa-solid fa-plus"></i> Add Mock User
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Full Name</th>
+                                <th>Phone Number</th>
+                                <th>EE Coins Balance</th>
+                                <th>Account Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-users-tbody">
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">Loading registered users...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEPARTMENT 3: PAYOUTS & FINANCIAL HUB -->
+        <div id="dept-payouts" class="admin-dept-pane">
+            <div class="admin-column-card">
+                <div class="card-header">
+                    <div>
+                        <h3><i class="fa-solid fa-wallet text-gold"></i> Pending Cashout Approval Queue</h3>
+                        <p class="text-muted text-xs">Review user cashout requests via UPI, Paytm, Google Play, or Bank Transfer.</p>
+                    </div>
+                    <span class="badge badge-warning" id="pending-cashout-badge-dept">0 Pending Requests</span>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Payout Method</th>
+                                <th>Target ID / Phone</th>
+                                <th>Requested Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-withdrawals-tbody">
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">Loading pending payouts...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card-header margin-top-lg">
+                    <h3><i class="fa-solid fa-list-check text-green"></i> System Transaction Logs</h3>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Transaction Type</th>
+                                <th>Coins Amount</th>
+                                <th>Timestamp</th>
+                                <th>Details & Reference</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-transactions-tbody">
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">Loading transactions...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEPARTMENT 4: ARCADE & GAME STUDIO -->
+        <div id="dept-arcade" class="admin-dept-pane">
+            <div class="admin-column-card">
+                <div class="card-header">
+                    <div>
+                        <h3><i class="fa-solid fa-gamepad text-gold"></i> Live HTML Arcade Games Manager</h3>
+                        <p class="text-muted text-xs">Select any arcade game file to edit its HTML5 source code and deploy changes instantly to all users.</p>
+                    </div>
+                </div>
+
+                <div class="margin-top-sm">
+                    <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Select Game File to View / Edit:</label>
+                    <div id="game-list-buttons" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn btn-secondary btn-sm" disabled><i class="fa-solid fa-circle-notch fa-spin"></i> Loading games...</button>
+                    </div>
+                </div>
+
+                <div id="game-editor-box" style="display: none; border-top: 1px dashed var(--border-color); padding-top: 20px; margin-top: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h4 style="margin: 0; color: #fff; font-size: 16px; font-weight: 700;">
+                            <i class="fa-solid fa-code text-primary" style="margin-right: 6px;"></i> Editing File: <span class="text-gold" id="editing-game-title">filename.html</span>
+                        </h4>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary btn-sm" onclick="closeGameEditor()"><i class="fa-solid fa-xmark"></i> Cancel</button>
+                            <button class="btn btn-success btn-sm" onclick="saveGameCode()"><i class="fa-solid fa-floppy-disk"></i> Save & Deploy Live</button>
+                        </div>
+                    </div>
+                    <textarea id="game-code-textarea" spellcheck="false" class="code-editor-textarea" placeholder="Loading game source code..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEPARTMENT 5: MONETIZATION & APP BRANDING -->
+        <div id="dept-monetization" class="admin-dept-pane">
+            <div class="dept-grid-2">
+                <!-- AdMob Rewards & Economy Controls -->
+                <div class="admin-column-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-rectangle-ad text-gold"></i> AdMob & Coin Reward Rates</h3>
+                    </div>
+                    <div class="form-grid-2 margin-top-sm">
+                        <div class="input-group-dark">
+                            <label for="ad-reward-val">Video Ad Reward (Coins)</label>
+                            <input type="number" id="ad-reward-val" value="15" onchange="updateSettingsFromWeb()" class="input-dark">
+                        </div>
+                        <div class="input-group-dark">
+                            <label for="checkin-reward-val">Daily Check-in Reward (Coins)</label>
+                            <input type="number" id="checkin-reward-val" value="50" onchange="updateSettingsFromWeb()" class="input-dark">
+                        </div>
+                    </div>
+                    <p class="text-xs text-muted margin-top-sm">Values are stored in database.json and applied instantly across all mobile client apps.</p>
+                </div>
+
+                <!-- Dynamic App Branding & Custom Theme -->
+                <div class="admin-column-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-palette text-primary"></i> Dynamic App Branding & Theme</h3>
+                    </div>
+                    <div class="form-grid-2 margin-top-sm">
+                        <div class="input-group-dark">
+                            <label for="app-name-val">Application Name</label>
+                            <input type="text" id="app-name-val" value="ExtraEarn" onchange="updateSettingsFromWeb()" class="input-dark">
+                        </div>
+                        <div class="input-group-dark">
+                            <label for="app-title-val">App Header Title</label>
+                            <input type="text" id="app-title-val" value="Earn Daily Rewards" onchange="updateSettingsFromWeb()" class="input-dark">
+                        </div>
+                    </div>
+                    <div class="input-group-dark margin-top-sm">
+                        <label for="app-subtitle-val">App Subtitle / Slogan</label>
+                        <input type="text" id="app-subtitle-val" value="Earn coins by checking in, watching ads, and playing games!" onchange="updateSettingsFromWeb()" class="input-dark">
                     </div>
 
-                    <!-- Push Notification Sender -->
-                    <div class="admin-form-group margin-top-md">
-                        <h4><i class="fa-solid fa-paper-plane"></i> Push Broadcaster</h4>
-                        <p class="text-sm">Broadcast push notification alerts to the client app screen.</p>
-                        <form onsubmit="broadcastNotification(event)" class="margin-top-sm">
-                            <div class="form-group-flex">
-                                <input type="text" id="admin-push-title" placeholder="Notification Title" required>
-                                <input type="text" id="admin-push-msg" placeholder="Message content..." required>
-                                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-broadcast-tower"></i> Send</button>
+                    <div class="form-grid-2 margin-top-md">
+                        <div>
+                            <label for="color-primary" style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Primary Accent</label>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <input type="color" id="color-primary" value="#FFD54A" onchange="updateColorLabels(); updateSettingsFromWeb();" style="width: 34px; height: 34px; border: none; background: none; cursor: pointer;">
+                                <span id="label-primary" style="font-family: monospace; font-size: 12px; font-weight: 700;">#FFD54A</span>
                             </div>
+                        </div>
+                        <div>
+                            <label for="color-secondary" style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Secondary Color</label>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <input type="color" id="color-secondary" value="#7C3AED" onchange="updateColorLabels(); updateSettingsFromWeb();" style="width: 34px; height: 34px; border: none; background: none; cursor: pointer;">
+                                <span id="label-secondary" style="font-family: monospace; font-size: 12px; font-weight: 700;">#7C3AED</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid-2 margin-top-sm">
+                        <div>
+                            <label for="color-card" style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Card Background</label>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <input type="color" id="color-card" value="#14141B" onchange="updateColorLabels(); updateSettingsFromWeb();" style="width: 34px; height: 34px; border: none; background: none; cursor: pointer;">
+                                <span id="label-card" style="font-family: monospace; font-size: 12px; font-weight: 700;">#14141B</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="color-border" style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Card Border</label>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <input type="color" id="color-border" value="#252535" onchange="updateColorLabels(); updateSettingsFromWeb();" style="width: 34px; height: 34px; border: none; background: none; cursor: pointer;">
+                                <span id="label-border" style="font-family: monospace; font-size: 12px; font-weight: 700;">#252535</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="margin-top-sm">
+                        <label for="color-bg" style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">App Background</label>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <input type="color" id="color-bg" value="#070709" onchange="updateColorLabels(); updateSettingsFromWeb();" style="width: 34px; height: 34px; border: none; background: none; cursor: pointer;">
+                            <span id="label-bg" style="font-family: monospace; font-size: 12px; font-weight: 700;">#070709</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEPARTMENT 6: BROADCAST & SECURITY -->
+        <div id="dept-broadcast" class="admin-dept-pane">
+            <div class="admin-column-card">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-shield-halved text-rose"></i> System Security & Anti-Fraud Center</h3>
+                </div>
+                <div class="dept-grid-2 margin-top-sm">
+                    <div>
+                        <h4 class="text-sm font-bold text-gold">Security Policy Rules:</h4>
+                        <ul class="text-xs text-muted" style="margin-top: 8px; line-height: 1.6; padding-left: 20px;">
+                            <li>Each user device is registered with a unique 10-digit mobile number.</li>
+                            <li>Arcade game scores are capped at a maximum of 50 EE Coins per session.</li>
+                            <li>Daily Video Ads are strictly throttled to 15 ads/day per user account.</li>
+                            <li>Minimum cashout threshold is set to 100 EE Coins (₹1.00 INR).</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-primary">Push Broadcast Dispatcher:</h4>
+                        <form onsubmit="broadcastNotification(event)" class="margin-top-sm">
+                            <input type="text" id="admin-push-title-dept" placeholder="Title" required class="input-dark margin-bottom-sm" style="width:100%; margin-bottom: 8px;">
+                            <input type="text" id="admin-push-msg-dept" placeholder="Message content..." required class="input-dark margin-bottom-sm" style="width:100%; margin-bottom: 8px;">
+                            <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-paper-plane"></i> Send Push Broadcast</button>
                         </form>
                     </div>
-
-                    <!-- AdMob Rewards Modifier -->
-                    <div class="admin-form-group margin-top-md">
-                        <h4><i class="fa-solid fa-rectangle-ad"></i> AdMob & EPM Adjuster</h4>
-                        <div class="form-grid-2">
-                            <div>
-                                <label for="ad-reward-val">Video Ad Payout (Coins)</label>
-                                <input type="number" id="ad-reward-val" value="15" onchange="updateSettingsFromWeb()">
-                            </div>
-                            <div>
-                                <label for="checkin-reward-val">Daily Checkin (Coins)</label>
-                                <input type="number" id="checkin-reward-val" value="50" onchange="updateSettingsFromWeb()">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Dynamic App Branding & Theme -->
-                    <div class="admin-form-group margin-top-md" style="border-top: 1px dashed var(--border-color); padding-top: 15px;">
-                        <h4><i class="fa-solid fa-palette text-gold"></i> Dynamic App Branding & Theme</h4>
-                        <p class="text-sm">Customize application name, splash texts, and colors dynamically.</p>
-                        <div class="form-grid-2 margin-top-sm">
-                            <div>
-                                <label for="app-name-val">App Name</label>
-                                <input type="text" id="app-name-val" value="ExtraEarn" onchange="updateSettingsFromWeb()">
-                            </div>
-                            <div>
-                                <label for="app-title-val">App Title</label>
-                                <input type="text" id="app-title-val" value="Earn Daily Rewards" onchange="updateSettingsFromWeb()">
-                            </div>
-                        </div>
-                        <div class="margin-top-sm" style="margin-top: 8px;">
-                            <label for="app-subtitle-val" style="font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 4px;">App Subtitle</label>
-                            <input type="text" id="app-subtitle-val" value="Earn coins by checking in, watching ads, and playing games!" onchange="updateSettingsFromWeb()" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; color: #fff; font-size: 12px;">
-                        </div>
-                        <div class="form-grid-2 margin-top-sm" style="margin-top: 8px;">
-                            <div>
-                                <label for="color-primary">Primary Color</label>
-                                <div style="display: flex; gap: 8px; align-items: center;">
-                                    <input type="color" id="color-primary" value="#FFD54A" onchange="updateColorLabels(); updateSettingsFromWeb();" style="width: 32px; height: 32px; border: none; padding: 0; background: none; cursor: pointer;">
-                                    <span id="label-primary" style="font-family: monospace; font-size: 11px;">#FFD54A</span>
-                                </div>
-                            </div>
-                            <div>
-                                <label for="color-secondary">Secondary Color</label>
-                                <div style="display: flex; gap: 8px; align-items: center;">
-                                    <input type="color" id="color-secondary" value="#7C3AED" onchange="updateColorLabels(); updateSettingsFromWeb();" style="width: 32px; height: 32px; border: none; padding: 0; background: none; cursor: pointer;">
-                                    <span id="label-secondary" style="font-family: monospace; font-size: 11px;">#7C3AED</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-grid-2 margin-top-sm" style="margin-top: 8px;">
-                            <div>
-                                <label for="color-card">Card Color</label>
-                                <div style="display: flex; gap: 8px; align-items: center;">
-                                    <input type="color" id="color-card" value="#14141B" onchange="updateColorLabels(); updateSettingsFromWeb();" style="width: 32px; height: 32px; border: none; padding: 0; background: none; cursor: pointer;">
-                                    <span id="label-card" style="font-family: monospace; font-size: 11px;">#14141B</span>
-                                </div>
-                            </div>
-                            <div>
-                                <label for="color-border">Border Color</label>
-                                <div style="display: flex; gap: 8px; align-items: center;">
-                                    <input type="color" id="color-border" value="#252535" onchange="updateColorLabels(); updateSettingsFromWeb();" style="width: 32px; height: 32px; border: none; padding: 0; background: none; cursor: pointer;">
-                                    <span id="label-border" style="font-family: monospace; font-size: 11px;">#252535</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="margin-top-sm" style="margin-top: 8px;">
-                            <label for="color-bg" style="font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 4px;">Background Color</label>
-                            <div style="display: flex; gap: 8px; align-items: center;">
-                                <input type="color" id="color-bg" value="#070709" onchange="updateColorLabels(); updateSettingsFromWeb();" style="width: 32px; height: 32px; border: none; padding: 0; background: none; cursor: pointer;">
-                                <span id="label-bg" style="font-family: monospace; font-size: 11px;">#070709</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Live Server Security Log -->
-                    <div class="security-logs-container margin-top-md">
-                        <h4><i class="fa-solid fa-terminal"></i> Live Dashboard Operations Log</h4>
-                        <div class="console-box" id="admin-console">
-                            <div class="console-line text-green">[SYSTEM] ExtraEarn Server initialized.</div>
-                            <div class="console-line text-green">[SYSTEM] Admin Dashboard loaded.</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Live Game Manager Section -->
-            <div class="admin-column-card margin-top-lg" style="width: 100%; grid-column: span 2;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px;">
-                    <div>
-                        <h3 style="font-family: var(--font-heading); font-size: 20px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
-                            <i class="fa-solid fa-gamepad text-gold"></i> Live Game Manager
-                        </h3>
-                        <p class="text-sm text-muted" style="margin: 0; font-size: 13px;">Manage, edit, and instantly deploy code for web-based arcade games running inside client apps.</p>
-                    </div>
-                </div>
-                
-                <div class="game-manager-content">
-                    <div style="margin-bottom: 20px;">
-                        <h4 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 10px;">Select Game File to Edit:</h4>
-                        <div id="game-list-buttons" style="display: flex; gap: 12px; flex-wrap: wrap;">
-                            <button class="btn btn-secondary btn-sm" disabled><i class="fa-solid fa-circle-notch fa-spin"></i> Loading games...</button>
-                        </div>
-                    </div>
-
-                    <div id="game-editor-box" style="display: none; border-top: 1px dashed var(--border-color); padding-top: 20px; margin-top: 20px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                            <h4 style="margin: 0; color: #fff; font-size: 16px; font-weight: 600;">
-                                <i class="fa-solid fa-code text-primary" style="margin-right: 6px;"></i> Editing Game: <span class="text-gold" id="editing-game-title">filename.html</span>
-                            </h4>
-                            <div style="display: flex; gap: 8px;">
-                                <button class="btn btn-secondary btn-sm" onclick="closeGameEditor()"><i class="fa-solid fa-xmark"></i> Cancel</button>
-                                <button class="btn btn-success btn-sm" onclick="saveGameCode()"><i class="fa-solid fa-floppy-disk"></i> Save & Deploy Live</button>
-                            </div>
-                        </div>
-                        <div style="position: relative;">
-                            <textarea id="game-code-textarea" spellcheck="false" style="width: 100%; height: 550px; background: #070709; color: #34d399; font-family: 'Consolas', 'Courier New', Courier, monospace; font-size: 14px; line-height: 1.5; border: 1px solid var(--border-color); border-radius: 8px; padding: 18px; resize: vertical; outline: none; box-shadow: inset 0 4px 12px rgba(0,0,0,0.85); transition: border-color 0.2s;" placeholder="Loading game source code..."></textarea>
-                        </div>
-                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+
+        <!-- DEPARTMENT 7: SYSTEM AUDIT LOGS -->
+        <div id="dept-logs" class="admin-dept-pane">
+            <div class="admin-column-card">
+                <div class="card-header">
+                    <h3><i class="fa-solid fa-terminal text-green"></i> Live Operational Audit Log Console</h3>
+                    <button class="btn btn-secondary btn-sm" onclick="document.getElementById('admin-console').innerHTML=''"><i class="fa-solid fa-trash-can"></i> Clear Terminal</button>
+                </div>
+                <div class="console-box" id="admin-console" style="height: 480px;">
+                    <div class="console-line text-green">[SYSTEM] ExtraEarn Live Admin Console Initialized.</div>
+                    <div class="console-line text-green">[SYSTEM] Ready for live REST API operations.</div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- ==========================================================================
@@ -438,7 +552,28 @@
         </div>
     </div>
 
-    <!-- Main Logic Script -->
+    <!-- Department Switcher JS Inline Script -->
+    <script>
+        function switchAdminDept(deptId) {
+            document.querySelectorAll('.admin-dept-nav-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-dept') === deptId);
+            });
+            document.querySelectorAll('.admin-dept-pane').forEach(pane => {
+                pane.classList.toggle('active', pane.id === deptId);
+            });
+        }
+
+        function filterUsersTable() {
+            const query = document.getElementById('user-search-input').value.toLowerCase();
+            const rows = document.querySelectorAll('#admin-users-tbody tr');
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        }
+    </script>
+
+    <!-- Main Logic Controller Script -->
     <script src="app.js"></script>
 </body>
 </html>
